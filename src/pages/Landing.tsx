@@ -164,7 +164,7 @@ export default function Landing() {
         <div className="flex items-center">
           <div className="h-2 w-16 bg-black" />
           <div className="ml-2 rounded-md border-4 border-black bg-orange-400 px-3 py-1 text-xl font-extrabold">
-            H&M
+            Recycle
           </div>
         </div>
       </motion.div>
@@ -177,7 +177,7 @@ export default function Landing() {
       >
         <div className="flex items-center">
           <div className="mr-2 rounded-md border-4 border-black bg-orange-400 px-3 py-1 text-xl font-extrabold">
-            ZARA
+            Plant Trees
           </div>
           <div className="h-2 w-16 bg-black" />
         </div>
@@ -190,7 +190,7 @@ export default function Landing() {
         transition={{ duration: 3.2, repeat: Infinity }}
       >
         <div className="rounded-md border-4 border-black bg-orange-400 px-4 py-2 text-lg font-extrabold">
-          Big Cotton
+          Clean Oceans
         </div>
       </motion.div>
     </div>
