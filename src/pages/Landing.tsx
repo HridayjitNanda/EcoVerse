@@ -284,7 +284,20 @@ export default function Landing() {
       
 
       {/* Top Nav */}
-      <nav className="sticky top-0 z-50 border-b-4 border-black bg-gradient-to-r from-pink-300 via-fuchsia-300 to-cyan-300">
+      <nav
+        className="sticky top-0 z-50 border-b-4 border-black"
+        style={{
+          // tiny checkerboard squares base (white + soft pink)
+          backgroundImage: `
+            repeating-conic-gradient(#fff 0% 25%, #ffe4f2 0% 50%),
+            radial-gradient(circle at 18% 28%, rgba(135, 206, 250, 0.35), transparent 42%),
+            radial-gradient(circle at 72% 62%, rgba(255, 105, 180, 0.28), transparent 46%),
+            radial-gradient(circle at 35% 78%, rgba(173, 216, 230, 0.25), transparent 50%)
+          `,
+          backgroundSize: "12px 12px, auto, auto, auto",
+          backgroundPosition: "0 0, center, center, center",
+        }}
+      >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4">
             {navItems.map((item, i) => (
