@@ -451,17 +451,9 @@ export default function Landing() {
       {/* Footer (simple, bold) */}
       <footer className="border-t-4 border-black bg-[#ffd139] py-8">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <span className="text-lg font-extrabold tracking-tight">Hempy Fan Token</span>
+          <span className="text-lg font-extrabold tracking-tight">EcoVerse</span>
           <span className="text-sm font-semibold">
-            © 2024 Hempy. Built by{" "}
-            <a
-              href="https://vly.ai"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline"
-            >
-              vly.ai
-            </a>
+            © 2024 EcoVerse. All rights reserved.
           </span>
         </div>
       </footer>
