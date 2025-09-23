@@ -244,11 +244,36 @@ export default function Landing() {
           stroke="black"
           strokeWidth="8"
         />
-        {/* leaves inside head */}
-        <g fill="#2ecc71" stroke="black" strokeWidth="4">
-          <ellipse cx="110" cy="90" rx="10" ry="6" />
-          <ellipse cx="150" cy="100" rx="12" ry="7" />
-          <ellipse cx="128" cy="125" rx="9" ry="5" />
+        {/* earth land masses (increase land coverage) */}
+        <g fill="#2ecc71" stroke="black" strokeWidth="4" opacity="0.98">
+          {/* Large left land mass */}
+          <path d="M85 100
+                   q18 -16 40 -12
+                   q12 2 22 10
+                   q6 5 -2 12
+                   q-10 9 -20 12
+                   q-14 4 -24 0
+                   q-18 -6 -16 -22 Z" />
+          {/* Central curved land bridge */}
+          <path d="M110 118
+                   q14 -6 34 -4
+                   q10 2 16 8
+                   q4 5 -2 10
+                   q-10 9 -28 10
+                   q-18 1 -26 -6
+                   q-5 -4 6 -18 Z" />
+          {/* Right land mass */}
+          <path d="M158 96
+                   q16 4 26 16
+                   q6 8 2 16
+                   q-6 12 -22 14
+                   q-10 2 -18 -2
+                   q-6 -3 -4 -10
+                   q2 -10 8 -16
+                   q6 -6 8 -18 Z" />
+          {/* Small islands */}
+          <path d="M102 142 q6 -4 10 0 q-2 8 -10 8 q-6 -4 0 -8 Z" />
+          <path d="M150 140 q6 -4 10 0 q-2 8 -10 8 q-6 -4 0 -8 Z" />
         </g>
 
         {/* eyes and smile */}
