@@ -343,7 +343,7 @@ export default function Landing() {
 
   // Add: global candy background layer (fixed, subtle, sparse)
   const GlobalCandyBackground = () => (
-    <div className="pointer-events-none fixed inset-0 z-10">
+    <div className="pointer-events-none absolute inset-0 z-10">
       {/* top-left */}
       <Candy
         variant="wrapped"
@@ -390,7 +390,7 @@ export default function Landing() {
   );
 
   return (
-    <div className="min-h-screen w-full overflow-hidden" style={{ backgroundColor: "#ffd139" }}>
+    <div className="relative min-h-screen w-full overflow-hidden" style={{ backgroundColor: "#ffd139" }}>
       {/* Global subtle animated candy layer across the page */}
       <GlobalCandyBackground />
       
