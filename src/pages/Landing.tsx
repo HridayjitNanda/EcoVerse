@@ -859,14 +859,6 @@ export default function Landing() {
 
       {/* Features */}
       <section id="features" className="relative mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-        {/* sparse candies across features grid */}
-        <div className="pointer-events-none absolute inset-0 -z-10">
-          <Candy variant="wrapped" color="#79a7ff" className="absolute left-8 top-8 w-7 opacity-70" delay={0.2} />
-          <Candy variant="lollipop" color="#35c163" className="absolute right-8 top-1/2 w-8 opacity-70" delay={0.8} />
-          <Candy variant="wrapped" color="#ffa6df" className="absolute left-1/2 bottom-4 -translate-x-1/2 w-7 opacity-70" delay={1.4} />
-          <Candy variant="lollipop" color="#ffd34d" className="absolute left-[35%] top-1/3 w-8 opacity-70" delay={1.0} />
-          <Candy variant="wrapped" color="#ff79c6" className="absolute right-[30%] top-[42%] w-7 opacity-70" delay={1.2} />
-        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             { title: "Personal Monsters", desc: "Students battle and grow their own eco-avatar through quests and challenges." },
@@ -895,13 +887,6 @@ export default function Landing() {
           </Button>
         </div>
       </section>
-
-      {/* Add: Decorative candies in lower sections */}
-      <div className="relative mx-auto max-w-7xl h-40 md:h-48 lg:h-56 px-4 sm:px-6 lg:px-8 mb-6 pointer-events-none">
-        {/* Layered candies across bottom area */}
-        <Candy variant="wrapped" color="#ff79c6" className="absolute left-6 bottom-3 w-9 sm:w-11" delay={0.4} />
-        <Candy variant="lollipop" color="#79a7ff" className="absolute right-8 bottom-4 w-9 sm:w-11" delay={0.9} />
-      </div>
 
       {/* Bottom CTA for authenticated users to jump to dashboard */}
       <div className="pb-16 text-center">
