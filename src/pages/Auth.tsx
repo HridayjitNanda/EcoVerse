@@ -98,13 +98,8 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Frosting Sprinkles Navbar with Drips */}
-      <nav
-        className="sticky top-0 z-50 border-b-4 border-black relative overflow-visible"
-        style={{
-          backgroundColor: "#ffd7ea",
-        }}
-      >
+      {/* Clean simple white navbar */}
+      <nav className="sticky top-0 z-50 border-b border-black bg-white">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <button
             className="flex items-center gap-2 rounded-md border-2 border-black bg-white px-3 py-1 text-sm font-extrabold hover:bg-white/90"
@@ -114,7 +109,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
             EcoVerse
           </button>
 
-          <div className="flex items-center gap-2 sm:-mr-4 lg:-mr-8 xl:-mr-12">
+          <div className="flex items-center gap-2">
             <Button
               className="rounded-md border-2 border-black bg-white text-black hover:bg-white/90"
               onClick={() => navigate("/auth")}
@@ -129,85 +124,6 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
             </Button>
           </div>
         </div>
-
-        {/* Frosting seam + layered drip (matches reference) */}
-        <svg
-          viewBox="0 0 1440 170"
-          className="pointer-events-none absolute left-0 right-0 -bottom-[74px] h-[96px] w-full drop-shadow-[0_8px_0_rgba(0,0,0,0.25)]"
-          aria-hidden="true"
-          preserveAspectRatio="none"
-        >
-          <defs>
-            <linearGradient id="frostingTopGloss" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#ffb2da" />
-              <stop offset="60%" stopColor="#ff8dcb" />
-              <stop offset="100%" stopColor="#ff5fb6" />
-            </linearGradient>
-            <linearGradient id="frostingBody" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#ff9fd1" />
-              <stop offset="70%" stopColor="#ff63b8" />
-              <stop offset="100%" stopColor="#ff3f9f" />
-            </linearGradient>
-            <linearGradient id="biscuit" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#f3c22b" />
-              <stop offset="100%" stopColor="#e2ad13" />
-            </linearGradient>
-          </defs>
-
-          {/* Top stitch dashes */}
-          <g>
-            <rect x="0" y="0" width="1440" height="8" fill="#ffd7ea" />
-            {/* dashed stitches */}
-            {
-              /* 72 dashes across the width */
-            }
-            {Array.from({ length: 72 }).map((_, i) => {
-              const x = 10 + i * 20;
-              return (
-                <rect key={i} x={x} y={2} width="10" height="4" rx="2" fill="#8b6bd9" />
-              );
-            })}
-          </g>
-
-          {/* Thin dark separator line (subtle) */}
-          <rect x="0" y="14" width="1440" height="2" fill="#7b1a52" opacity="0.5" />
-
-          {/* Pink frosting flat top */}
-          <rect x="0" y="16" width="1440" height="28" fill="url(#frostingTopGloss)" />
-
-          {/* Pink wavy drip body */}
-          <path
-            d="M0,44 
-               C160,58 320,58 480,44 
-               C640,30 800,30 960,44 
-               C1120,58 1280,58 1440,44 
-               L1440,120 
-               C1380,132 1340,150 1290,150 
-               C1240,150 1200,132 1140,120 
-               C1080,108 1020,126 960,138 
-               C900,150 840,132 780,120 
-               C720,108 660,126 600,138 
-               C540,150 480,132 420,120 
-               C360,108 300,126 240,138 
-               C180,150 120,132 60,120 
-               C40,116 20,118 0,122
-               Z"
-            fill="url(#frostingBody)"
-          />
-
-          {/* Biscuit/Yellow base wave under frosting */}
-          <path
-            d="M0,128 
-               C120,138 240,146 360,138 
-               C480,130 600,138 720,146 
-               C840,154 960,146 1080,138 
-               C1200,130 1320,138 1440,146 
-               L1440,170 L0,170 Z"
-            fill="url(#biscuit)"
-            stroke="#b9910b"
-            strokeWidth="6"
-          />
-        </svg>
       </nav>
 
       {/* Auth Content */}
