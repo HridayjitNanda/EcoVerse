@@ -43,27 +43,39 @@ export default function Landing() {
 
   // Add: start/stop audio using Web Audio (soothing sine)
   const startAudio = async () => {
-    // If already playing via either mode, do nothing
     if (isPlaying) return;
 
-    // Try external audio element using Chosic link — play directly (no WebAudio graph)
-    try {
-      const el = new Audio(ISLAND_URL);
+    // Try external audio element using Chosic link — play directly
+    const tryPlayUrl = async (url: string) => {
+      const el = new Audio();
+      el.src = url;
       el.loop = true;
+      el.preload = "auto";
       el.crossOrigin = "anonymous";
       el.volume = volume;
-
-      // Save refs (direct playback, no AudioContext involvement)
+      // Save refs (direct playback, no AudioContext involvement) only on success
+      await el.play();
       audioElRef.current = el;
       mediaSourceRef.current = null;
       audioCtxRef.current = null;
       gainRef.current = null;
-
-      await el.play();
       setIsPlaying(true);
+    };
+
+    try {
+      await tryPlayUrl(ISLAND_URL);
       return;
     } catch {
-      // Fallback to synth if external playback fails
+      // Retry with a common streaming variant
+      try {
+        const altUrl = ISLAND_URL.includes("?")
+          ? `${ISLAND_URL}&download=1`
+          : `${ISLAND_URL}?download=1`;
+        await tryPlayUrl(altUrl);
+        return;
+      } catch {
+        // Fallback to synth if external playback fails
+      }
     }
 
     // Fallback: soothing ambient synth (sine + sawtooth, lowpass, slow drift)
