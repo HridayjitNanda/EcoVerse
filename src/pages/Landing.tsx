@@ -31,6 +31,9 @@ export default function Landing() {
   const gainRef = useRef<GainNode | null>(null);
   const oscRef = useRef<OscillatorNode | null>(null);
   const speakerWrapRef = useRef<HTMLDivElement | null>(null);
+  // Add: second oscillator + timer ref for gentle drifting
+  const osc2Ref = useRef<OscillatorNode | null>(null);
+  const driftTimerRef = useRef<number | null>(null);
 
   // Add: start/stop audio using Web Audio (soothing sine)
   const startAudio = async () => {
@@ -39,24 +42,68 @@ export default function Landing() {
     const gain = ctx.createGain();
     gain.gain.value = volume;
 
-    const osc = ctx.createOscillator();
-    osc.type = "sine";
-    osc.frequency.value = 432; // calming pitch
-    osc.connect(gain).connect(ctx.destination);
-    osc.start();
+    // Gentle low-pass filter to soften the tone
+    const lowpass = ctx.createBiquadFilter();
+    lowpass.type = "lowpass";
+    lowpass.frequency.value = 1200;
+    lowpass.Q.value = 0.7;
+
+    // Two soft triangle oscillators with slight detune for warmth
+    const osc1 = ctx.createOscillator();
+    osc1.type = "triangle";
+    osc1.frequency.value = 396; // calm base
+
+    const osc2 = ctx.createOscillator();
+    osc2.type = "triangle";
+    osc2.frequency.value = 528; // sweet upper tone
+
+    // Wire: both oscillators -> lowpass -> gain -> destination
+    osc1.connect(lowpass);
+    osc2.connect(lowpass);
+    lowpass.connect(gain).connect(ctx.destination);
+
+    osc1.start();
+    osc2.start();
+
+    // Slow, soothing drift between frequencies
+    let up = true;
+    const scheduleDrift = () => {
+      const now = ctx.currentTime;
+      const dur = 8; // seconds per drift
+      const target1 = up ? 416 : 396; // gentle drift
+      const target2 = up ? 544 : 528;
+
+      try {
+        osc1.frequency.cancelScheduledValues(now);
+        osc2.frequency.cancelScheduledValues(now);
+        osc1.frequency.linearRampToValueAtTime(target1, now + dur);
+        osc2.frequency.linearRampToValueAtTime(target2, now + dur);
+      } catch {}
+      up = !up;
+    };
+
+    scheduleDrift();
+    driftTimerRef.current = window.setInterval(scheduleDrift, 8000);
 
     audioCtxRef.current = ctx;
     gainRef.current = gain;
-    oscRef.current = osc;
+    oscRef.current = osc1;
+    osc2Ref.current = osc2;
     setIsPlaying(true);
   };
 
   const stopAudio = async () => {
     try {
       oscRef.current?.stop();
+      osc2Ref.current?.stop();
+      if (driftTimerRef.current) {
+        clearInterval(driftTimerRef.current);
+        driftTimerRef.current = null;
+      }
       await audioCtxRef.current?.close();
     } catch {}
     oscRef.current = null;
+    osc2Ref.current = null;
     gainRef.current = null;
     audioCtxRef.current = null;
     setIsPlaying(false);
@@ -339,7 +386,7 @@ export default function Landing() {
                     )}
                   </div>
                 </TooltipTrigger>
-                <TooltipContent>Hero + Music</TooltipContent>
+                <TooltipContent>Soothing Music</TooltipContent>
               </Tooltip>
             </TooltipProvider>
 
