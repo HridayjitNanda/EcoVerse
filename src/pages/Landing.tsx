@@ -578,6 +578,46 @@ export default function Landing() {
             className="absolute right-[10%] top-[64%] w-7 sm:w-8 opacity-30"
             delay={1.2}
           />
+
+          {/* Extra left-side candies to fill empty area shown in feedback */}
+          <Candy
+            variant="wrapped"
+            color="#ffa6df"
+            className="absolute left-[3%] top-[22%] w-6 sm:w-7 opacity-40"
+            delay={0.32}
+          />
+          <Candy
+            variant="lollipop"
+            color="#79a7ff"
+            className="absolute left-[8%] top-[28%] w-7 sm:w-8 opacity-38"
+            delay={0.72}
+          />
+          <Candy
+            variant="wrapped"
+            color="#35c163"
+            className="absolute left-[14%] top-[34%] w-6 sm:w-7 opacity-36"
+            delay={1.02}
+          />
+
+          {/* Extra right-side candies to balance the headline area */}
+          <Candy
+            variant="wrapped"
+            color="#ffd34d"
+            className="absolute right-[4%] top-[22%] w-6 sm:w-7 opacity-38"
+            delay={0.5}
+          />
+          <Candy
+            variant="lollipop"
+            color="#ff79c6"
+            className="absolute right-[10%] top-[28%] w-7 sm:w-8 opacity-36"
+            delay={0.9}
+          />
+          <Candy
+            variant="wrapped"
+            color="#79a7ff"
+            className="absolute right-[15%] top-[18%] w-6 sm:w-7 opacity-34"
+            delay={1.25}
+          />
         </div>
         <div className="text-center">
           <motion.h1
