@@ -539,6 +539,45 @@ export default function Landing() {
             className="absolute left-[38%] top-[20%] w-6 sm:w-7 opacity-42"
             delay={0.7}
           />
+
+          {/* ADD: Far-left and far-right sparse candies to fill empty side areas */}
+          <Candy
+            variant="wrapped"
+            color="#ffa6df"
+            className="absolute left-[6%] top-[34%] w-7 sm:w-8 opacity-35"
+            delay={0.35}
+          />
+          <Candy
+            variant="lollipop"
+            color="#79a7ff"
+            className="absolute left-[8%] top-[48%] w-8 sm:w-9 opacity-32"
+            delay={0.85}
+          />
+          <Candy
+            variant="wrapped"
+            color="#35c163"
+            className="absolute left-[10%] top-[62%] w-7 sm:w-8 opacity-30"
+            delay={1.15}
+          />
+
+          <Candy
+            variant="wrapped"
+            color="#ffd34d"
+            className="absolute right-[8%] top-[36%] w-7 sm:w-8 opacity-33"
+            delay={0.55}
+          />
+          <Candy
+            variant="lollipop"
+            color="#ff79c6"
+            className="absolute right-[6%] top=[50%] w-8 sm:w-9 opacity-34"
+            delay={0.95}
+          />
+          <Candy
+            variant="wrapped"
+            color="#79a7ff"
+            className="absolute right-[10%] top-[64%] w-7 sm:w-8 opacity-30"
+            delay={1.2}
+          />
         </div>
         <div className="text-center">
           <motion.h1
