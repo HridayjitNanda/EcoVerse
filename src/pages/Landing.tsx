@@ -281,8 +281,7 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen w-full overflow-hidden" style={{ backgroundColor: "#ffd139" }}>
-      {/* Hidden background audio element */}
-      <audio ref={audioElRef} src={ISLAND_DL_URL} autoPlay loop hidden />
+      
 
       {/* Top Nav */}
       <nav className="sticky top-0 z-50 border-b-4 border-black bg-[#ffd139]">
@@ -304,59 +303,7 @@ export default function Landing() {
           </div>
 
           <div className="flex items-center gap-2">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div ref={speakerWrapRef} className="relative">
-                    <button
-                      className={`grid h-9 w-9 place-items-center rounded-md border-2 border-black text-lg transition hover:translate-y-0.5 active:translate-y-1 ${
-                        isPlaying ? "bg-green-300" : "bg-orange-300"
-                      }`}
-                      aria-label={isPlaying ? "Stop Music & Show Volume" : "Play Music & Show Volume"}
-                      onClick={handleSpeakerClick}
-                    >
-                      🔈
-                    </button>
-
-                    {/* Volume panel with download link */}
-                    {showVolume && (
-                      <div className="absolute right-0 top-11 z-50 w-44 rounded-md border-2 border-black bg-white p-3">
-                        <div className="mb-2 text-xs font-extrabold text-black">Volume</div>
-                        <Slider
-                          value={[Math.round(volume * 100)]}
-                          onValueChange={(val) => setVolume((val?.[0] ?? 30) / 100)}
-                          min={0}
-                          max={100}
-                          step={1}
-                        />
-                        <div className="mt-2 flex items-center justify-between">
-                          <span className="text-xs font-semibold text-black/70">{Math.round(volume * 100)}%</span>
-                          <button
-                            className="text-xs font-extrabold underline"
-                            onClick={() => {
-                              if (isPlaying) stopAudio();
-                              else startAudio();
-                            }}
-                          >
-                            {isPlaying ? "Stop" : "Play"}
-                          </button>
-                        </div>
-                        <a
-                          href={ISLAND_DL_URL}
-                          download
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mt-3 block text-xs font-bold underline text-black"
-                        >
-                          Download track
-                        </a>
-                      </div>
-                    )}
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>Music</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            
 
             <Button
               className="rounded-md border-2 border-black bg-white text-black hover:bg-white/90"
