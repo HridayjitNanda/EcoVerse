@@ -443,6 +443,12 @@ export default function Landing() {
 
       {/* Hero Content */}
       <section id="hero" className="relative mx-auto max-w-7xl px-4 pb-24 pt-12 sm:px-6 lg:px-8">
+        {/* subtle scattered candies in hero */}
+        <div className="pointer-events-none absolute inset-0 -z-10">
+          <Candy variant="wrapped" color="#ffa6df" className="absolute left-2 top-6 w-7 sm:w-8 opacity-80" delay={0.3} />
+          <Candy variant="lollipop" color="#79a7ff" className="absolute right-4 top-12 w-8 sm:w-9 opacity-80" delay={0.9} />
+          <Candy variant="wrapped" color="#35c163" className="absolute right-1/3 top-1/3 w-7 opacity-80" delay={0.6} />
+        </div>
         <div className="text-center">
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
@@ -491,6 +497,11 @@ export default function Landing() {
 
       {/* About (EcoVerse) */}
       <section id="about" className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        {/* light candy accents around about */}
+        <div className="pointer-events-none absolute inset-0 -z-10">
+          <Candy variant="wrapped" color="#ffd34d" className="absolute left-6 top-2 w-7 sm:w-8 opacity-70" delay={0.4} />
+          <Candy variant="lollipop" color="#ff79c6" className="absolute right-10 bottom-4 w-8 sm:w-9 opacity-70" delay={1.1} />
+        </div>
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -509,6 +520,12 @@ export default function Landing() {
 
       {/* Features */}
       <section id="features" className="relative mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
+        {/* sparse candies across features grid */}
+        <div className="pointer-events-none absolute inset-0 -z-10">
+          <Candy variant="wrapped" color="#79a7ff" className="absolute left-8 top-8 w-7 opacity-70" delay={0.2} />
+          <Candy variant="lollipop" color="#35c163" className="absolute right-8 top-1/2 w-8 opacity-70" delay={0.8} />
+          <Candy variant="wrapped" color="#ffa6df" className="absolute left-1/2 bottom-4 -translate-x-1/2 w-7 opacity-70" delay={1.4} />
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             { title: "Personal Monsters", desc: "Students battle and grow their own eco-avatar through quests and challenges." },
