@@ -618,6 +618,41 @@ export default function Landing() {
             className="absolute right-[15%] top-[18%] w-6 sm:w-7 opacity-34"
             delay={1.25}
           />
+
+          {/* FEEDBACK TARGET AREA FILL — precise band near hero sides */}
+          {/* Left-side band (fills visible empty strip shown in screenshot) */}
+          <Candy
+            variant="lollipop"
+            color="#ff79c6"
+            className="absolute left-[7%] top-[30%] w-9 sm:w-10 opacity-45"
+            delay={0.42}
+          />
+          <Candy
+            variant="wrapped"
+            color="#35c163"
+            className="absolute left-[12%] top-[36%] w-8 sm:w-9 opacity-42"
+            delay={0.68}
+          />
+          <Candy
+            variant="wrapped"
+            color="#ffd34d"
+            className="absolute left-[16%] top=[41%] w-7 sm:w-8 opacity-40"
+            delay={0.88}
+          />
+
+          {/* Right-side band (mirror to balance composition) */}
+          <Candy
+            variant="lollipop"
+            color="#79a7ff"
+            className="absolute right-[8%] top-[31%] w-9 sm:w-10 opacity-44"
+            delay={0.5}
+          />
+          <Candy
+            variant="wrapped"
+            color="#ffa6df"
+            className="absolute right-[13%] top-[37%] w-8 sm:w-9 opacity-41"
+            delay={0.72}
+          />
         </div>
         <div className="text-center">
           <motion.h1
