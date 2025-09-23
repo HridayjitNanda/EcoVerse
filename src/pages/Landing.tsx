@@ -386,6 +386,20 @@ export default function Landing() {
         className="absolute right-12 bottom-16 w-8 sm:w-10 opacity-20"
         delay={0.9}
       />
+
+      {/* NEW: mid-page subtle candies to fill center area */}
+      <Candy
+        variant="wrapped"
+        color="#ff79c6"
+        className="absolute left-[42%] top-[45%] w-7 sm:w-8 opacity-20"
+        delay={0.65}
+      />
+      <Candy
+        variant="lollipop"
+        color="#35c163"
+        className="absolute right-[40%] top-[52%] w-8 sm:w-9 opacity-18"
+        delay={1.05}
+      />
     </div>
   );
 
@@ -505,6 +519,26 @@ export default function Landing() {
           <Candy variant="lollipop" color="#35c163" className="absolute left-[42%] top-[28%] w-7 sm:w-8 opacity-50" delay={0.55} />
           <Candy variant="wrapped" color="#79a7ff" className="absolute right-[26%] top-[30%] w-6 sm:w-7 opacity-50" delay={0.85} />
           <Candy variant="wrapped" color="#ffd34d" className="absolute right-[12%] top-[20%] w-6 sm:w-7 opacity-45" delay={1.15} />
+
+          {/* NEW: add a few very subtle candies around headline to reduce emptiness */}
+          <Candy
+            variant="wrapped"
+            color="#ffa6df"
+            className="absolute left-[46%] top-[18%] w-6 sm:w-7 opacity-45 -translate-x-1/2"
+            delay={0.4}
+          />
+          <Candy
+            variant="lollipop"
+            color="#79a7ff"
+            className="absolute left-[58%] top-[22%] w-7 sm:w-8 opacity-40"
+            delay={0.95}
+          />
+          <Candy
+            variant="wrapped"
+            color="#35c163"
+            className="absolute left-[38%] top-[20%] w-6 sm:w-7 opacity-42"
+            delay={0.7}
+          />
         </div>
         <div className="text-center">
           <motion.h1
