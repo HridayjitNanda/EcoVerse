@@ -259,19 +259,6 @@ export default function Landing() {
           <circle cx="158" cy="114" r="6" fill="#1f2937" />
           <path d="M120 135 q12 10 28 0" stroke="#1f9e55" strokeWidth="6" fill="none" strokeLinecap="round" />
         </g>
-
-        {/* right hand peace sign */}
-        <g>
-          <motion.g
-            animate={{ rotate: [0, 10, 0] }}
-            transition={{ duration: 2.2, repeat: Infinity }}
-            transform="translate(180,130)"
-          >
-            <rect x="-10" y="0" width="10" height="40" rx="5" fill="#ff79c6" stroke="black" strokeWidth="6" />
-            <rect x="-14" y="-8" width="8" height="22" rx="4" fill="#ffffff" stroke="black" strokeWidth="5" />
-            <rect x="-4" y="-8" width="8" height="22" rx="4" fill="#ffffff" stroke="black" strokeWidth="5" />
-          </motion.g>
-        </g>
       </svg>
     </motion.div>
   );
