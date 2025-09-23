@@ -284,7 +284,7 @@ export default function Landing() {
       
       {/* Top Nav */}
       <nav
-        className="sticky top-0 z-50 border-b-4 border-black"
+        className="sticky top-0 z-50 border-b-4 border-black relative overflow-visible"
         style={{
           backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 36 36'><rect width='36' height='36' fill='%23fbd3e4'/><rect x='4' y='6' width='8' height='3' rx='1.5' fill='%23ffd166' transform='rotate(20 8 7.5)'/><rect x='20' y='4' width='8' height='3' rx='1.5' fill='%2366d9e8' transform='rotate(-25 24 5.5)'/><rect x='10' y='18' width='8' height='3' rx='1.5' fill='%23a78bfa' transform='rotate(30 14 19.5)'/><rect x='24' y='22' width='8' height='3' rx='1.5' fill='%23ff6fae' transform='rotate(-15 28 23.5)'/><rect x='2' y='24' width='8' height='3' rx='1.5' fill='%23ffffff' transform='rotate(12 6 25.5)'/><rect x='14' y='8' width='8' height='3' rx='1.5' fill='%239b87f5' transform='rotate(-8 18 9.5)'/></svg>")`,
           backgroundSize: "36px 36px",
@@ -324,6 +324,33 @@ export default function Landing() {
             </Button>
           </div>
         </div>
+
+        {/* Pink frosting drip edge */}
+        <svg
+          viewBox="0 0 1440 160"
+          className="pointer-events-none absolute left-0 right-0 -bottom-[68px] h-[84px] w-full drop-shadow-[0_8px_0_rgba(0,0,0,0.25)]"
+          aria-hidden="true"
+          preserveAspectRatio="none"
+        >
+          <defs>
+            <linearGradient id="frostingGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#ff97cf" />
+              <stop offset="55%" stopColor="#ff86c2" />
+              <stop offset="100%" stopColor="#ff5fb6" />
+            </linearGradient>
+          </defs>
+          {/* Top gloss band */}
+          <rect x="0" y="0" width="1440" height="36" fill="url(#frostingGradient)" />
+          {/* Drip waves */}
+          <path
+            d="M0,36 C120,52 240,52 360,36 C480,20 600,20 720,36 C840,52 960,52 1080,36 C1200,20 1320,20 1440,36 L1440,120 
+               C1410,135 1390,160 1350,160 C1310,160 1290,130 1260,120 C1230,110 1200,130 1170,140 C1140,150 1110,130 1080,120 
+               C1050,110 1020,130 990,140 C960,150 930,130 900,120 C870,110 840,130 810,140 C780,150 750,130 720,120 
+               C690,110 660,130 630,140 C600,150 570,130 540,120 C510,110 480,130 450,140 C420,150 390,130 360,120 
+               C330,110 300,130 270,140 C240,150 210,130 180,120 C150,110 120,130 90,140 C60,150 30,135 0,120 Z"
+            fill="url(#frostingGradient)"
+          />
+        </svg>
       </nav>
 
       {/* Clouds */}
