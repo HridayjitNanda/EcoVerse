@@ -258,23 +258,25 @@ export default function Landing() {
                q-10 -5 -12 -12
                q-2 -7 8 -21 Z"
           />
-          {/* India subcontinent (triangular peninsula pointing south) */}
-          <path
-            d="M144 100
-               q-4 6 -6 12
-               q-2 6 2 12
-               q3 5 1 10
-               q-2 6 -8 10
-               q10 0 16 -3
-               q6 -3 12 -2
-               q6 1 10 6
-               q-2 -10 -6 -16
-               q-3 -5 -3 -10
-               q0 -6 4 -12
-               q-10 2 -22 3 Z"
-          />
-          {/* Sri Lanka (small island below India) */}
-          <path d="M152 148 q6 2 4 8 q-6 4 -10 0 q0 -6 6 -8 Z" />
+          {/* India subcontinent (triangular peninsula pointing south) - shifted slightly east to separate */}
+          <g transform="translate(6,0)">
+            <path
+              d="M144 100
+                 q-4 6 -6 12
+                 q-2 6 2 12
+                 q3 5 1 10
+                 q-2 6 -8 10
+                 q10 0 16 -3
+                 q6 -3 12 -2
+                 q6 1 10 6
+                 q-2 -10 -6 -16
+                 q-3 -5 -3 -10
+                 q0 -6 4 -12
+                 q-10 2 -22 3 Z"
+            />
+          </g>
+          {/* Sri Lanka (small island below India) - nudged slightly SE to maintain gap */}
+          <path d="M160 154 q6 2 4 8 q-6 4 -10 0 q0 -6 6 -8 Z" />
           {/* Arabian region hint (west of India) */}
           <path
             d="M120 108
