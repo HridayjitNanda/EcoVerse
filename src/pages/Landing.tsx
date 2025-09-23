@@ -653,6 +653,70 @@ export default function Landing() {
             className="absolute right-[13%] top-[37%] w-8 sm:w-9 opacity-41"
             delay={0.72}
           />
+
+          {/* NEW: Ultra-precise fill for the visibly empty left strip (between cloud and headline) */}
+          <Candy
+            variant="lollipop"
+            color="#ffa6df"
+            className="absolute left-[4%] top-[22%] w-10 sm:w-12 opacity-55"
+            delay={0.38}
+          />
+          <Candy
+            variant="wrapped"
+            color="#79a7ff"
+            className="absolute left-[6%] top-[31%] w-9 sm:w-10 opacity-50"
+            delay={0.66}
+          />
+          <Candy
+            variant="wrapped"
+            color="#35c163"
+            className="absolute left-[9%] top-[40%] w-8 sm:w-9 opacity-48"
+            delay={0.92}
+          />
+          <Candy
+            variant="lollipop"
+            color="#ffd34d"
+            className="absolute left-[12%] top-[47%] w-9 sm:w-10 opacity-46"
+            delay={1.18}
+          />
+          <Candy
+            variant="wrapped"
+            color="#ff79c6"
+            className="absolute left-[7%] top-[27%] w-7 sm:w-8 opacity-52"
+            delay={0.51}
+          />
+
+          {/* NEW: Mirror precise fill for the visibly empty right strip */}
+          <Candy
+            variant="lollipop"
+            color="#79a7ff"
+            className="absolute right-[4%] top-[23%] w-10 sm:w-12 opacity-55"
+            delay={0.42}
+          />
+          <Candy
+            variant="wrapped"
+            color="#ffa6df"
+            className="absolute right-[6%] top-[32%] w-9 sm:w-10 opacity-50"
+            delay={0.73}
+          />
+          <Candy
+            variant="wrapped"
+            color="#ffd34d"
+            className="absolute right-[9%] top-[41%] w-8 sm:w-9 opacity-48"
+            delay={0.97}
+          />
+          <Candy
+            variant="lollipop"
+            color="#35c163"
+            className="absolute right-[12%] top-[48%] w-9 sm:w-10 opacity-46"
+            delay={1.22}
+          />
+          <Candy
+            variant="wrapped"
+            color="#79a7ff"
+            className="absolute right-[7%] top-[28%] w-7 sm:w-8 opacity-52"
+            delay={0.55}
+          />
         </div>
         <div className="text-center">
           <motion.h1
