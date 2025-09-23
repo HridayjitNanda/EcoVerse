@@ -341,8 +341,58 @@ export default function Landing() {
   // Nav items (removed per request; keeping only icon buttons and SIGN-UP)
   const navItems: string[] = [];
 
+  // Add: global candy background layer (fixed, subtle, sparse)
+  const GlobalCandyBackground = () => (
+    <div className="pointer-events-none fixed inset-0 z-10">
+      {/* top-left */}
+      <Candy
+        variant="wrapped"
+        color="#ffa6df"
+        className="absolute left-4 top-24 w-8 sm:w-10 opacity-30"
+        delay={0.2}
+      />
+      {/* upper-right */}
+      <Candy
+        variant="lollipop"
+        color="#79a7ff"
+        className="absolute right-6 top-36 w-10 sm:w-12 opacity-25"
+        delay={0.8}
+      />
+      {/* mid-left */}
+      <Candy
+        variant="wrapped"
+        color="#35c163"
+        className="absolute left-10 top-1/2 w-9 sm:w-11 opacity-20"
+        delay={0.5}
+      />
+      {/* mid-right */}
+      <Candy
+        variant="wrapped"
+        color="#ffd34d"
+        className="absolute right-8 top-[60%] w-8 sm:w-10 opacity-22"
+        delay={1.1}
+      />
+      {/* lower-left */}
+      <Candy
+        variant="lollipop"
+        color="#ff79c6"
+        className="absolute left-1/5 bottom-24 w-9 sm:w-11 opacity-22"
+        delay={1.4}
+      />
+      {/* lower-right */}
+      <Candy
+        variant="wrapped"
+        color="#79a7ff"
+        className="absolute right-12 bottom-16 w-8 sm:w-10 opacity-20"
+        delay={0.9}
+      />
+    </div>
+  );
+
   return (
     <div className="min-h-screen w-full overflow-hidden" style={{ backgroundColor: "#ffd139" }}>
+      {/* Global subtle animated candy layer across the page */}
+      <GlobalCandyBackground />
       
       {/* Top Nav - frosting style */}
       <nav
