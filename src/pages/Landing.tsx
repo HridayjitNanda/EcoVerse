@@ -287,15 +287,19 @@ export default function Landing() {
       <nav
         className="sticky top-0 z-50 border-b-4 border-black"
         style={{
-          // tiny checkerboard squares base (white + soft pink)
+          // Bubblegummy mosaic: multiple offset repeating-conic layers + blobs with blend modes
           backgroundImage: `
-            repeating-conic-gradient(#fff 0% 25%, #ffe4f2 0% 50%),
-            radial-gradient(circle at 18% 28%, rgba(135, 206, 250, 0.35), transparent 42%),
-            radial-gradient(circle at 72% 62%, rgba(255, 105, 180, 0.28), transparent 46%),
-            radial-gradient(circle at 35% 78%, rgba(173, 216, 230, 0.25), transparent 50%)
+            repeating-conic-gradient(from 0deg at 10% 20%, #fff 0% 10%, #ffe4f2 10% 20%, #d9f2ff 20% 30%, #f9d0ff 30% 40%),
+            repeating-conic-gradient(from 45deg at 60% 40%, #ffe4f2 0% 12%, #c8eaff 12% 24%, #fff 24% 36%, #ffd0e8 36% 48%),
+            repeating-conic-gradient(from 90deg at 30% 80%, #d9f2ff 0% 8%, #fff 8% 16%, #ffd0e8 16% 24%, #e6f6ff 24% 32%),
+            radial-gradient(circle at 18% 28%, rgba(135,206,250,0.35), transparent 42%),
+            radial-gradient(circle at 72% 62%, rgba(255,105,180,0.28), transparent 46%),
+            radial-gradient(circle at 35% 78%, rgba(173,216,230,0.25), transparent 50%)
           `,
-          backgroundSize: "12px 12px, auto, auto, auto",
-          backgroundPosition: "0 0, center, center, center",
+          backgroundSize: "14px 14px, 16px 16px, 18px 18px, auto, auto, auto",
+          backgroundPosition: "0 0, 6px 4px, -5px 3px, center, center, center",
+          backgroundBlendMode: "multiply, multiply, screen, normal, normal, normal",
+          backgroundColor: "#ffd139",
         }}
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
