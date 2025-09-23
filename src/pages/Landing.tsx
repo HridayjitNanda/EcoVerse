@@ -22,146 +22,44 @@ export default function Landing() {
   const { isLoading, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  // Add: audio + volume UI state
+  // Audio state
   const [isPlaying, setIsPlaying] = useState(false);
   const [showVolume, setShowVolume] = useState(false);
   const [volume, setVolume] = useState(0.3); // 0..1
 
-  // Add: external audio track for "Island" (Luke Bergs) via Chosic
+  // Chosic audio: Island by Luke Bergs
   const ISLAND_URL = "https://www.chosic.com/download-audio/42076/";
+  // Use direct download variant for consistent streaming
+  const ISLAND_DL_URL = ISLAND_URL.includes("?")
+    ? `${ISLAND_URL}&download=1`
+    : `${ISLAND_URL}?download=1`;
 
-  // Add: refs for HTMLAudioElement and media source
+  // Refs: keep only the HTMLAudioElement and the speaker wrapper
   const audioElRef = useRef<HTMLAudioElement | null>(null);
-  const mediaSourceRef = useRef<MediaElementAudioSourceNode | null>(null);
-
-  const audioCtxRef = useRef<AudioContext | null>(null);
-  const gainRef = useRef<GainNode | null>(null);
-  const oscRef = useRef<OscillatorNode | null>(null);
-  const osc2Ref = useRef<OscillatorNode | null>(null);
-  const driftTimerRef = useRef<number | null>(null);
   const speakerWrapRef = useRef<HTMLDivElement | null>(null);
 
-  // Add: start/stop audio using Web Audio (soothing sine)
+  // Replace startAudio to play the hidden <audio> element
   const startAudio = async () => {
     if (isPlaying) return;
-
-    // Try external audio element using Chosic link — play directly
-    const tryPlayUrl = async (url: string) => {
-      const el = new Audio();
-      el.src = url;
-      el.loop = true;
-      el.preload = "auto";
-      el.crossOrigin = "anonymous";
-      el.volume = volume;
-      // Save refs (direct playback, no AudioContext involvement) only on success
-      await el.play();
-      audioElRef.current = el;
-      mediaSourceRef.current = null;
-      audioCtxRef.current = null;
-      gainRef.current = null;
-      setIsPlaying(true);
-    };
-
     try {
-      await tryPlayUrl(ISLAND_URL);
-      return;
-    } catch {
-      // Retry with a common streaming variant
-      try {
-        const altUrl = ISLAND_URL.includes("?")
-          ? `${ISLAND_URL}&download=1`
-          : `${ISLAND_URL}?download=1`;
-        await tryPlayUrl(altUrl);
-        return;
-      } catch {
-        // Fallback to synth if external playback fails
+      if (audioElRef.current) {
+        audioElRef.current.volume = volume;
+        await audioElRef.current.play();
+        setIsPlaying(true);
       }
+    } catch {
+      // Autoplay might be blocked; user can click again after interaction
     }
-
-    // Fallback: soothing ambient synth (sine + sawtooth, lowpass, slow drift)
-    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-    const gain = ctx.createGain();
-    gain.gain.value = volume;
-
-    const lowpass = ctx.createBiquadFilter();
-    lowpass.type = "lowpass";
-    lowpass.frequency.value = 1000;
-    lowpass.Q.value = 0.9;
-
-    const osc1 = ctx.createOscillator();
-    osc1.type = "sine";
-    osc1.frequency.value = 432;
-
-    const osc2 = ctx.createOscillator();
-    osc2.type = "sawtooth";
-    osc2.frequency.value = 648;
-
-    osc1.connect(lowpass);
-    osc2.connect(lowpass);
-    lowpass.connect(gain).connect(ctx.destination);
-
-    osc1.start();
-    osc2.start();
-
-    let up = true;
-    const scheduleDrift = () => {
-      const now = ctx.currentTime;
-      const dur = 10;
-      const target1 = up ? 440 : 432;
-      const target2 = up ? 660 : 648;
-      try {
-        osc1.frequency.cancelScheduledValues(now);
-        osc2.frequency.cancelScheduledValues(now);
-        osc1.frequency.linearRampToValueAtTime(target1, now + dur);
-        osc2.frequency.linearRampToValueAtTime(target2, now + dur);
-      } catch {}
-      up = !up;
-    };
-    scheduleDrift();
-    driftTimerRef.current = window.setInterval(scheduleDrift, 10000);
-
-    // Save refs for synth mode
-    audioCtxRef.current = ctx;
-    gainRef.current = gain;
-    oscRef.current = osc1;
-    osc2Ref.current = osc2;
-
-    // Ensure external refs are cleared
-    mediaSourceRef.current = null;
-    audioElRef.current = null;
-
-    setIsPlaying(true);
   };
 
+  // Replace stopAudio to pause/reset the hidden <audio> element
   const stopAudio = async () => {
     try {
-      // If using external track
       if (audioElRef.current) {
         audioElRef.current.pause();
         audioElRef.current.currentTime = 0;
-        try {
-          mediaSourceRef.current?.disconnect();
-        } catch {}
       }
-
-      // If using synth fallback
-      oscRef.current?.stop();
-      osc2Ref.current?.stop();
-
-      if (driftTimerRef.current) {
-        clearInterval(driftTimerRef.current);
-        driftTimerRef.current = null;
-      }
-
-      await audioCtxRef.current?.close();
     } catch {}
-    // Clear refs for both modes
-    mediaSourceRef.current = null;
-    audioElRef.current = null;
-    oscRef.current = null;
-    osc2Ref.current = null;
-    gainRef.current = null;
-    audioCtxRef.current = null;
     setIsPlaying(false);
   };
 
@@ -176,17 +74,14 @@ export default function Landing() {
     setShowVolume(true);
   };
 
-  // Add: sync volume with gain node
+  // Sync volume to <audio>
   useEffect(() => {
-    if (gainRef.current) {
-      gainRef.current.gain.value = volume;
-    }
     if (audioElRef.current) {
       audioElRef.current.volume = volume;
     }
   }, [volume]);
 
-  // Add: click outside to close volume panel
+  // Click outside to close volume panel
   useEffect(() => {
     function onDocClick(e: MouseEvent) {
       if (!showVolume) return;
@@ -199,11 +94,13 @@ export default function Landing() {
     return () => document.removeEventListener("mousedown", onDocClick);
   }, [showVolume]);
 
-  // Cleanup on unmount
+  // Cleanup on unmount (ensure audio is stopped)
   useEffect(() => {
     return () => {
-      if (audioCtxRef.current) {
-        stopAudio();
+      if (audioElRef.current) {
+        try {
+          audioElRef.current.pause();
+        } catch {}
       }
     };
   }, []);
@@ -384,6 +281,9 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen w-full overflow-hidden" style={{ backgroundColor: "#ffd139" }}>
+      {/* Hidden background audio element */}
+      <audio ref={audioElRef} src={ISLAND_DL_URL} autoPlay loop hidden />
+
       {/* Top Nav */}
       <nav className="sticky top-0 z-50 border-b-4 border-black bg-[#ffd139]">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -418,7 +318,7 @@ export default function Landing() {
                       🔈
                     </button>
 
-                    {/* Add: Volume panel */}
+                    {/* Volume panel with download link */}
                     {showVolume && (
                       <div className="absolute right-0 top-11 z-50 w-44 rounded-md border-2 border-black bg-white p-3">
                         <div className="mb-2 text-xs font-extrabold text-black">Volume</div>
@@ -441,6 +341,15 @@ export default function Landing() {
                             {isPlaying ? "Stop" : "Play"}
                           </button>
                         </div>
+                        <a
+                          href={ISLAND_DL_URL}
+                          download
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-3 block text-xs font-bold underline text-black"
+                        >
+                          Download track
+                        </a>
                       </div>
                     )}
                   </div>
