@@ -331,7 +331,7 @@ export default function Landing() {
             ))}
           </div>
 
-          <div className="flex items-center gap-2 sm:-mr-4 lg:-mr-8 xl:-mr-12">
+          <div className="flex items-center gap-2 -mr-2 sm:-mr-6 md:-mr-8 lg:-mr-10 xl:-mr-14">
             <Button
               className="rounded-md border-2 border-black bg-white text-black hover:bg-white/90"
               onClick={() => navigate("/auth")}
