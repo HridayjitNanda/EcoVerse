@@ -400,6 +400,50 @@ export default function Landing() {
         className="absolute right-[40%] top-[52%] w-8 sm:w-9 opacity-18"
         delay={1.05}
       />
+
+      {/* ADDED: more subtle global candies to balance empty regions across the site */}
+      {/* top-center accent */}
+      <Candy
+        variant="wrapped"
+        color="#ffd34d"
+        className="absolute left-1/2 top-10 w-8 sm:w-9 -translate-x-1/2 opacity-25"
+        delay={0.35}
+      />
+      {/* upper mid-left band */}
+      <Candy
+        variant="lollipop"
+        color="#ff79c6"
+        className="absolute left-[18%] top-[30%] w-9 sm:w-10 opacity-24"
+        delay={0.7}
+      />
+      {/* upper mid-right band */}
+      <Candy
+        variant="wrapped"
+        color="#35c163"
+        className="absolute right-[16%] top-[34%] w-8 sm:w-9 opacity-22"
+        delay={1.0}
+      />
+      {/* center-low accent */}
+      <Candy
+        variant="wrapped"
+        color="#79a7ff"
+        className="absolute left-1/2 top-[68%] w-8 sm:w-9 -translate-x-1/2 opacity-22"
+        delay={0.55}
+      />
+      {/* bottom-left corner */}
+      <Candy
+        variant="lollipop"
+        color="#ffa6df"
+        className="absolute left-4 bottom-10 w-10 sm:w-12 opacity-22"
+        delay={0.9}
+      />
+      {/* bottom-right corner */}
+      <Candy
+        variant="wrapped"
+        color="#ff79c6"
+        className="absolute right-5 bottom-12 w-9 sm:w-11 opacity-22"
+        delay={1.15}
+      />
     </div>
   );
 
