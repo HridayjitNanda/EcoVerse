@@ -286,7 +286,7 @@ export default function Landing() {
       <nav
         className="sticky top-0 z-50 border-b-2 border-black relative"
         style={{
-          background: "#fbd3e4",
+          background: "#ffffff",
         }}
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -322,35 +322,6 @@ export default function Landing() {
             </Button>
           </div>
         </div>
-
-        {/* Simplified, clean wave edge (remove heavy gloss and biscuit base) */}
-        <svg
-          viewBox="0 0 1440 60"
-          className="pointer-events-none absolute left-0 right-0 -bottom-[44px] h-[48px] w-full"
-          aria-hidden="true"
-          preserveAspectRatio="none"
-        >
-          <defs>
-            <linearGradient id="frostingSimple" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#ff97cf" />
-              <stop offset="100%" stopColor="#ff5fb6" />
-            </linearGradient>
-          </defs>
-
-          {/* Thin subtle separator line */}
-          <path d="M0,2 L1440,2" stroke="#a81d74" strokeWidth="2" opacity="0.35" />
-
-          {/* Single smooth wave */}
-          <path
-            d="
-              M0,6
-              C240,22 480,22 720,6
-              C960,-10 1200,-10 1440,6
-              L1440,60 L0,60 Z
-            "
-            fill="url(#frostingSimple)"
-          />
-        </svg>
       </nav>
 
       {/* Clouds */}
