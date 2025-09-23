@@ -537,6 +537,32 @@ export default function Landing() {
         <div className="relative mt-10 grid place-items-center">
           <div className="relative">
             <HempyMascot />
+            <div className="pointer-events-none absolute inset-0 -z-10">
+              <Candy
+                variant="wrapped"
+                color="#ffa6df"
+                className="absolute -left-6 top-8 w-7 sm:w-8 opacity-70"
+                delay={0.25}
+              />
+              <Candy
+                variant="lollipop"
+                color="#79a7ff"
+                className="absolute -right-6 top-10 w-8 sm:w-9 opacity-70"
+                delay={0.6}
+              />
+              <Candy
+                variant="wrapped"
+                color="#ffd34d"
+                className="absolute left-[20%] -bottom-3 w-7 sm:w-8 opacity-70"
+                delay={0.9}
+              />
+              <Candy
+                variant="lollipop"
+                color="#35c163"
+                className="absolute right-[22%] -bottom-5 w-8 sm:w-9 opacity-70"
+                delay={1.15}
+              />
+            </div>
             <div className="mt-2 h-6 w-full rounded-full bg-black/20 blur-md" />
           </div>
           <div className="relative mt-4 w-full">
