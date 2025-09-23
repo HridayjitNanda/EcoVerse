@@ -46,35 +46,18 @@ export default function Landing() {
     // If already playing via either mode, do nothing
     if (isPlaying) return;
 
-    // Try external audio element using Chosic link
+    // Try external audio element using Chosic link — play directly (no WebAudio graph)
     try {
-      // Create HTMLAudioElement
       const el = new Audio(ISLAND_URL);
       el.loop = true;
       el.crossOrigin = "anonymous";
       el.volume = volume;
 
-      // Create AudioContext + Gain chain if possible
-      const Ctx = (window.AudioContext || (window as any).webkitAudioContext);
-      const ctx: AudioContext = new Ctx();
-
-      const gain = ctx.createGain();
-      gain.gain.value = volume;
-
-      let mediaSource: MediaElementAudioSourceNode | null = null;
-      try {
-        mediaSource = ctx.createMediaElementSource(el);
-        mediaSource.connect(gain).connect(ctx.destination);
-      } catch {
-        // If creating a media source fails (due to CORS), play element directly
-        gain.disconnect?.();
-      }
-
-      // Save refs
-      audioCtxRef.current = ctx;
-      gainRef.current = gain;
-      mediaSourceRef.current = mediaSource;
+      // Save refs (direct playback, no AudioContext involvement)
       audioElRef.current = el;
+      mediaSourceRef.current = null;
+      audioCtxRef.current = null;
+      gainRef.current = null;
 
       await el.play();
       setIsPlaying(true);
