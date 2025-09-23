@@ -307,11 +307,11 @@ export default function Landing() {
   return (
     <div className="min-h-screen w-full overflow-hidden" style={{ backgroundColor: "#ffd139" }}>
       
-      {/* Top Nav */}
+      {/* Top Nav - frosting style */}
       <nav
         className="sticky top-0 z-50 border-b-2 border-black relative"
         style={{
-          background: "#ffffff",
+          background: "linear-gradient(180deg,#ff9dd6 0%,#ff64b5 100%)",
         }}
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -319,7 +319,7 @@ export default function Landing() {
             {navItems.map((item, i) => (
               <button
                 key={i}
-                className="hidden rounded-md border-2 border-black bg-transparent px-3 py-1 text-sm font-extrabold tracking-tight hover:translate-y-0.5 active:translate-y-1 transition md:block"
+                className="hidden rounded-md border-2 border-black bg-white px-3 py-1 text-sm font-extrabold tracking-tight hover:translate-y-0.5 active:translate-y-1 transition md:block"
                 onClick={() => {
                   if (item === "Home" || item === "Logo") window.scrollTo({ top: 0, behavior: "smooth" });
                   if (item === "About") document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
@@ -348,6 +348,52 @@ export default function Landing() {
           </div>
         </div>
       </nav>
+
+      {/* Frosting drip and biscuit base under navbar */}
+      <div className="relative -mt-1 pointer-events-none">
+        <svg
+          viewBox="0 0 1440 110"
+          className="block w-full h-[78px]"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <defs>
+            <linearGradient id="frostingGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#ffa6df" />
+              <stop offset="100%" stopColor="#ff4fa3" />
+            </linearGradient>
+          </defs>
+
+          {/* stitched sprinkles line at the very top */}
+          <line x1="0" y1="6" x2="1440" y2="6" stroke="#7b5eb6" strokeWidth="6" strokeDasharray="8 16" strokeLinecap="round" opacity="0.8" />
+
+          {/* subtle gloss curve */}
+          <path d="M0 18 C 360 10, 1080 10, 1440 18 L1440 34 L0 34 Z" fill="#ffffff" opacity="0.35" />
+
+          {/* main frosting band with wavy bottom */}
+          <path
+            d="M0 18 L1440 18 L1440 66
+               C1200 86, 960 46, 720 66
+               C480 86, 240 46, 0 66
+               Z"
+            fill="url(#frostingGrad)"
+          />
+
+          {/* thin separator under frosting */}
+          <line x1="0" y1="66" x2="1440" y2="66" stroke="#a81d74" strokeWidth="3" opacity="0.45" />
+
+          {/* biscuit base following the wave */}
+          <path
+            d="M0 66
+               C240 86, 480 46, 720 66
+               C960 86, 1200 46, 1440 66
+               L1440 110 L0 110 Z"
+            fill="#f5c338"
+            stroke="#b58a1a"
+            strokeWidth="4"
+          />
+        </svg>
+      </div>
 
       {/* Clouds */}
       <div className="pointer-events-none relative mx-auto max-w-7xl">
