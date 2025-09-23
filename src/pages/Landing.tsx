@@ -130,6 +130,43 @@ export default function Landing() {
     </motion.svg>
   );
 
+  // Add: Candy SVG component (wrapped and lollipop variants)
+  const Candy = ({
+    variant = "wrapped",
+    color = "#ff79c6",
+    className = "",
+    delay = 0,
+  }: {
+    variant?: "wrapped" | "lollipop";
+    color?: string;
+    className?: string;
+    delay?: number;
+  }) => (
+    <motion.svg
+      initial={{ opacity: 0, y: 6, rotate: 0 }}
+      animate={{ opacity: 1, y: [0, -6, 0], rotate: [0, 2, 0] }}
+      transition={{ duration: 3.2, repeat: Infinity, delay }}
+      viewBox="0 0 80 80"
+      className={className}
+      aria-hidden="true"
+    >
+      {variant === "wrapped" ? (
+        <>
+          <rect x="18" y="26" width="44" height="28" rx="6" fill={color} stroke="black" strokeWidth="4" />
+          <path d="M18 40 L6 28 L14 40 L6 52 Z" fill={color} stroke="black" strokeWidth="4" />
+          <path d="M62 40 L74 28 L66 40 L74 52 Z" fill={color} stroke="black" strokeWidth="4" />
+          <circle cx="40" cy="40" r="8" fill="#fff" opacity="0.5" />
+        </>
+      ) : (
+        <>
+          <rect x="38" y="36" width="6" height="36" rx="3" fill="#e6e6e6" stroke="black" strokeWidth="3" />
+          <circle cx="41" cy="30" r="18" fill={color} stroke="black" strokeWidth="4" />
+          <path d="M28 30 A13 13 0 0 0 54 30" stroke="white" strokeWidth="4" fill="none" opacity="0.7" />
+        </>
+      )}
+    </motion.svg>
+  );
+
   // Bricks base with arms holding brand signs
   const BricksWithArms = () => (
     <div className="relative w-full max-w-5xl mx-auto">
@@ -500,6 +537,16 @@ export default function Landing() {
           </Button>
         </div>
       </section>
+
+      {/* Add: Decorative candies in lower sections */}
+      <div className="relative mx-auto max-w-7xl h-40 md:h-48 lg:h-56 px-4 sm:px-6 lg:px-8 mb-6 pointer-events-none">
+        {/* Layered candies across bottom area */}
+        <Candy variant="wrapped" color="#ff79c6" className="absolute left-4 bottom-2 w-10 sm:w-12" delay={0.2} />
+        <Candy variant="lollipop" color="#ffd34d" className="absolute left-1/4 bottom-4 w-10 sm:w-12" delay={0.6} />
+        <Candy variant="wrapped" color="#79a7ff" className="absolute left-1/2 bottom-1 w-9 sm:w-11 -translate-x-1/2" delay={1.0} />
+        <Candy variant="lollipop" color="#35c163" className="absolute right-1/3 bottom-5 w-10 sm:w-12" delay={1.4} />
+        <Candy variant="wrapped" color="#ffa6df" className="absolute right-6 bottom-3 w-9 sm:w-11" delay={1.8} />
+      </div>
 
       {/* Bottom CTA for authenticated users to jump to dashboard */}
       <div className="pb-16 text-center">
