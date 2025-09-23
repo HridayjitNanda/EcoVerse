@@ -386,7 +386,7 @@ export default function Landing() {
                     )}
                   </div>
                 </TooltipTrigger>
-                <TooltipContent>Soothing Music</TooltipContent>
+                <TooltipContent>Music</TooltipContent>
               </Tooltip>
             </TooltipProvider>
 
