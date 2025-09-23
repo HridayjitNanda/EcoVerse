@@ -15,10 +15,92 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Slider } from "@/components/ui/slider";
+import { useEffect, useRef, useState } from "react";
 
 export default function Landing() {
   const { isLoading, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Add: audio + volume UI state
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [showVolume, setShowVolume] = useState(false);
+  const [volume, setVolume] = useState(0.3); // 0..1
+
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const gainRef = useRef<GainNode | null>(null);
+  const oscRef = useRef<OscillatorNode | null>(null);
+  const speakerWrapRef = useRef<HTMLDivElement | null>(null);
+
+  // Add: start/stop audio using Web Audio (soothing sine)
+  const startAudio = async () => {
+    if (audioCtxRef.current) return;
+    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const gain = ctx.createGain();
+    gain.gain.value = volume;
+
+    const osc = ctx.createOscillator();
+    osc.type = "sine";
+    osc.frequency.value = 432; // calming pitch
+    osc.connect(gain).connect(ctx.destination);
+    osc.start();
+
+    audioCtxRef.current = ctx;
+    gainRef.current = gain;
+    oscRef.current = osc;
+    setIsPlaying(true);
+  };
+
+  const stopAudio = async () => {
+    try {
+      oscRef.current?.stop();
+      await audioCtxRef.current?.close();
+    } catch {}
+    oscRef.current = null;
+    gainRef.current = null;
+    audioCtxRef.current = null;
+    setIsPlaying(false);
+  };
+
+  // Add: handle speaker click (toggle playback + open volume)
+  const handleSpeakerClick = async () => {
+    if (isPlaying) {
+      await stopAudio();
+      setShowVolume(true);
+      return;
+    }
+    await startAudio();
+    setShowVolume(true);
+  };
+
+  // Add: sync volume with gain node
+  useEffect(() => {
+    if (gainRef.current) {
+      gainRef.current.gain.value = volume;
+    }
+  }, [volume]);
+
+  // Add: click outside to close volume panel
+  useEffect(() => {
+    function onDocClick(e: MouseEvent) {
+      if (!showVolume) return;
+      const t = e.target as Node;
+      if (speakerWrapRef.current && !speakerWrapRef.current.contains(t)) {
+        setShowVolume(false);
+      }
+    }
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, [showVolume]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (audioCtxRef.current) {
+        stopAudio();
+      }
+    };
+  }, []);
 
   // Add: smooth scroll helper
   const scrollToId = (id: string) => {
@@ -219,15 +301,45 @@ export default function Landing() {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <button
-                    className="grid h-9 w-9 place-items-center rounded-md border-2 border-black bg-orange-300 text-lg hover:translate-y-0.5 active:translate-y-1 transition"
-                    aria-label="Go to Hero"
-                    onClick={() => scrollToId("hero")}
-                  >
-                    🔈
-                  </button>
+                  <div ref={speakerWrapRef} className="relative">
+                    <button
+                      className={`grid h-9 w-9 place-items-center rounded-md border-2 border-black text-lg transition hover:translate-y-0.5 active:translate-y-1 ${
+                        isPlaying ? "bg-green-300" : "bg-orange-300"
+                      }`}
+                      aria-label={isPlaying ? "Stop Music & Show Volume" : "Play Music & Show Volume"}
+                      onClick={handleSpeakerClick}
+                    >
+                      🔈
+                    </button>
+
+                    {/* Add: Volume panel */}
+                    {showVolume && (
+                      <div className="absolute right-0 top-11 z-50 w-44 rounded-md border-2 border-black bg-white p-3">
+                        <div className="mb-2 text-xs font-extrabold text-black">Volume</div>
+                        <Slider
+                          value={[Math.round(volume * 100)]}
+                          onValueChange={(val) => setVolume((val?.[0] ?? 30) / 100)}
+                          min={0}
+                          max={100}
+                          step={1}
+                        />
+                        <div className="mt-2 flex items-center justify-between">
+                          <span className="text-xs font-semibold text-black/70">{Math.round(volume * 100)}%</span>
+                          <button
+                            className="text-xs font-extrabold underline"
+                            onClick={() => {
+                              if (isPlaying) stopAudio();
+                              else startAudio();
+                            }}
+                          >
+                            {isPlaying ? "Stop" : "Play"}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </TooltipTrigger>
-                <TooltipContent>Hero</TooltipContent>
+                <TooltipContent>Hero + Music</TooltipContent>
               </Tooltip>
             </TooltipProvider>
 
