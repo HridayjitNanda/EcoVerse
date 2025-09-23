@@ -498,6 +498,9 @@ export default function Landing() {
           <Candy variant="wrapped" color="#ffa6df" className="absolute left-2 top-6 w-7 sm:w-8 opacity-80" delay={0.3} />
           <Candy variant="lollipop" color="#79a7ff" className="absolute right-4 top-12 w-8 sm:w-9 opacity-80" delay={0.9} />
           <Candy variant="wrapped" color="#35c163" className="absolute right-1/3 top-1/3 w-7 opacity-80" delay={0.6} />
+          <Candy variant="wrapped" color="#ffd34d" className="absolute left-[28%] top-[26%] w-6 sm:w-7 opacity-50" delay={0.45} />
+          <Candy variant="lollipop" color="#ff79c6" className="absolute right-[30%] top-[24%] w-7 sm:w-8 opacity-55" delay={0.75} />
+          <Candy variant="wrapped" color="#79a7ff" className="absolute left-[50%] top-[40%] w-6 -translate-x-1/2 opacity-45" delay={1.05} />
         </div>
         <div className="text-center">
           <motion.h1
