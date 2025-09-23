@@ -43,16 +43,54 @@ export default function Landing() {
 
   // Add: start/stop audio using Web Audio (soothing sine)
   const startAudio = async () => {
-    if (audioCtxRef.current) return;
+    // If already playing via either mode, do nothing
+    if (isPlaying) return;
 
-    // New soothing ambient: sine + sawtooth at 432Hz & 648Hz, gentle lowpass, slow drift
+    // Try external audio element using Chosic link
+    try {
+      // Create HTMLAudioElement
+      const el = new Audio(ISLAND_URL);
+      el.loop = true;
+      el.crossOrigin = "anonymous";
+      el.volume = volume;
+
+      // Create AudioContext + Gain chain if possible
+      const Ctx = (window.AudioContext || (window as any).webkitAudioContext);
+      const ctx: AudioContext = new Ctx();
+
+      const gain = ctx.createGain();
+      gain.gain.value = volume;
+
+      let mediaSource: MediaElementAudioSourceNode | null = null;
+      try {
+        mediaSource = ctx.createMediaElementSource(el);
+        mediaSource.connect(gain).connect(ctx.destination);
+      } catch {
+        // If creating a media source fails (due to CORS), play element directly
+        gain.disconnect?.();
+      }
+
+      // Save refs
+      audioCtxRef.current = ctx;
+      gainRef.current = gain;
+      mediaSourceRef.current = mediaSource;
+      audioElRef.current = el;
+
+      await el.play();
+      setIsPlaying(true);
+      return;
+    } catch {
+      // Fallback to synth if external playback fails
+    }
+
+    // Fallback: soothing ambient synth (sine + sawtooth, lowpass, slow drift)
     const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
     const gain = ctx.createGain();
     gain.gain.value = volume;
 
     const lowpass = ctx.createBiquadFilter();
     lowpass.type = "lowpass";
-    lowpass.frequency.value = 1000; // slightly softer tone
+    lowpass.frequency.value = 1000;
     lowpass.Q.value = 0.9;
 
     const osc1 = ctx.createOscillator();
@@ -73,7 +111,7 @@ export default function Landing() {
     let up = true;
     const scheduleDrift = () => {
       const now = ctx.currentTime;
-      const dur = 10; // slower drift
+      const dur = 10;
       const target1 = up ? 440 : 432;
       const target2 = up ? 660 : 648;
       try {
@@ -84,17 +122,16 @@ export default function Landing() {
       } catch {}
       up = !up;
     };
-
     scheduleDrift();
     driftTimerRef.current = window.setInterval(scheduleDrift, 10000);
 
-    // Save refs
+    // Save refs for synth mode
     audioCtxRef.current = ctx;
     gainRef.current = gain;
     oscRef.current = osc1;
     osc2Ref.current = osc2;
 
-    // Ensure external audio refs are cleared since we're not using them now
+    // Ensure external refs are cleared
     mediaSourceRef.current = null;
     audioElRef.current = null;
 
