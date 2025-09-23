@@ -184,9 +184,8 @@ export default function Landing() {
     </motion.div>
   );
 
-  // Nav items matching the reference
-  // Keep original items to preserve theme but add "Features" for EcoVerse section
-  const navItems = ["Logo", "Home", "About", "Features", "Roadmap", "FAQ", "White Paper"];
+  // Nav items (removed per request; keeping only icon buttons and SIGN-UP)
+  const navItems: string[] = [];
 
   return (
     <div className="min-h-screen w-full overflow-hidden" style={{ backgroundColor: "#ffd139" }}>
