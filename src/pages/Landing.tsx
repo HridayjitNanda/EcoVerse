@@ -186,7 +186,7 @@ export default function Landing() {
 
   // Nav items matching the reference
   // Keep original items to preserve theme but add "Features" for EcoVerse section
-  const navItems = ["Logo", "Hero", "About Us", "Features", "Roadmap", "Hempynomics", "FAQ", "White Paper"];
+  const navItems = ["Logo", "Home", "About", "Features", "Roadmap", "FAQ", "White Paper"];
 
   return (
     <div className="min-h-screen w-full overflow-hidden" style={{ backgroundColor: "#ffd139" }}>
@@ -199,8 +199,8 @@ export default function Landing() {
                 key={i}
                 className="hidden rounded-md border-2 border-black bg-transparent px-3 py-1 text-sm font-extrabold tracking-tight hover:translate-y-0.5 active:translate-y-1 transition md:block"
                 onClick={() => {
-                  if (item === "Hero" || item === "Logo") window.scrollTo({ top: 0, behavior: "smooth" });
-                  if (item === "About Us") document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
+                  if (item === "Home" || item === "Logo") window.scrollTo({ top: 0, behavior: "smooth" });
+                  if (item === "About") document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
                   if (item === "Features") document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
                 }}
               >
@@ -247,8 +247,8 @@ export default function Landing() {
             className="mx-auto max-w-4xl text-4xl font-extrabold leading-tight tracking-tight text-black sm:text-6xl"
             style={{ textShadow: "0 3px 0 rgba(0,0,0,0.25)" }}
           >
-            SHEIN, H&amp;M, ZARA —{" "}
-            <span className="block">YOUR DAYS ARE NUMBERED</span>
+            ECOVERSE —{" "}
+            <span className="block">LEARN. PLAY. TAKE ACTION.</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 12 }}
@@ -256,7 +256,7 @@ export default function Landing() {
             transition={{ delay: 0.15, duration: 0.5 }}
             className="mx-auto mt-4 max-w-2xl text-lg font-semibold text-black/80"
           >
-            Hempy is building the first crypto-powered fashion empire powered by degens, real science, and care for the planet
+            A gamified environmental education platform. Battle your Personal Monster, team up for the World Boss, and earn EcoTokens for real-world impact.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -268,7 +268,7 @@ export default function Landing() {
               className="rounded-md border-2 border-black bg-[#35c163] px-6 py-6 text-base font-extrabold text-black hover:bg-[#2cb25a]"
               onClick={() => navigate("/auth")}
             >
-              BUY SHEMPY
+              START NOW
             </Button>
           </motion.div>
         </div>
