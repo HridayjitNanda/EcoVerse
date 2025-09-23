@@ -370,11 +370,13 @@ export default function Landing() {
           {/* subtle gloss curve */}
           <path d="M0 18 C 360 10, 1080 10, 1440 18 L1440 34 L0 34 Z" fill="#ffffff" opacity="0.35" />
 
-          {/* main frosting band with wavy bottom */}
+          {/* main frosting band with wavy bottom - increased curvature and frequency */}
           <path
-            d="M0 18 L1440 18 L1440 66
-               C1200 86, 960 46, 720 66
-               C480 86, 240 46, 0 66
+            d="M0 18 L1440 18 L1440 78
+               C1320 102, 1200 54, 1080 78
+               C960 102, 840 54, 720 78
+               C600 102, 480 54, 360 78
+               C240 102, 120 54, 0 78
                Z"
             fill="url(#frostingGrad)"
           />
@@ -382,11 +384,11 @@ export default function Landing() {
           {/* thin separator under frosting */}
           <line x1="0" y1="66" x2="1440" y2="66" stroke="#a81d74" strokeWidth="3" opacity="0.45" />
 
-          {/* biscuit base following the wave */}
+          {/* biscuit base following the wave - matched curvature */}
           <path
-            d="M0 66
-               C240 86, 480 46, 720 66
-               C960 86, 1200 46, 1440 66
+            d="M0 78
+               C240 102, 480 54, 720 78
+               C960 102, 1200 54, 1440 78
                L1440 110 L0 110 Z"
             fill="#f5c338"
             stroke="#b58a1a"
