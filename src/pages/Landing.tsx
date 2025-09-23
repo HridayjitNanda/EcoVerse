@@ -19,420 +19,307 @@ export default function Landing() {
   const { isLoading, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  const ticker = [
-    { label: "HFT", value: "$0.0032", delta: "+12.4%" },
-    { label: "MKT CAP", value: "$12.5M", delta: "+4.3%" },
-    { label: "LIQUIDITY", value: "$2.1M", delta: "Locked" },
-    { label: "HOLDERS", value: "24,382", delta: "+281" },
-  ];
+  // Simple Cloud SVG component
+  const Cloud = ({ className = "", delay = 0 }) => (
+    <motion.svg
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: [0, -6, 0] }}
+      transition={{ duration: 6, repeat: Infinity, delay }}
+      viewBox="0 0 200 80"
+      className={className}
+      aria-hidden="true"
+    >
+      <path
+        d="M30 60c-12 0-22-10-22-22S18 16 30 16c3-10 12-16 22-16 13 0 24 10 25 23 2-1 5-2 8-2 12 0 22 10 22 22s-10 22-22 22H30Z"
+        fill="white"
+        stroke="black"
+        strokeWidth="4"
+      />
+    </motion.svg>
+  );
 
-  const tokenomics = [
-    { title: "Liquidity", percent: "55%", desc: "Locked for stability", icon: <Shield className="h-5 w-5" /> },
-    { title: "Community", percent: "30%", desc: "AirDrops & rewards", icon: <Stars className="h-5 w-5" /> },
-    { title: "Treasury", percent: "10%", desc: "Ecosystem growth", icon: <TrendingUp className="h-5 w-5" /> },
-    { title: "Team", percent: "5%", desc: "Vested & transparent", icon: <Wallet className="h-5 w-5" /> },
-  ];
+  // Bricks base with arms holding brand signs
+  const BricksWithArms = () => (
+    <div className="relative w-full max-w-5xl mx-auto">
+      {/* Bricks pile */}
+      <motion.div
+        className="absolute inset-x-0 bottom-0 h-28"
+        initial={{ y: 10 }}
+        animate={{ y: [0, 2, 0] }}
+        transition={{ duration: 4, repeat: Infinity }}
+      >
+        <div className="h-full w-full [--brick:#c3442e] [--mortar:#111]">
+          {/* create rows of chunky bricks via CSS gradients */}
+          <div
+            className="h-full w-full rounded-[12px] border-4 border-black"
+            style={{
+              backgroundImage:
+                "repeating-linear-gradient(90deg, var(--brick), var(--brick) 40px, var(--mortar) 42px), repeating-linear-gradient(0deg, var(--brick), var(--brick) 22px, var(--mortar) 24px)",
+              filter: "drop-shadow(0px 6px 0px rgba(0,0,0,0.35))",
+              clipPath:
+                "polygon(0 40%, 8% 30%, 16% 45%, 24% 35%, 32% 48%, 40% 32%, 48% 50%, 56% 38%, 64% 52%, 72% 36%, 80% 50%, 88% 34%, 96% 46%, 100% 40%, 100% 100%, 0 100%)",
+            }}
+          />
+        </div>
+      </motion.div>
 
-  const roadmap = [
-    {
-      phase: "Phase 1",
-      title: "Ignition",
-      items: ["Launch & Liquidity", "CMC/CG Listings", "1K Holders"],
-    },
-    {
-      phase: "Phase 2",
-      title: "Momentum",
-      items: ["Staking & Rewards", "Meme Contest", "10K Holders"],
-    },
-    {
-      phase: "Phase 3",
-      title: "Orbit",
-      items: ["CEX Listings", "Brand Partnerships", "50K Holders"],
-    },
-  ];
+      {/* Left arm */}
+      <motion.div
+        className="absolute -left-3 bottom-16 origin-right"
+        animate={{ rotate: [0, -8, 0] }}
+        transition={{ duration: 2.2, repeat: Infinity }}
+      >
+        <div className="flex items-center">
+          <div className="h-2 w-16 bg-black" />
+          <div className="ml-2 rounded-md border-4 border-black bg-orange-400 px-3 py-1 text-xl font-extrabold">
+            H&M
+          </div>
+        </div>
+      </motion.div>
 
-  const howToBuy = [
-    {
-      title: "Create/Use Wallet",
-      desc: "Install a crypto wallet (e.g., MetaMask) or use your existing one.",
-      icon: <Wallet className="h-6 w-6" />,
-    },
-    {
-      title: "Add Funds",
-      desc: "Buy ETH/BNB/SOL on your preferred on-ramp and send it to your wallet.",
-      icon: <Coins className="h-6 w-6" />,
-    },
-    {
-      title: "Swap for HFT",
-      desc: "Use your DEX of choice and paste our token address to swap.",
-      icon: <Flame className="h-6 w-6" />,
-    },
-  ];
+      {/* Right arm */}
+      <motion.div
+        className="absolute -right-3 bottom-16 origin-left"
+        animate={{ rotate: [0, 8, 0] }}
+        transition={{ duration: 2.4, repeat: Infinity }}
+      >
+        <div className="flex items-center">
+          <div className="mr-2 rounded-md border-4 border-black bg-orange-400 px-3 py-1 text-xl font-extrabold">
+            ZARA
+          </div>
+          <div className="h-2 w-16 bg-black" />
+        </div>
+      </motion.div>
+
+      {/* Floating "Big Cotton" plank on right */}
+      <motion.div
+        className="absolute right-8 -bottom-2 rotate-6"
+        animate={{ y: [0, -6, 0], rotate: [6, 2, 6] }}
+        transition={{ duration: 3.2, repeat: Infinity }}
+      >
+        <div className="rounded-md border-4 border-black bg-orange-400 px-4 py-2 text-lg font-extrabold">
+          Big Cotton
+        </div>
+      </motion.div>
+    </div>
+  );
+
+  // Hempy mascot (simple bold SVG character)
+  const HempyMascot = () => (
+    <motion.div
+      initial={{ y: 0 }}
+      animate={{ y: [-6, 0, -6] }}
+      transition={{ duration: 3.4, repeat: Infinity }}
+      className="relative"
+    >
+      <svg
+        viewBox="0 0 260 320"
+        className="w-[280px] sm:w-[340px] drop-shadow-[0_6px_0_rgba(0,0,0,0.35)]"
+      >
+        {/* legs */}
+        <g>
+          <rect x="95" y="210" width="22" height="60" fill="#79a7ff" stroke="black" strokeWidth="6" rx="10" />
+          <rect x="142" y="210" width="22" height="60" fill="#79a7ff" stroke="black" strokeWidth="6" rx="10" />
+          {/* shoes */}
+          <path d="M80 270 h55 v20 h-70 v-10 q0-10 15-10Z" fill="#ffffff" stroke="black" strokeWidth="6" />
+          <path d="M130 270 h55 v20 h70 v-10 q0-10-15-10Z" fill="#ffffff" stroke="black" strokeWidth="6" />
+          <circle cx="105" cy="280" r="6" fill="#e83c7f" />
+          <circle cx="170" cy="280" r="6" fill="#e83c7f" />
+        </g>
+
+        {/* hoodie */}
+        <path
+          d="M60 120 q70-60 140 0 v80 q0 30-70 40 q-70-10-70-40Z"
+          fill="#ff79c6"
+          stroke="black"
+          strokeWidth="6"
+        />
+        {/* hoodie cords */}
+        <path d="M120 170 v30" stroke="black" strokeWidth="6" />
+        <path d="M150 170 v30" stroke="black" strokeWidth="6" />
+        <circle cx="120" cy="202" r="4" fill="#ffd34d" stroke="black" strokeWidth="3" />
+        <circle cx="150" cy="202" r="4" fill="#ffd34d" stroke="black" strokeWidth="3" />
+
+        {/* leaf badge */}
+        <path d="M95 185 q10-8 14 0 q-6 10-14 0Z" fill="#27c93f" stroke="black" strokeWidth="4" />
+
+        {/* head circle */}
+        <circle cx="130" cy="110" r="60" fill="#4ea3ff" stroke="black" strokeWidth="8" />
+        {/* head fluff outline */}
+        <path
+          d="M70 112 q8-36 40-50 q36-16 70 10 q26 20 24 48"
+          fill="none"
+          stroke="black"
+          strokeWidth="8"
+        />
+        {/* leaves inside head */}
+        <g fill="#2ecc71" stroke="black" strokeWidth="4">
+          <ellipse cx="110" cy="90" rx="10" ry="6" />
+          <ellipse cx="150" cy="100" rx="12" ry="7" />
+          <ellipse cx="128" cy="125" rx="9" ry="5" />
+        </g>
+
+        {/* eyes and smile */}
+        <g>
+          <ellipse cx="118" cy="110" rx="16" ry="12" fill="white" stroke="black" strokeWidth="4" />
+          <ellipse cx="155" cy="112" rx="16" ry="12" fill="white" stroke="black" strokeWidth="4" />
+          <circle cx="122" cy="112" r="6" fill="#1f2937" />
+          <circle cx="158" cy="114" r="6" fill="#1f2937" />
+          <path d="M120 135 q12 10 28 0" stroke="#1f9e55" strokeWidth="6" fill="none" strokeLinecap="round" />
+        </g>
+
+        {/* right hand peace sign */}
+        <g>
+          <motion.g
+            animate={{ rotate: [0, 10, 0] }}
+            transition={{ duration: 2.2, repeat: Infinity }}
+            transform="translate(180,130)"
+          >
+            <rect x="-10" y="0" width="10" height="40" rx="5" fill="#ff79c6" stroke="black" strokeWidth="6" />
+            <rect x="-14" y="-8" width="8" height="22" rx="4" fill="#ffffff" stroke="black" strokeWidth="5" />
+            <rect x="-4" y="-8" width="8" height="22" rx="4" fill="#ffffff" stroke="black" strokeWidth="5" />
+          </motion.g>
+        </g>
+      </svg>
+    </motion.div>
+  );
+
+  // Nav items matching the reference
+  const navItems = ["Logo", "Hero", "About Us", "Roadmap", "Hempynomics", "FAQ", "White Paper"];
 
   return (
-    <div className="min-h-screen overflow-hidden bg-[radial-gradient(1200px_600px_at_10%_-10%,rgba(59,130,246,.15),transparent),radial-gradient(900px_500px_at_110%_10%,rgba(99,102,241,.15),transparent)] dark:bg-[radial-gradient(1200px_600px_at_10%_-10%,rgba(59,130,246,.2),transparent),radial-gradient(900px_500px_at_110%_10%,rgba(99,102,241,.2),transparent)]">
-      {/* Nav */}
-      <nav className="sticky top-0 z-50 bg-white/60 dark:bg-gray-900/60 backdrop-blur-md border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-3 cursor-pointer" onClick={() => navigate("/")}>
-            <img src="/logo.svg" alt="CopyVault" className="h-8 w-8" />
-            <span className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-              Hempy Fan Token
-            </span>
+    <div className="min-h-screen w-full overflow-hidden" style={{ backgroundColor: "#ffd139" }}>
+      {/* Top Nav */}
+      <nav className="sticky top-0 z-50 border-b-4 border-black bg-[#ffd139]">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-4">
+            {navItems.map((item, i) => (
+              <button
+                key={i}
+                className="hidden rounded-md border-2 border-black bg-transparent px-3 py-1 text-sm font-extrabold tracking-tight hover:translate-y-0.5 active:translate-y-1 transition md:block"
+                onClick={() => {
+                  if (item === "Hero") window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+              >
+                {item.toUpperCase()}
+              </button>
+            ))}
           </div>
+
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => navigate("/auth")}>Buy HFT</Button>
-            {!isLoading && (
-              isAuthenticated ? (
-                <Button onClick={() => navigate("/dashboard")}>
-                  Dashboard <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              ) : (
-                <Button onClick={() => navigate("/auth")}>
-                  Get Started <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              )
-            )}
+            {/* small icon buttons (decorative) */}
+            {["🔈", "🎧", "🧢", "🧪"].map((i, idx) => (
+              <button
+                key={idx}
+                className="grid h-9 w-9 place-items-center rounded-md border-2 border-black bg-orange-300 text-lg hover:translate-y-0.5 active:translate-y-1 transition"
+                aria-label="icon"
+              >
+                {i}
+              </button>
+            ))}
+            <Button
+              className="rounded-md border-2 border-black bg-white text-black hover:bg-white/90"
+              onClick={() => navigate("/auth")}
+            >
+              SIGN-UP
+            </Button>
           </div>
         </div>
       </nav>
 
-      {/* Ticker */}
-      <div className="border-y bg-white/50 dark:bg-gray-900/50">
-        <div className="max-w-[100vw] overflow-hidden">
-          <div className="flex whitespace-nowrap animate-[marquee_24s_linear_infinite] py-3">
-            {[...ticker, ...ticker].map((t, i) => (
-              <div key={i} className="flex items-center gap-2 px-6">
-                <span className="text-xs font-semibold text-gray-500">{t.label}</span>
-                <span className="text-sm font-bold">{t.value}</span>
-                <span className={`text-xs ${t.delta.includes("+") ? "text-green-600" : "text-amber-500"}`}>
-                  {t.delta}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
+      {/* Clouds */}
+      <div className="pointer-events-none relative mx-auto max-w-7xl">
+        <Cloud className="absolute left-4 top-10 w-32" delay={0.2} />
+        <Cloud className="absolute right-10 top-6 w-40" delay={0.6} />
+        <Cloud className="absolute left-1/2 top-24 w-28 -translate-x-1/2" delay={1.0} />
       </div>
 
-      {/* Hero */}
-      <section className="relative py-16 sm:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-10 items-center">
-          <div>
-            <motion.div
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs bg-white/70 dark:bg-gray-800/70">
-                <Rocket className="h-4 w-4 text-indigo-600" />
-                Launched • 24,000+ holders
-              </div>
-              <h1 className="mt-4 text-4xl sm:text-6xl tracking-tight font-extrabold text-gray-900 dark:text-white">
-                The Meme Token with
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                  Real Community Power
-                </span>
-              </h1>
-              <p className="mt-4 text-lg text-gray-600 dark:text-gray-300 max-w-xl">
-                Meet Hempy—your fan-fueled rocket to the moon. Community-first, liquidity locked,
-                and built for fun, rewards, and long-term vibes.
-              </p>
-              <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                <Button size="lg" className="text-base" onClick={() => navigate("/auth")}>
-                  Buy on DEX <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-                <Button size="lg" variant="outline" className="text-base" onClick={() => navigate("/auth")}>
-                  View Chart
-                </Button>
-              </div>
-              <div className="mt-6 flex items-center gap-6 text-sm text-gray-600 dark:text-gray-300">
-                <div className="flex items-center gap-2">
-                  <Shield className="h-4 w-4" /> Liquidity Locked
-                </div>
-                <div className="flex items-center gap-2">
-                  <Stars className="h-4 w-4" /> Fair Launch
-                </div>
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4" /> Hyper Deflationary
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Animated Mascots */}
-          <div className="relative">
-            <motion.div
-              className="relative mx-auto aspect-square w-full max-w-md rounded-3xl border bg-white/60 dark:bg-gray-900/60 backdrop-blur-md"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7 }}
-            >
-              {/* Coin */}
-              <motion.div
-                className="absolute -top-6 -left-4"
-                animate={{ y: [0, -12, 0], rotate: [0, -6, 6, 0] }}
-                transition={{ duration: 4, repeat: Infinity }}
-              >
-                <div className="h-20 w-20 rounded-full bg-gradient-to-br from-yellow-300 to-amber-500 border-4 border-amber-200 shadow-inner grid place-items-center text-3xl">
-                  🪙
-                </div>
-              </motion.div>
-
-              {/* Hempy character */}
-              <motion.div
-                className="absolute inset-0 grid place-items-center"
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 3.2, repeat: Infinity }}
-              >
-                <div className="text-[110px] sm:text-[140px] select-none">🌿</div>
-              </motion.div>
-
-              {/* Side sticker */}
-              <motion.div
-                className="absolute -right-6 top-8"
-                animate={{ y: [0, 8, 0], rotate: [0, 4, -2, 0] }}
-                transition={{ duration: 3.6, repeat: Infinity }}
-              >
-                <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-500 text-white grid place-items-center text-3xl">
-                  😼
-                </div>
-              </motion.div>
-
-              {/* Sparkles */}
-              <motion.div
-                className="absolute bottom-6 left-8 text-2xl"
-                animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.2, 1] }}
-                transition={{ duration: 2.2, repeat: Infinity }}
-              >
-                ✨
-              </motion.div>
-              <motion.div
-                className="absolute bottom-10 right-10 text-2xl"
-                animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.2, 1] }}
-                transition={{ duration: 2.6, repeat: Infinity }}
-              >
-                ✨
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="py-14 bg-white/50 dark:bg-gray-800/50 border-y">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            {
-              icon: <Shield className="h-6 w-6" />,
-              title: "Locked Liquidity",
-              desc: "Security-first design keeps the floor steady.",
-            },
-            {
-              icon: <Stars className="h-6 w-6" />,
-              title: "Community Rewards",
-              desc: "Win airdrops, contests, and weekly giveaways.",
-            },
-            {
-              icon: <TrendingUp className="h-6 w-6" />,
-              title: "Deflationary Mechanics",
-              desc: "Periodic burns and buybacks for scarcity.",
-            },
-          ].map((f, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-            >
-              <Card className="h-full">
-                <CardHeader>
-                  <div className="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900 grid place-items-center text-blue-700 dark:text-blue-200">
-                    {f.icon}
-                  </div>
-                  <CardTitle className="mt-2 text-xl">{f.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-base">{f.desc}</CardDescription>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* Tokenomics */}
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Tokenomics</h2>
-            <p className="text-gray-600 dark:text-gray-300 mt-2">
-              Transparent distribution designed for long-term sustainability.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {tokenomics.map((t, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08 }}
-              >
-                <Card className="h-full">
-                  <CardHeader>
-                    <div className="w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-900 grid place-items-center text-indigo-700 dark:text-indigo-200">
-                      {t.icon}
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg">{t.title}</CardTitle>
-                      <span className="text-indigo-600 dark:text-indigo-300 font-bold">{t.percent}</span>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription>{t.desc}</CardDescription>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How to Buy */}
-      <section className="py-16 bg-white/50 dark:bg-gray-800/50 border-y">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">How to Buy</h2>
-            <p className="text-gray-600 dark:text-gray-300 mt-2">
-              Three simple steps to join the Hempy fam.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {howToBuy.map((s, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-              >
-                <Card className="h-full">
-                  <CardHeader>
-                    <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900 grid place-items-center text-emerald-700 dark:text-emerald-200">
-                      {s.icon}
-                    </div>
-                    <CardTitle className="text-xl">{s.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-base">{s.desc}</CardDescription>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-          <div className="mt-8 flex justify-center">
-            <Button size="lg" onClick={() => navigate("/auth")}>
-              Buy HFT Now <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Roadmap */}
-      <section className="py-16">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">Roadmap</h2>
-            <p className="text-gray-600 dark:text-gray-300 mt-2">Milestones to orbit and beyond.</p>
-          </div>
-          <div className="space-y-6">
-            {roadmap.map((r, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08 }}
-              >
-                <Card>
-                  <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                    <div className="inline-flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900 grid place-items-center text-purple-700 dark:text-purple-200">
-                        <Rocket className="h-4 w-4" />
-                      </div>
-                      <CardTitle className="text-xl">{r.phase} • {r.title}</CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      {r.items.map((it, idx) => (
-                        <li key={idx} className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-                          <Check className="h-4 w-4 text-green-600" /> {it}
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-16">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="rounded-3xl border bg-white/60 dark:bg-gray-900/60 backdrop-blur-md p-8 text-center"
+      {/* Hero Content */}
+      <section className="relative mx-auto max-w-7xl px-4 pb-24 pt-12 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <motion.h1
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="mx-auto max-w-4xl text-4xl font-extrabold leading-tight tracking-tight text-black sm:text-6xl"
+            style={{ textShadow: "0 3px 0 rgba(0,0,0,0.25)" }}
           >
-            <div className="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 grid place-items-center text-white">
-              <Rocket className="h-7 w-7" />
-            </div>
-            <h3 className="mt-4 text-3xl font-bold tracking-tight">Join the Hempy Movement</h3>
-            <p className="mt-2 text-gray-600 dark:text-gray-300">
-              Get in early. Get rewarded. Let's take this rocket together.
-            </p>
-            <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
-              {!isLoading && !isAuthenticated && (
-                <Button size="lg" onClick={() => navigate("/auth")}>
-                  Start Free <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              )}
-              <Button size="lg" variant="outline" onClick={() => navigate("/dashboard")}>
-                View Dashboard
-              </Button>
-            </div>
+            SHEIN, H&amp;M, ZARA —{" "}
+            <span className="block">YOUR DAYS ARE NUMBERED</span>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15, duration: 0.5 }}
+            className="mx-auto mt-4 max-w-2xl text-lg font-semibold text-black/80"
+          >
+            Hempy is building the first crypto-powered fashion empire powered by degens, real science, and care for the planet
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25, duration: 0.5 }}
+            className="mt-6 flex justify-center"
+          >
+            <Button
+              className="rounded-md border-2 border-black bg-[#35c163] px-6 py-6 text-base font-extrabold text-black hover:bg-[#2cb25a]"
+              onClick={() => navigate("/auth")}
+            >
+              BUY SHEMPY
+            </Button>
           </motion.div>
         </div>
-      </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <img src="/logo.svg" alt="CopyVault" className="h-8 w-8" />
-            <span className="text-lg font-bold tracking-tight">Hempy Fan Token</span>
+        {/* Scene: Character + Bricks */}
+        <div className="relative mt-10 grid place-items-center">
+          <div className="relative">
+            <HempyMascot />
+            <div className="mt-2 h-6 w-full rounded-full bg-black/20 blur-md" />
           </div>
-          <div className="text-gray-400 text-sm text-center md:text-right">
-            <p>© 2024 Hempy Fan Token. All rights reserved.</p>
-            <p className="mt-1">
-              Built with ❤️ by{" "}
-              <a
-                href="https://vly.ai"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-400 hover:text-blue-300 transition-colors"
-              >
-                vly.ai
-              </a>
-            </p>
+          <div className="relative mt-4 w-full">
+            <BricksWithArms />
           </div>
         </div>
-      </footer>
+      </section>
 
-      {/* Keyframes */}
-      <style>
-        {`@keyframes marquee { 0% { transform: translateX(0) } 100% { transform: translateX(-50%) } }`}
-      </style>
+      {/* Bottom CTA for authenticated users to jump to dashboard */}
+      <div className="pb-16 text-center">
+        {!isLoading && isAuthenticated ? (
+          <Button
+            variant="outline"
+            className="rounded-md border-2 border-black bg-white px-6 py-5 text-base font-extrabold text-black hover:bg-white/90"
+            onClick={() => navigate("/dashboard")}
+          >
+            Go to Dashboard
+          </Button>
+        ) : (
+          <Button
+            variant="outline"
+            className="rounded-md border-2 border-black bg-white px-6 py-5 text-base font-extrabold text-black hover:bg-white/90"
+            onClick={() => navigate("/auth")}
+          >
+            Get Started
+          </Button>
+        )}
+      </div>
+
+      {/* Footer (simple, bold) */}
+      <footer className="border-t-4 border-black bg-[#ffd139] py-8">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          <span className="text-lg font-extrabold tracking-tight">Hempy Fan Token</span>
+          <span className="text-sm font-semibold">
+            © 2024 Hempy. Built by{" "}
+            <a
+              href="https://vly.ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline"
+            >
+              vly.ai
+            </a>
+          </span>
+        </div>
+      </footer>
     </div>
   );
 }
