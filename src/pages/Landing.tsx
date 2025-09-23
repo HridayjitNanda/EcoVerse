@@ -394,14 +394,6 @@ export default function Landing() {
           <p className="mt-3 text-black/80 font-semibold">
             Learn and take action through play. Battle with your Personal Monster, team up against the World Boss, and earn points and EcoTokens as rewards.
           </p>
-          <div className="mt-6">
-            <Button
-              className="rounded-md border-2 border-black bg-white text-black hover:bg-white/90 px-6 py-5 font-extrabold"
-              onClick={() => navigate("/auth")}
-            >
-              Get Started
-            </Button>
-          </div>
         </motion.div>
       </section>
 
@@ -446,15 +438,7 @@ export default function Landing() {
           >
             Go to Dashboard
           </Button>
-        ) : (
-          <Button
-            variant="outline"
-            className="rounded-md border-2 border-black bg-white px-6 py-5 text-base font-extrabold text-black hover:bg-white/90"
-            onClick={() => navigate("/auth")}
-          >
-            Get Started
-          </Button>
-        )}
+        ) : null}
       </div>
 
       {/* Footer (simple, bold) */}
