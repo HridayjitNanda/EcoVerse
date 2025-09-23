@@ -216,7 +216,6 @@ export default function Landing() {
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Make icon buttons functional with tooltips */}
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -229,45 +228,6 @@ export default function Landing() {
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>Hero</TooltipContent>
-              </Tooltip>
-
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    className="grid h-9 w-9 place-items-center rounded-md border-2 border-black bg-orange-300 text-lg hover:translate-y-0.5 active:translate-y-1 transition"
-                    aria-label="View Features"
-                    onClick={() => scrollToId("features")}
-                  >
-                    🎧
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent>Features</TooltipContent>
-              </Tooltip>
-
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    className="grid h-9 w-9 place-items-center rounded-md border-2 border-black bg-orange-300 text-lg hover:translate-y-0.5 active:translate-y-1 transition"
-                    aria-label="About EcoVerse"
-                    onClick={() => scrollToId("about")}
-                  >
-                    🧢
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent>About</TooltipContent>
-              </Tooltip>
-
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    className="grid h-9 w-9 place-items-center rounded-md border-2 border-black bg-orange-300 text-lg hover:translate-y-0.5 active:translate-y-1 transition"
-                    aria-label="Get Started"
-                    onClick={() => navigate("/auth")}
-                  >
-                    🧪
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent>Get Started</TooltipContent>
               </Tooltip>
             </TooltipProvider>
 
