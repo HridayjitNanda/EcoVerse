@@ -32,12 +32,32 @@ const schema = defineSchema(
       role: v.optional(roleValidator), // role of the user. do not remove
     }).index("email", ["email"]), // index for the email. do not remove or modify
 
-    // add other tables here
+    // Copy management tables
+    copies: defineTable({
+      title: v.string(),
+      content: v.string(),
+      category: v.string(),
+      tags: v.array(v.string()),
+      userId: v.id("users"),
+      isPublic: v.boolean(),
+      views: v.number(),
+      likes: v.number(),
+    })
+      .index("by_user", ["userId"])
+      .index("by_category", ["category"])
+      .index("by_public", ["isPublic"]),
 
-    // tableName: defineTable({
-    //   ...
-    //   // table fields
-    // }).index("by_field", ["field"])
+    likes: defineTable({
+      userId: v.id("users"),
+      copyId: v.id("copies"),
+    }).index("by_user_and_copy", ["userId", "copyId"]),
+
+    categories: defineTable({
+      name: v.string(),
+      description: v.optional(v.string()),
+      color: v.optional(v.string()),
+      userId: v.id("users"),
+    }).index("by_user", ["userId"]),
   },
   {
     schemaValidation: false,
