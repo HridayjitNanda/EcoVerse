@@ -27,81 +27,124 @@ export default function Landing() {
   const [showVolume, setShowVolume] = useState(false);
   const [volume, setVolume] = useState(0.3); // 0..1
 
+  // Add: external audio track for "Island" (Luke Bergs) via Chosic
+  const ISLAND_URL = "https://www.chosic.com/download-audio/42076/";
+
+  // Add: refs for HTMLAudioElement and media source
+  const audioElRef = useRef<HTMLAudioElement | null>(null);
+  const mediaSourceRef = useRef<MediaElementAudioSourceNode | null>(null);
+
   const audioCtxRef = useRef<AudioContext | null>(null);
   const gainRef = useRef<GainNode | null>(null);
   const oscRef = useRef<OscillatorNode | null>(null);
-  const speakerWrapRef = useRef<HTMLDivElement | null>(null);
-  // Add: second oscillator + timer ref for gentle drifting
   const osc2Ref = useRef<OscillatorNode | null>(null);
   const driftTimerRef = useRef<number | null>(null);
+  const speakerWrapRef = useRef<HTMLDivElement | null>(null);
 
   // Add: start/stop audio using Web Audio (soothing sine)
   const startAudio = async () => {
     if (audioCtxRef.current) return;
-    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-    const gain = ctx.createGain();
-    gain.gain.value = volume;
+    try {
+      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const audio = new Audio(ISLAND_URL);
+      audio.crossOrigin = "anonymous";
+      audio.loop = true;
 
-    // Gentle low-pass filter to soften the tone
-    const lowpass = ctx.createBiquadFilter();
-    lowpass.type = "lowpass";
-    lowpass.frequency.value = 1200;
-    lowpass.Q.value = 0.7;
+      // Create WebAudio chain for volume control
+      const source = ctx.createMediaElementSource(audio);
+      const gain = ctx.createGain();
+      gain.gain.value = volume;
 
-    // Two soft triangle oscillators with slight detune for warmth
-    const osc1 = ctx.createOscillator();
-    osc1.type = "triangle";
-    osc1.frequency.value = 396; // calm base
+      source.connect(gain).connect(ctx.destination);
 
-    const osc2 = ctx.createOscillator();
-    osc2.type = "triangle";
-    osc2.frequency.value = 528; // sweet upper tone
+      // Attempt to play track
+      await audio.play();
 
-    // Wire: both oscillators -> lowpass -> gain -> destination
-    osc1.connect(lowpass);
-    osc2.connect(lowpass);
-    lowpass.connect(gain).connect(ctx.destination);
+      // Save refs
+      audioCtxRef.current = ctx;
+      gainRef.current = gain;
+      mediaSourceRef.current = source;
+      audioElRef.current = audio;
 
-    osc1.start();
-    osc2.start();
+      setIsPlaying(true);
+      return; // success
+    } catch (err) {
+      // Fallback: keep existing soothing synth logic (triangle detuned + lowpass + drift)
+      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const gain = ctx.createGain();
+      gain.gain.value = volume;
 
-    // Slow, soothing drift between frequencies
-    let up = true;
-    const scheduleDrift = () => {
-      const now = ctx.currentTime;
-      const dur = 8; // seconds per drift
-      const target1 = up ? 416 : 396; // gentle drift
-      const target2 = up ? 544 : 528;
+      const lowpass = ctx.createBiquadFilter();
+      lowpass.type = "lowpass";
+      lowpass.frequency.value = 1200;
+      lowpass.Q.value = 0.7;
 
-      try {
-        osc1.frequency.cancelScheduledValues(now);
-        osc2.frequency.cancelScheduledValues(now);
-        osc1.frequency.linearRampToValueAtTime(target1, now + dur);
-        osc2.frequency.linearRampToValueAtTime(target2, now + dur);
-      } catch {}
-      up = !up;
-    };
+      const osc1 = ctx.createOscillator();
+      osc1.type = "triangle";
+      osc1.frequency.value = 396;
 
-    scheduleDrift();
-    driftTimerRef.current = window.setInterval(scheduleDrift, 8000);
+      const osc2 = ctx.createOscillator();
+      osc2.type = "triangle";
+      osc2.frequency.value = 528;
 
-    audioCtxRef.current = ctx;
-    gainRef.current = gain;
-    oscRef.current = osc1;
-    osc2Ref.current = osc2;
-    setIsPlaying(true);
+      osc1.connect(lowpass);
+      osc2.connect(lowpass);
+      lowpass.connect(gain).connect(ctx.destination);
+
+      osc1.start();
+      osc2.start();
+
+      let up = true;
+      const scheduleDrift = () => {
+        const now = ctx.currentTime;
+        const dur = 8;
+        const target1 = up ? 416 : 396;
+        const target2 = up ? 544 : 528;
+        try {
+          osc1.frequency.cancelScheduledValues(now);
+          osc2.frequency.cancelScheduledValues(now);
+          osc1.frequency.linearRampToValueAtTime(target1, now + dur);
+          osc2.frequency.linearRampToValueAtTime(target2, now + dur);
+        } catch {}
+        up = !up;
+      };
+
+      scheduleDrift();
+      driftTimerRef.current = window.setInterval(scheduleDrift, 8000);
+
+      audioCtxRef.current = ctx;
+      gainRef.current = gain;
+      oscRef.current = osc1;
+      osc2Ref.current = osc2;
+      setIsPlaying(true);
+    }
   };
 
   const stopAudio = async () => {
     try {
+      // If using external track
+      if (audioElRef.current) {
+        audioElRef.current.pause();
+        audioElRef.current.currentTime = 0;
+        try {
+          mediaSourceRef.current?.disconnect();
+        } catch {}
+      }
+
+      // If using synth fallback
       oscRef.current?.stop();
       osc2Ref.current?.stop();
+
       if (driftTimerRef.current) {
         clearInterval(driftTimerRef.current);
         driftTimerRef.current = null;
       }
+
       await audioCtxRef.current?.close();
     } catch {}
+    // Clear refs for both modes
+    mediaSourceRef.current = null;
+    audioElRef.current = null;
     oscRef.current = null;
     osc2Ref.current = null;
     gainRef.current = null;
@@ -124,6 +167,9 @@ export default function Landing() {
   useEffect(() => {
     if (gainRef.current) {
       gainRef.current.gain.value = volume;
+    }
+    if (audioElRef.current) {
+      audioElRef.current.volume = volume;
     }
   }, [volume]);
 
