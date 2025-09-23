@@ -185,7 +185,8 @@ export default function Landing() {
   );
 
   // Nav items matching the reference
-  const navItems = ["Logo", "Hero", "About Us", "Roadmap", "Hempynomics", "FAQ", "White Paper"];
+  // Keep original items to preserve theme but add "Features" for EcoVerse section
+  const navItems = ["Logo", "Hero", "About Us", "Features", "Roadmap", "Hempynomics", "FAQ", "White Paper"];
 
   return (
     <div className="min-h-screen w-full overflow-hidden" style={{ backgroundColor: "#ffd139" }}>
@@ -198,7 +199,9 @@ export default function Landing() {
                 key={i}
                 className="hidden rounded-md border-2 border-black bg-transparent px-3 py-1 text-sm font-extrabold tracking-tight hover:translate-y-0.5 active:translate-y-1 transition md:block"
                 onClick={() => {
-                  if (item === "Hero") window.scrollTo({ top: 0, behavior: "smooth" });
+                  if (item === "Hero" || item === "Logo") window.scrollTo({ top: 0, behavior: "smooth" });
+                  if (item === "About Us") document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
+                  if (item === "Features") document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
                 }}
               >
                 {item.toUpperCase()}
@@ -235,7 +238,7 @@ export default function Landing() {
       </div>
 
       {/* Hero Content */}
-      <section className="relative mx-auto max-w-7xl px-4 pb-24 pt-12 sm:px-6 lg:px-8">
+      <section id="hero" className="relative mx-auto max-w-7xl px-4 pb-24 pt-12 sm:px-6 lg:px-8">
         <div className="text-center">
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
@@ -279,6 +282,63 @@ export default function Landing() {
           <div className="relative mt-4 w-full">
             <BricksWithArms />
           </div>
+        </div>
+      </section>
+
+      {/* About (EcoVerse) */}
+      <section id="about" className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mx-auto max-w-4xl text-center"
+        >
+          <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-black" style={{ textShadow: "0 2px 0 rgba(0,0,0,0.2)" }}>
+            EcoVerse — A Gamified Environmental Education Platform
+          </h2>
+          <p className="mt-3 text-black/80 font-semibold">
+            Learn and take action through play. Battle with your Personal Monster, team up against the World Boss, and earn points and EcoTokens as rewards.
+          </p>
+          <div className="mt-6">
+            <Button
+              className="rounded-md border-2 border-black bg-white text-black hover:bg-white/90 px-6 py-5 font-extrabold"
+              onClick={() => navigate("/auth")}
+            >
+              Get Started
+            </Button>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Features */}
+      <section id="features" className="relative mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            { title: "Personal Monsters", desc: "Students battle and grow their own eco-avatar through quests and challenges." },
+            { title: "World Boss", desc: "Join forces to defeat a collective environmental threat with community progress." },
+            { title: "Rewards", desc: "Earn points and EcoTokens for completing actions and learning modules." },
+          ].map((f, idx) => (
+            <motion.div
+              key={f.title}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.08 }}
+              className="rounded-lg border-4 border-black bg-white p-6"
+            >
+              <h3 className="text-xl font-extrabold tracking-tight text-black mb-2">{f.title}</h3>
+              <p className="text-black/80 font-semibold">{f.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+        <div className="mt-8 flex justify-center">
+          <Button
+            className="rounded-md border-2 border-black bg-[#35c163] px-6 py-5 text-base font-extrabold text-black hover:bg-[#2cb25a]"
+            onClick={() => navigate("/auth")}
+          >
+            Get Started
+          </Button>
         </div>
       </section>
 
