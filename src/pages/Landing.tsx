@@ -244,36 +244,47 @@ export default function Landing() {
           stroke="black"
           strokeWidth="8"
         />
-        {/* earth land masses (increase land coverage) */}
+        {/* earth land masses — emphasize Indian subcontinent */}
         <g fill="#2ecc71" stroke="black" strokeWidth="4" opacity="0.98">
-          {/* Large left land mass */}
-          <path d="M85 100
-                   q18 -16 40 -12
-                   q12 2 22 10
-                   q6 5 -2 12
-                   q-10 9 -20 12
-                   q-14 4 -24 0
-                   q-18 -6 -16 -22 Z" />
-          {/* Central curved land bridge */}
-          <path d="M110 118
-                   q14 -6 34 -4
-                   q10 2 16 8
-                   q4 5 -2 10
-                   q-10 9 -28 10
-                   q-18 1 -26 -6
-                   q-5 -4 6 -18 Z" />
-          {/* Right land mass */}
-          <path d="M158 96
-                   q16 4 26 16
-                   q6 8 2 16
-                   q-6 12 -22 14
-                   q-10 2 -18 -2
-                   q-6 -3 -4 -10
-                   q2 -10 8 -16
-                   q6 -6 8 -18 Z" />
-          {/* Small islands */}
-          <path d="M102 142 q6 -4 10 0 q-2 8 -10 8 q-6 -4 0 -8 Z" />
-          <path d="M150 140 q6 -4 10 0 q-2 8 -10 8 q-6 -4 0 -8 Z" />
+          {/* Eurasia base (upper-right blob) */}
+          <path
+            d="M100 86
+               q18 -10 36 -8
+               q14 2 24 9
+               q10 7 10 16
+               q0 10 -10 16
+               q-10 6 -26 6
+               q-18 0 -30 -6
+               q-10 -5 -12 -12
+               q-2 -7 8 -21 Z"
+          />
+          {/* India subcontinent (triangular peninsula pointing south) */}
+          <path
+            d="M144 100
+               q-4 6 -6 12
+               q-2 6 2 12
+               q3 5 1 10
+               q-2 6 -8 10
+               q10 0 16 -3
+               q6 -3 12 -2
+               q6 1 10 6
+               q-2 -10 -6 -16
+               q-3 -5 -3 -10
+               q0 -6 4 -12
+               q-10 2 -22 3 Z"
+          />
+          {/* Sri Lanka (small island below India) */}
+          <path d="M152 148 q6 2 4 8 q-6 4 -10 0 q0 -6 6 -8 Z" />
+          {/* Arabian region hint (west of India) */}
+          <path
+            d="M120 108
+               q-10 2 -16 8
+               q-6 6 -4 12
+               q2 6 10 8
+               q8 2 14 -2
+               q6 -4 6 -10
+               q0 -8 -10 -16 Z"
+          />
         </g>
 
         {/* eyes and smile */}
