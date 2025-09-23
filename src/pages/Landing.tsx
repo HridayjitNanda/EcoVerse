@@ -14,10 +14,17 @@ import {
   Wallet,
 } from "lucide-react";
 import { useNavigate } from "react-router";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function Landing() {
   const { isLoading, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Add: smooth scroll helper
+  const scrollToId = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   // Simple Cloud SVG component
   const Cloud = ({ className = "", delay = 0 }) => (
@@ -209,16 +216,61 @@ export default function Landing() {
           </div>
 
           <div className="flex items-center gap-2">
-            {/* small icon buttons (decorative) */}
-            {["🔈", "🎧", "🧢", "🧪"].map((i, idx) => (
-              <button
-                key={idx}
-                className="grid h-9 w-9 place-items-center rounded-md border-2 border-black bg-orange-300 text-lg hover:translate-y-0.5 active:translate-y-1 transition"
-                aria-label="icon"
-              >
-                {i}
-              </button>
-            ))}
+            {/* Make icon buttons functional with tooltips */}
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    className="grid h-9 w-9 place-items-center rounded-md border-2 border-black bg-orange-300 text-lg hover:translate-y-0.5 active:translate-y-1 transition"
+                    aria-label="Go to Hero"
+                    onClick={() => scrollToId("hero")}
+                  >
+                    🔈
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>Hero</TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    className="grid h-9 w-9 place-items-center rounded-md border-2 border-black bg-orange-300 text-lg hover:translate-y-0.5 active:translate-y-1 transition"
+                    aria-label="View Features"
+                    onClick={() => scrollToId("features")}
+                  >
+                    🎧
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>Features</TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    className="grid h-9 w-9 place-items-center rounded-md border-2 border-black bg-orange-300 text-lg hover:translate-y-0.5 active:translate-y-1 transition"
+                    aria-label="About EcoVerse"
+                    onClick={() => scrollToId("about")}
+                  >
+                    🧢
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>About</TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    className="grid h-9 w-9 place-items-center rounded-md border-2 border-black bg-orange-300 text-lg hover:translate-y-0.5 active:translate-y-1 transition"
+                    aria-label="Get Started"
+                    onClick={() => navigate("/auth")}
+                  >
+                    🧪
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>Get Started</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
             <Button
               className="rounded-md border-2 border-black bg-white text-black hover:bg-white/90"
               onClick={() => navigate("/auth")}
