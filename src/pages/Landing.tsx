@@ -284,9 +284,9 @@ export default function Landing() {
       
       {/* Top Nav */}
       <nav
-        className="sticky top-0 z-50 border-b-4 border-black relative overflow-visible"
+        className="sticky top-0 z-50 border-b-2 border-black relative"
         style={{
-          background: "linear-gradient(180deg, #ffb5df 0%, #ff97cf 40%, #ff86c2 70%, #ff5fb6 100%)",
+          background: "#fbd3e4",
         }}
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -323,66 +323,32 @@ export default function Landing() {
           </div>
         </div>
 
-        {/* Pink frosting drip edge with golden base (matches reference) */}
+        {/* Simplified, clean wave edge (remove heavy gloss and biscuit base) */}
         <svg
-          viewBox="0 0 1440 160"
-          className="pointer-events-none absolute left-0 right-0 -bottom-[68px] h-[84px] w-full drop-shadow-[0_8px_0_rgba(0,0,0,0.25)]"
+          viewBox="0 0 1440 60"
+          className="pointer-events-none absolute left-0 right-0 -bottom-[44px] h-[48px] w-full"
           aria-hidden="true"
           preserveAspectRatio="none"
         >
           <defs>
-            {/* Frosting gradient */}
-            <linearGradient id="frostingGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#ffb5df" />
-              <stop offset="45%" stopColor="#ff97cf" />
-              <stop offset="75%" stopColor="#ff86c2" />
+            <linearGradient id="frostingSimple" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#ff97cf" />
               <stop offset="100%" stopColor="#ff5fb6" />
-            </linearGradient>
-            {/* Biscuit gradient */}
-            <linearGradient id="biscuitGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#f6c63a" />
-              <stop offset="100%" stopColor="#f3b21a" />
             </linearGradient>
           </defs>
 
-          {/* Gloss band on the frosting top */}
-          <rect x="0" y="0" width="1440" height="28" fill="url(#frostingGradient)" opacity="0.85" />
+          {/* Thin subtle separator line */}
+          <path d="M0,2 L1440,2" stroke="#a81d74" strokeWidth="2" opacity="0.35" />
 
-          {/* Thin dark separator line like the reference */}
-          <path d="M0,36 C360,28 1080,28 1440,36" stroke="#a81d74" strokeWidth="3" fill="none" opacity="0.55" />
-
-          {/* Frosting wave (wavier and more uniform than drip) */}
+          {/* Single smooth wave */}
           <path
             d="
-              M0,36
-              C180,56 360,56 540,36
-              C720,16 900,16 1080,36
-              C1260,56 1350,56 1440,36
-              L1440,120
-              C1380,124 1320,116 1260,120
-              C1140,128 1020,140 900,130
-              C780,120 660,136 540,128
-              C420,120 300,140 180,128
-              C120,122 60,124 0,120
-              Z
+              M0,6
+              C240,22 480,22 720,6
+              C960,-10 1200,-10 1440,6
+              L1440,60 L0,60 Z
             "
-            fill="url(#frostingGradient)"
-          />
-
-          {/* Golden biscuit base following the frosting wave */}
-          <path
-            d="
-              M0,120
-              C60,124 120,122 180,128
-              C300,140 420,120 540,128
-              C660,136 780,120 900,130
-              C1020,140 1140,128 1260,120
-              C1320,116 1380,124 1440,120
-              L1440,160 L0,160 Z
-            "
-            fill="url(#biscuitGradient)"
-            stroke="#b08912"
-            strokeWidth="6"
+            fill="url(#frostingSimple)"
           />
         </svg>
       </nav>
