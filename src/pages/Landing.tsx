@@ -284,7 +284,7 @@ export default function Landing() {
       
 
       {/* Top Nav */}
-      <nav className="sticky top-0 z-50 border-b-4 border-black bg-[#ffd139]">
+      <nav className="sticky top-0 z-50 border-b-4 border-black bg-gradient-to-r from-pink-300 via-fuchsia-300 to-cyan-300">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4">
             {navItems.map((item, i) => (
