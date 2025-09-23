@@ -44,80 +44,61 @@ export default function Landing() {
   // Add: start/stop audio using Web Audio (soothing sine)
   const startAudio = async () => {
     if (audioCtxRef.current) return;
-    try {
-      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const audio = new Audio(ISLAND_URL);
-      audio.crossOrigin = "anonymous";
-      audio.loop = true;
 
-      // Create WebAudio chain for volume control
-      const source = ctx.createMediaElementSource(audio);
-      const gain = ctx.createGain();
-      gain.gain.value = volume;
+    // New soothing ambient: sine + sawtooth at 432Hz & 648Hz, gentle lowpass, slow drift
+    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const gain = ctx.createGain();
+    gain.gain.value = volume;
 
-      source.connect(gain).connect(ctx.destination);
+    const lowpass = ctx.createBiquadFilter();
+    lowpass.type = "lowpass";
+    lowpass.frequency.value = 1000; // slightly softer tone
+    lowpass.Q.value = 0.9;
 
-      // Attempt to play track
-      await audio.play();
+    const osc1 = ctx.createOscillator();
+    osc1.type = "sine";
+    osc1.frequency.value = 432;
 
-      // Save refs
-      audioCtxRef.current = ctx;
-      gainRef.current = gain;
-      mediaSourceRef.current = source;
-      audioElRef.current = audio;
+    const osc2 = ctx.createOscillator();
+    osc2.type = "sawtooth";
+    osc2.frequency.value = 648;
 
-      setIsPlaying(true);
-      return; // success
-    } catch (err) {
-      // Fallback: keep existing soothing synth logic (triangle detuned + lowpass + drift)
-      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const gain = ctx.createGain();
-      gain.gain.value = volume;
+    osc1.connect(lowpass);
+    osc2.connect(lowpass);
+    lowpass.connect(gain).connect(ctx.destination);
 
-      const lowpass = ctx.createBiquadFilter();
-      lowpass.type = "lowpass";
-      lowpass.frequency.value = 1200;
-      lowpass.Q.value = 0.7;
+    osc1.start();
+    osc2.start();
 
-      const osc1 = ctx.createOscillator();
-      osc1.type = "triangle";
-      osc1.frequency.value = 396;
+    let up = true;
+    const scheduleDrift = () => {
+      const now = ctx.currentTime;
+      const dur = 10; // slower drift
+      const target1 = up ? 440 : 432;
+      const target2 = up ? 660 : 648;
+      try {
+        osc1.frequency.cancelScheduledValues(now);
+        osc2.frequency.cancelScheduledValues(now);
+        osc1.frequency.linearRampToValueAtTime(target1, now + dur);
+        osc2.frequency.linearRampToValueAtTime(target2, now + dur);
+      } catch {}
+      up = !up;
+    };
 
-      const osc2 = ctx.createOscillator();
-      osc2.type = "triangle";
-      osc2.frequency.value = 528;
+    scheduleDrift();
+    driftTimerRef.current = window.setInterval(scheduleDrift, 10000);
 
-      osc1.connect(lowpass);
-      osc2.connect(lowpass);
-      lowpass.connect(gain).connect(ctx.destination);
+    // Save refs
+    audioCtxRef.current = ctx;
+    gainRef.current = gain;
+    oscRef.current = osc1;
+    osc2Ref.current = osc2;
 
-      osc1.start();
-      osc2.start();
+    // Ensure external audio refs are cleared since we're not using them now
+    mediaSourceRef.current = null;
+    audioElRef.current = null;
 
-      let up = true;
-      const scheduleDrift = () => {
-        const now = ctx.currentTime;
-        const dur = 8;
-        const target1 = up ? 416 : 396;
-        const target2 = up ? 544 : 528;
-        try {
-          osc1.frequency.cancelScheduledValues(now);
-          osc2.frequency.cancelScheduledValues(now);
-          osc1.frequency.linearRampToValueAtTime(target1, now + dur);
-          osc2.frequency.linearRampToValueAtTime(target2, now + dur);
-        } catch {}
-        up = !up;
-      };
-
-      scheduleDrift();
-      driftTimerRef.current = window.setInterval(scheduleDrift, 8000);
-
-      audioCtxRef.current = ctx;
-      gainRef.current = gain;
-      oscRef.current = osc1;
-      osc2Ref.current = osc2;
-      setIsPlaying(true);
-    }
+    setIsPlaying(true);
   };
 
   const stopAudio = async () => {
