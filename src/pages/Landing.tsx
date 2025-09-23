@@ -282,10 +282,14 @@ export default function Landing() {
   return (
     <div className="min-h-screen w-full overflow-hidden" style={{ backgroundColor: "#ffd139" }}>
       
-
       {/* Top Nav */}
       <nav
-        className="sticky top-0 z-50 border-b-4 border-black bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80"
+        className="sticky top-0 z-50 border-b-4 border-black"
+        style={{
+          backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 36 36'><rect width='36' height='36' fill='%23fbd3e4'/><rect x='4' y='6' width='8' height='3' rx='1.5' fill='%23ffd166' transform='rotate(20 8 7.5)'/><rect x='20' y='4' width='8' height='3' rx='1.5' fill='%2366d9e8' transform='rotate(-25 24 5.5)'/><rect x='10' y='18' width='8' height='3' rx='1.5' fill='%23a78bfa' transform='rotate(30 14 19.5)'/><rect x='24' y='22' width='8' height='3' rx='1.5' fill='%23ff6fae' transform='rotate(-15 28 23.5)'/><rect x='2' y='24' width='8' height='3' rx='1.5' fill='%23ffffff' transform='rotate(12 6 25.5)'/><rect x='14' y='8' width='8' height='3' rx='1.5' fill='%239b87f5' transform='rotate(-8 18 9.5)'/></svg>")`,
+          backgroundSize: "36px 36px",
+          backgroundColor: "#fbd3e4",
+        }}
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4">
