@@ -283,6 +283,7 @@ const LESSONS: Record<string, LessonInfo> = {
 export default function LessonPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const goBackToLessons = () => navigate("/dashboard?tab=lessons");
   const lesson = useMemo(() => (id ? LESSONS[id] : undefined), [id]);
 
   const [completedSections, setCompletedSections] = useState<Record<number, boolean>>({});
@@ -294,7 +295,7 @@ export default function LessonPage() {
           <Button
             variant="outline"
             className="border-2 border-black bg-white text-black hover:bg-white/90"
-            onClick={() => navigate("/dashboard?tab=lessons")}
+            onClick={goBackToLessons}
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Dashboard
@@ -322,7 +323,7 @@ export default function LessonPage() {
           <Button
             variant="outline"
             className="border-2 border-black bg-white text-black hover:bg-white/90"
-            onClick={() => navigate("/dashboard?tab=lessons")}
+            onClick={goBackToLessons}
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
@@ -447,7 +448,7 @@ export default function LessonPage() {
                 all[idx] = true;
               });
               setCompletedSections(all);
-              navigate("/dashboard?tab=lessons");
+              goBackToLessons();
             }}
           >
             Finish Lesson
