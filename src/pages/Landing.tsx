@@ -447,8 +447,23 @@ export default function Landing() {
     </div>
   );
 
+  // Add: global cloud background layer (behind candy)
+  const GlobalCloudBackground = () => (
+    <div className="pointer-events-none absolute inset-0 z-0">
+      <Cloud className="absolute left-6 top-10 w-36 opacity-90" delay={0.15} />
+      <Cloud className="absolute right-10 top-6 w-44 opacity-90" delay={0.45} />
+      <Cloud className="absolute left-[12%] top-[28%] w-40 opacity-85" delay={0.75} />
+      <Cloud className="absolute right-[14%] top-[30%] w-40 opacity-85" delay={1.05} />
+      <Cloud className="absolute left-1/2 top-24 w-32 -translate-x-1/2 opacity-90" delay={0.9} />
+      <Cloud className="absolute -left-8 bottom-[22%] w-44 opacity-80" delay={0.6} />
+      <Cloud className="absolute -right-6 bottom-[18%] w-48 opacity-80" delay={1.2} />
+    </div>
+  );
+
   return (
     <div className="relative min-h-screen w-full overflow-hidden" style={{ backgroundColor: "#ffd139" }}>
+      {/* Global animated clouds layer (behind candy) */}
+      <GlobalCloudBackground />
       {/* Global subtle animated candy layer across the page */}
       <GlobalCandyBackground />
       
