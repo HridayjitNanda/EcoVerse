@@ -255,12 +255,12 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-x-hidden lg:pl-[21rem]" style={{ backgroundColor: "#ffd139" }}>
+    <div className="relative min-h-screen w-full overflow-x-hidden lg:pl-[22rem]" style={{ backgroundColor: "#ffd139" }}>
       <GlobalCandyBackground />
 
       {/* Fixed Left Sidebar (lg and up) */}
       <div
-        className="hidden lg:block fixed inset-y-0 left-0 h-screen w-64 border-r-4 border-black z-50 relative overflow-hidden"
+        className="hidden lg:block fixed top-0 inset-y-0 left-0 h-screen w-64 border-r-4 border-black z-50 relative overflow-hidden"
         style={{ background: "linear-gradient(180deg,#ff9dd6 0%,#ff64b5 100%)" }}
       >
         <div className="flex h-full flex-col p-4">
