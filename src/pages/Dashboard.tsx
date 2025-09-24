@@ -148,7 +148,12 @@ export default function Dashboard() {
       <GlobalCandyBackground />
 
       {/* Fixed Left Sidebar (lg and up) */}
-      <div className="hidden lg:block fixed left-0 top-0 h-full w-64 bg-transparent border-r-4 border-black z-40">
+      <div
+        className="hidden lg:block fixed left-0 top-0 h-full w-64 border-r-4 border-black z-40"
+        style={{
+          background: "linear-gradient(180deg,#ff9dd6 0%,#ff64b5 100%)",
+        }}
+      >
         <div className="flex h-full flex-col p-4">
           <div className="mb-4">
             <div className="text-black font-extrabold text-lg">EcoVerse</div>
