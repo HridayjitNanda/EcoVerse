@@ -115,6 +115,60 @@ const FrostingStrip = () => (
   </svg>
 );
 
+const VerticalFrostingStrip = () => (
+  <svg viewBox="0 0 80 1440" className="block h-full w-full" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="frostingGradVertical" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stopColor="#ffa6df" />
+        <stop offset="100%" stopColor="#ff4fa3" />
+      </linearGradient>
+    </defs>
+
+    {/* stitched sprinkles line along the inner edge */}
+    <line
+      x1="8"
+      y1="0"
+      x2="8"
+      y2="1440"
+      stroke="#7b5eb6"
+      strokeWidth="6"
+      strokeDasharray="8 16"
+      strokeLinecap="round"
+      opacity="0.8"
+    />
+
+    {/* subtle gloss curve */}
+    <path d="M18 0 C 10 360, 10 1080, 18 1440 L34 1440 L34 0 Z" fill="#ffffff" opacity="0.35" />
+
+    {/* main frosting band with wavy right edge */}
+    <path
+      d="
+        M18 0 L18 1440 L78 1440
+        C102 1320, 54 1200, 78 1080
+        C102 960, 54 840, 78 720
+        C102 600, 54 480, 78 360
+        C102 240, 54 120, 78 0
+        Z"
+      fill="url(#frostingGradVertical)"
+    />
+
+    {/* thin separator under frosting (near biscuit) */}
+    <line x1="66" y1="0" x2="66" y2="1440" stroke="#a81d74" strokeWidth="3" opacity="0.45" />
+
+    {/* biscuit base following the wave */}
+    <path
+      d="
+        M78 0
+        C102 240, 54 480, 78 720
+        C102 960, 54 1200, 78 1440
+        L110 1440 L110 0 Z"
+      fill="#f5c338"
+      stroke="#b58a1a"
+      strokeWidth="4"
+    />
+  </svg>
+);
+
 export default function Dashboard() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -206,11 +260,15 @@ export default function Dashboard() {
 
       {/* Fixed Left Sidebar (lg and up) */}
       <div
-        className="hidden lg:block fixed left-0 top-0 h-full w-64 border-r-4 border-black z-40"
+        className="hidden lg:block fixed left-0 top-0 h-full w-64 border-r-4 border-black z-40 relative"
         style={{
           background: "linear-gradient(180deg,#ff9dd6 0%,#ff64b5 100%)",
         }}
       >
+        {/* Vertical frosting/biscuit strip hugging the sidebar's right edge */}
+        <div className="pointer-events-none absolute top-0 -right-[78px] h-full w-[78px]">
+          <VerticalFrostingStrip />
+        </div>
         <div className="flex h-full flex-col p-4">
           <div className="mb-4">
             <div className="text-black font-extrabold text-lg">EcoVerse</div>
@@ -274,11 +332,6 @@ export default function Dashboard() {
 
       {/* Main content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Add frosting/biscuit strip at top of dashboard content (to mirror Landing navbar drip) */}
-        <div className="relative -mt-1 pointer-events-none">
-          <FrostingStrip />
-        </div>
-
         {/* Added: Simple welcome heading (replaces removed navbar area) */}
         <div className="mb-6 text-center">
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
