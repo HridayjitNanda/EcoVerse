@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router";
 import { Shield, BookOpen, Trophy, Leaf, Crown, Gift, Globe2, LogOut, Users, CheckCircle2, Swords } from "lucide-react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -87,6 +88,7 @@ const StaticCloud = ({ className = "" }: { className?: string }) => (
 export default function Dashboard() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Local demo state (simple, clean)
   const [ecoPoints, setEcoPoints] = useState<number>(10);
@@ -103,6 +105,16 @@ export default function Dashboard() {
 
   // Rename default tab to "dashboard"
   const [tab, setTab] = useState<string>("dashboard");
+
+  // Sync tab from query string (?tab=lessons, etc.)
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const t = params.get("tab");
+    const allowed = ["dashboard", "lessons", "quizzes", "challenges", "leaderboard", "rewards"];
+    if (t && allowed.includes(t) && t !== tab) {
+      setTab(t);
+    }
+  }, [location.search]);
 
   // NEW: names/levels for monsters
   const personalMonsterName = "Forest Guardian";

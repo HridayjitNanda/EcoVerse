@@ -294,7 +294,7 @@ export default function LessonPage() {
           <Button
             variant="outline"
             className="border-2 border-black bg-white text-black hover:bg-white/90"
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/dashboard?tab=lessons")}
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Dashboard
@@ -322,7 +322,7 @@ export default function LessonPage() {
           <Button
             variant="outline"
             className="border-2 border-black bg-white text-black hover:bg-white/90"
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/dashboard?tab=lessons")}
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
@@ -447,7 +447,7 @@ export default function LessonPage() {
                 all[idx] = true;
               });
               setCompletedSections(all);
-              navigate("/dashboard");
+              navigate("/dashboard?tab=lessons");
             }}
           >
             Finish Lesson
