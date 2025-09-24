@@ -672,20 +672,20 @@ export default function Dashboard() {
           </TabsContent>
 
           <TabsContent value="lessons" className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {lessons.map((l, i) => (
                 <motion.div key={l.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
-                  <Card className="border-4 border-black bg-white h-full">
+                  <Card className="border-4 border-black bg-white h-full min-h-[260px]">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-lg">{l.title}</CardTitle>
+                      <CardTitle className="text-2xl">{l.title}</CardTitle>
                       <CardDescription className="flex items-center justify-between">
                         <Badge variant="secondary" className="border-2 border-black">{l.tag}</Badge>
-                        <span>{l.duration}</span>
+                        <span className="text-base sm:text-lg font-bold">{l.duration}</span>
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="flex justify-end">
-                      <Button className="border-2 border-black" onClick={() => navigate(`/lesson/${l.id}`)}>
-                        <BookOpen className="h-4 w-4 mr-2" /> Start
+                      <Button className="border-2 border-black h-12 text-lg px-6" onClick={() => navigate(`/lesson/${l.id}`)}>
+                        <BookOpen className="h-5 w-5 mr-2" /> Start
                       </Button>
                     </CardContent>
                   </Card>
