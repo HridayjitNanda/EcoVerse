@@ -263,14 +263,23 @@ export default function Dashboard() {
 
       {/* Main content (offset to sit beside sidebar+frosting) */}
       <main className="px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-6 text-center">
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-            Welcome back, {user?.name || user?.email || "Eco Warrior"}!
-          </h1>
-          <p className="mt-1 text-sm sm:text-base font-semibold text-black/70">
-            Track progress, learn with focus, and take real action—at your pace.
-          </p>
-        </div>
+        {/* Replace the static welcome header with a conditional header */}
+        {tab === "lessons" ? (
+          <div className="mb-6 text-left">
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+              Environmental Lessons
+            </h1>
+          </div>
+        ) : (
+          <div className="mb-6 text-center">
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+              Welcome back, {user?.name || user?.email || "Eco Warrior"}!
+            </h1>
+            <p className="mt-1 text-sm sm:text-base font-semibold text-black/70">
+              Track progress, learn with focus, and take real action—at your pace.
+            </p>
+          </div>
+        )}
 
         {/* NEW: compact stats strip for tokens/challenges/badges */}
         {tab !== "lessons" && (
