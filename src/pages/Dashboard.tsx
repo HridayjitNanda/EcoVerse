@@ -58,6 +58,63 @@ const GlobalCandyBackground = () => (
   </div>
 );
 
+const FrostingStrip = () => (
+  <svg
+    viewBox="0 0 1440 110"
+    className="block w-full h-[78px]"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+  >
+    <defs>
+      <linearGradient id="frostingGradDash" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#ffa6df" />
+        <stop offset="100%" stopColor="#ff4fa3" />
+      </linearGradient>
+    </defs>
+
+    {/* stitched sprinkles line at the very top */}
+    <line
+      x1="0"
+      y1="6"
+      x2="1440"
+      y2="6"
+      stroke="#7b5eb6"
+      strokeWidth="6"
+      strokeDasharray="8 16"
+      strokeLinecap="round"
+      opacity="0.8"
+    />
+
+    {/* subtle gloss curve */}
+    <path d="M0 18 C 360 10, 1080 10, 1440 18 L1440 34 L0 34 Z" fill="#ffffff" opacity="0.35" />
+
+    {/* main frosting band with wavy bottom - increased curvature and frequency */}
+    <path
+      d="M0 18 L1440 18 L1440 78
+         C1320 102, 1200 54, 1080 78
+         C960 102, 840 54, 720 78
+         C600 102, 480 54, 360 78
+         C240 102, 120 54, 0 78
+         Z"
+      fill="url(#frostingGradDash)"
+    />
+
+    {/* thin separator under frosting */}
+    <line x1="0" y1="66" x2="1440" y2="66" stroke="#a81d74" strokeWidth="3" opacity="0.45" />
+
+    {/* biscuit base following the wave - matched curvature */}
+    <path
+      d="M0 78
+         C240 102, 480 54, 720 78
+         C960 102, 1200 54, 1440 78
+         L1440 110 L0 110 Z"
+      fill="#f5c338"
+      stroke="#b58a1a"
+      strokeWidth="4"
+    />
+  </svg>
+);
+
 export default function Dashboard() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -217,6 +274,11 @@ export default function Dashboard() {
 
       {/* Main content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Add frosting/biscuit strip at top of dashboard content (to mirror Landing navbar drip) */}
+        <div className="relative -mt-1 pointer-events-none">
+          <FrostingStrip />
+        </div>
+
         {/* Added: Simple welcome heading (replaces removed navbar area) */}
         <div className="mb-6 text-center">
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
