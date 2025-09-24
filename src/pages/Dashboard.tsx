@@ -188,8 +188,11 @@ export default function Dashboard() {
             {/* Unified sidebar button styles: increase size further */}
             <Button
               variant={tab === "dashboard" ? "default" : "ghost"}
-              className={`w-full h-20 justify-start gap-3 rounded-md border-2 border-black text-xl font-bold
-                ${tab === "dashboard" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"}`}
+              className={`w-full h-20 justify-start gap-3 rounded-xl border-[3px] text-xl font-bold
+                ${tab === "dashboard"
+                  ? "bg-black text-white outline outline-4 outline-black/30"
+                  : "bg-white text-black hover:bg-white/90 border-2 rounded-md"
+                }`}
               onClick={() => setTab("dashboard")}
             >
               <Shield className="h-7 w-7" /> Dashboard
