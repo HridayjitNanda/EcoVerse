@@ -255,18 +255,17 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-x-hidden lg:pl-64" style={{ backgroundColor: "#ffd139" }}>
+    {/* Increase left padding on large screens to account for sidebar (16rem) + frosting strip (~78px ≈ 5rem) */}
+    <div className="relative min-h-screen w-full overflow-x-hidden lg:pl-[21rem]" style={{ backgroundColor: "#ffd139" }}>
       <GlobalCandyBackground />
 
       {/* Fixed Left Sidebar (lg and up) */}
       <div
-        className="hidden lg:block fixed inset-y-0 left-0 h-screen w-64 border-r-4 border-black z-50 relative"
-        style={{
-          background: "linear-gradient(180deg,#ff9dd6 0%,#ff64b5 100%)",
-        }}
+        className="hidden lg:block fixed inset-y-0 left-0 h-screen w-64 border-r-4 border-black z-50 relative overflow-hidden"
+        style={{ background: "linear-gradient(180deg,#ff9dd6 0%,#ff64b5 100%)" }}
       >
-        {/* Vertical frosting/biscuit strip hugging the sidebar's right edge */}
-        <div className="pointer-events-none absolute top-0 -right-[78px] h-full w-[78px]">
+        {/* Add-only: decorative vertical frosting to the right of the original sidebar */}
+        <div className="pointer-events-none absolute top-0 right-[-78px] h-full w-[78px]">
           <VerticalFrostingStrip />
         </div>
         <div className="flex h-full flex-col p-4">
