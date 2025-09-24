@@ -286,7 +286,7 @@ export default function Dashboard() {
         )}
 
         {/* NEW: compact stats strip for tokens/challenges/badges */}
-        {tab !== "lessons" && (
+        {tab === "dashboard" && (
           <div className="mb-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Card className="border-4 border-black bg-white">
               <CardHeader className="pb-2">
@@ -316,7 +316,7 @@ export default function Dashboard() {
         )}
 
         {/* Top stats (EcoPoints + Monsters) */}
-        {tab !== "lessons" && (
+        {tab === "dashboard" && (
           <div className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Card className="border-4 border-black bg-white">
               <CardHeader className="pb-2">
