@@ -338,8 +338,8 @@ export default function Landing() {
     </motion.div>
   );
 
-  // Nav items (removed per request; keeping only icon buttons and SIGN-UP)
-  const navItems: string[] = [];
+  // Nav items
+  const navItems: string[] = ["Home", "About", "Features"];
 
   // Add: global candy background layer (fixed, subtle, sparse)
   const GlobalCandyBackground = () => (
