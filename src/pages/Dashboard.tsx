@@ -164,9 +164,10 @@ export default function Dashboard() {
         style={{ background: "linear-gradient(180deg,#ff9dd6 0%,#ff64b5 100%)" }}
       >
         <div className="flex h-full flex-col p-4">
-          <div className="mb-4">
-            <div className="text-black font-extrabold text-lg">EcoVerse</div>
-            <div className="text-black/70 text-xs">Save the Planet</div>
+          {/* Increase brand block sizing */}
+          <div className="mb-6">
+            <div className="text-black font-extrabold text-2xl leading-tight">EcoVerse</div>
+            <div className="text-black/80 text-sm font-bold">Save the Planet</div>
           </div>
 
           <div className="space-y-2">
