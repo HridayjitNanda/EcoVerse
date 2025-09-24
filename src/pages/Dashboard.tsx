@@ -466,7 +466,7 @@ export default function Dashboard() {
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="flex justify-end">
-                      <Button className="border-2 border-black" onClick={() => toast(`Started: ${l.title}`)}>
+                      <Button className="border-2 border-black" onClick={() => navigate(`/lesson/${l.id}`)}>
                         <BookOpen className="h-4 w-4 mr-2" /> Start
                       </Button>
                     </CardContent>
