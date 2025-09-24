@@ -85,12 +85,26 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   // Local demo state (simple, clean)
-  const [ecoPoints, setEcoPoints] = useState<number>(120);
-  const [badges, setBadges] = useState<string[]>(["Starter", "Water Saver"]);
-  const [personalMonsterHP, setPersonalMonsterHP] = useState<number>(100);
-  const [worldBossHP, setWorldBossHP] = useState<number>(100000);
+  const [ecoPoints, setEcoPoints] = useState<number>(10);
+  const [badges, setBadges] = useState<string[]>([]);
+  const [personalMonsterHP, setPersonalMonsterHP] = useState<number>(95);
+  const [worldBossHP, setWorldBossHP] = useState<number>(93200);
+
+  // NEW: extra dashboard stats
+  const [ecoTokens] = useState<number>(1);
+  const [challengesCount] = useState<number>(1);
+
+  // Add: track completed actions by id to prevent repeats
   const [completed, setCompleted] = useState<Record<string, boolean>>({});
-  const [tab, setTab] = useState<string>("overview");
+
+  // Rename default tab to "dashboard"
+  const [tab, setTab] = useState<string>("dashboard");
+
+  // NEW: names/levels for monsters
+  const personalMonsterName = "Forest Guardian";
+  const personalMonsterLevel = 1;
+  const worldBossName = "Climate Destroyer";
+  const worldBossLevel = 1;
 
   const lessons = [
     { id: "l1", title: "Plastic Pollution 101", duration: "5 min", tag: "Waste" },
@@ -138,7 +152,7 @@ export default function Dashboard() {
     });
     setWorldBossHP((prev) => Math.max(0, prev - 1));
     setEcoPoints((p) => p + pts);
-    setCompleted((m) => ({ ...m, [id]: true }));
+    setCompleted((m: Record<string, boolean>) => ({ ...m, [id]: true }));
     toast.success(`Nice! -${hp} HP personal, -1 HP world, +${pts} pts`);
   };
 
@@ -173,10 +187,10 @@ export default function Dashboard() {
           <div className="space-y-3">
             {/* Unified sidebar button styles: increase size further */}
             <Button
-              variant={tab === "overview" ? "default" : "ghost"}
+              variant={tab === "dashboard" ? "default" : "ghost"}
               className={`w-full h-20 justify-start gap-3 rounded-md border-2 border-black text-xl font-bold
-                ${tab === "overview" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"}`}
-              onClick={() => setTab("overview")}
+                ${tab === "dashboard" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"}`}
+              onClick={() => setTab("dashboard")}
             >
               <Shield className="h-7 w-7" /> Dashboard
             </Button>
@@ -251,11 +265,39 @@ export default function Dashboard() {
             Welcome back, {user?.name || user?.email || "Eco Warrior"}!
           </h1>
           <p className="mt-1 text-sm sm:text-base font-semibold text-black/70">
-            Track progress, learn, and take real action.
+            Track progress, learn with focus, and take real action—at your pace.
           </p>
         </div>
 
-        {/* Top stats */}
+        {/* NEW: compact stats strip for tokens/challenges/badges */}
+        <div className="mb-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <Card className="border-4 border-black bg-white">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xl">EcoTokens</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-extrabold">{ecoTokens}</div>
+            </CardContent>
+          </Card>
+          <Card className="border-4 border-black bg-white">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xl">Challenges</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-extrabold">{challengesCount}</div>
+            </CardContent>
+          </Card>
+          <Card className="border-4 border-black bg-white">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xl">Badges</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-extrabold">{badges.length}</div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Top stats (EcoPoints + Monsters) */}
         <div className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Card className="border-4 border-black bg-white">
             <CardHeader className="pb-2">
@@ -266,45 +308,46 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-extrabold">{ecoPoints}</div>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {badges.map((b) => (
-                  <Badge key={b} variant="secondary" className="border-2 border-black">
-                    {b}
-                  </Badge>
-                ))}
-              </div>
             </CardContent>
           </Card>
 
+          {/* Update Personal Monster with name, level, percent */}
           <Card className="border-4 border-black bg-white">
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2 text-xl">
-                <Swords className="h-5 w-5" /> Personal Monster
+                <Swords className="h-5 w-5" /> Your Personal Monster
               </CardTitle>
-              <CardDescription>Your current foe</CardDescription>
+              <CardDescription>
+                Level {personalMonsterLevel} • {personalMonsterName}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="mb-2 flex items-center justify-between text-sm font-semibold">
-                <span>Trash Troll</span>
+                <span>{personalMonsterName}</span>
                 <span>{personalMonsterHP} / 100 HP</span>
               </div>
               <Progress value={(personalMonsterHP / 100) * 100} className="h-3 border-2 border-black" />
+              <div className="mt-2 text-xs font-semibold">{((personalMonsterHP / 100) * 100).toFixed(1)}% Health</div>
             </CardContent>
           </Card>
 
+          {/* Update World Boss with name, level, percent */}
           <Card className="border-4 border-black bg-white">
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2 text-xl">
                 <Globe2 className="h-5 w-5" /> World Boss
               </CardTitle>
-              <CardDescription>Community challenge</CardDescription>
+              <CardDescription>
+                Level {worldBossLevel} • {worldBossName}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="mb-2 flex items-center justify-between text-sm font-semibold">
-                <span>Carbon Titan</span>
+                <span>{worldBossName}</span>
                 <span>{worldBossHP.toLocaleString()} / 100,000 HP</span>
               </div>
               <Progress value={(worldBossHP / 100000) * 100} className="h-3 border-2 border-black" />
+              <div className="mt-2 text-xs font-semibold">{((worldBossHP / 100000) * 100).toFixed(1)}% Health</div>
             </CardContent>
           </Card>
         </div>
@@ -312,7 +355,7 @@ export default function Dashboard() {
         {/* Tabs for content (also used on mobile) */}
         <Tabs value={tab} onValueChange={setTab}>
           <TabsList className="border-2 border-black bg-white lg:hidden">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-black data-[state=active]:text-white">Overview</TabsTrigger>
+            <TabsTrigger value="dashboard" className="data-[state=active]:bg-black data-[state=active]:text-white">Dashboard</TabsTrigger>
             <TabsTrigger value="lessons" className="data-[state=active]:bg-black data-[state=active]:text-white">Lessons</TabsTrigger>
             <TabsTrigger value="quizzes" className="data-[state=active]:bg-black data-[state=active]:text-white">Quizzes</TabsTrigger>
             <TabsTrigger value="challenges" className="data-[state=active]:bg-black data-[state=active]:text-white">Challenges</TabsTrigger>
@@ -320,11 +363,13 @@ export default function Dashboard() {
             <TabsTrigger value="rewards" className="data-[state=active]:bg-black data-[state=active]:text-white">Rewards</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview" className="mt-6">
+          <TabsContent value="dashboard" className="mt-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <Card className="border-4 border-black bg-white">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2"><Shield className="h-5 w-5" /> Personal Monster Actions</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <Shield className="h-5 w-5" /> Personal Monster Actions
+                  </CardTitle>
                   <CardDescription>Complete actions to reduce HP</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
@@ -353,6 +398,25 @@ export default function Dashboard() {
                       onClick={() => { setWorldBossHP((p) => Math.max(0, p - 1)); setEcoPoints((p) => p + 5); toast.success("Thanks for contributing! -1 HP, +5 pts"); }}>
                       Contribute
                     </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* NEW: Your Badges section with locked placeholders */}
+            <div className="mt-6">
+              <Card className="border-4 border-black bg-white">
+                <CardHeader>
+                  <CardTitle>Your Badges</CardTitle>
+                  <CardDescription>Earn badges by completing lessons, quizzes, and challenges</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    {Array.from({ length: 8 }).map((_, i) => (
+                      <div key={i} className="flex items-center justify-center rounded-md border-2 border-black bg-gray-100 py-6 text-lg font-bold">
+                        🔒 Locked
+                      </div>
+                    ))}
                   </div>
                 </CardContent>
               </Card>
