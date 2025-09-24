@@ -260,7 +260,7 @@ export default function Dashboard() {
 
       {/* Fixed Left Sidebar (lg and up) */}
       <div
-        className="hidden lg:block fixed left-0 top-0 h-full w-64 border-r-4 border-black z-40 relative"
+        className="hidden lg:block fixed inset-y-0 left-0 h-screen w-64 border-r-4 border-black z-50 relative"
         style={{
           background: "linear-gradient(180deg,#ff9dd6 0%,#ff64b5 100%)",
         }}
