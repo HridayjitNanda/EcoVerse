@@ -460,6 +460,69 @@ export default function Landing() {
     </div>
   );
 
+  // Graffiti tag SVG — bold outline + soft gradient fill + spray glow
+  const GraffitiTag = ({
+    text = "ECOVERSE",
+    rotate = 0,
+    scale = 1,
+    opacity = 0.18,
+    className = "",
+    idSuffix = "a",
+    colors = ["#ff79c6", "#ffd34d", "#79a7ff"], // matches theme
+  }: {
+    text?: string;
+    rotate?: number;
+    scale?: number;
+    opacity?: number;
+    className?: string;
+    idSuffix?: string;
+    colors?: [string, string, string] | string[];
+  }) => (
+    <div
+      className={`pointer-events-none absolute ${className}`}
+      style={{ transform: `rotate(${rotate}deg) scale(${scale})` }}
+      aria-hidden="true"
+    >
+      <svg viewBox="0 0 800 220" className="w-[700px] sm:w-[820px]">
+        <defs>
+          <linearGradient id={`grad-${idSuffix}`} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor={colors[0]} />
+            <stop offset="55%" stopColor={colors[1]} />
+            <stop offset="100%" stopColor={colors[2]} />
+          </linearGradient>
+        </defs>
+
+        {/* spray glow */}
+        <g opacity={opacity}>
+          <rect x="0" y="0" width="800" height="220" fill="url(#grad-a)" className="opacity-0" />
+          <g filter="url(#none)">
+            <text
+              x="10"
+              y="150"
+              fontSize="140"
+              fontWeight={900}
+              fontFamily="Impact, Haettenschweiler, 'Arial Black', sans-serif"
+              fill={`url(#grad-${idSuffix})`}
+              stroke="black"
+              strokeWidth="12"
+              paintOrder="stroke"
+              letterSpacing="2"
+            >
+              {text}
+            </text>
+          </g>
+        </g>
+      </svg>
+
+      {/* soft spray edges using blurred gradient blobs */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute -left-10 top-6 h-28 w-40 rounded-full bg-pink-400/30 blur-2xl" />
+        <div className="absolute left-1/2 top-1/2 h-24 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-yellow-400/30 blur-2xl" />
+        <div className="absolute right-0 bottom-0 h-24 w-36 rounded-full bg-blue-400/30 blur-2xl" />
+      </div>
+    </div>
+  );
+
   return (
     <div className="relative min-h-screen w-full overflow-hidden" style={{ backgroundColor: "#ffd139" }}>
       {/* Global animated clouds layer (behind candy) */}
@@ -566,6 +629,50 @@ export default function Landing() {
 
       {/* Hero Content */}
       <section id="hero" className="relative mx-auto max-w-7xl px-4 pb-24 pt-12 sm:px-6 lg:px-8">
+        {/* NEW: Graffiti tags behind the hero content */}
+        <div className="pointer-events-none absolute inset-0 -z-8">
+          {/* upper-left, slight tilt */}
+          <GraffitiTag
+            idSuffix="ul"
+            rotate={-8}
+            scale={0.75}
+            className="left-[-60px] top-[-20px] opacity-90"
+            colors={["#ff79c6", "#ffd34d", "#79a7ff"]}
+          />
+          {/* upper-right, mirrored tilt */}
+          <GraffitiTag
+            idSuffix="ur"
+            rotate={7}
+            scale={0.7}
+            className="right-[-40px] top-[10px] opacity-90"
+            colors={["#79a7ff", "#ffa6df", "#35c163"]}
+          />
+          {/* center faint large backdrop behind headline */}
+          <GraffitiTag
+            idSuffix="c"
+            rotate={-2}
+            scale={1.05}
+            className="left-1/2 top-[90px] -translate-x-1/2 opacity-90"
+            colors={["#ffd34d", "#ff79c6", "#79a7ff"]}
+          />
+          {/* lower-left subtle */}
+          <GraffitiTag
+            idSuffix="ll"
+            rotate={-12}
+            scale={0.6}
+            className="left-[-30px] top-[220px] opacity-90"
+            colors={["#35c163", "#ffd34d", "#ffa6df"]}
+          />
+          {/* lower-right subtle */}
+          <GraffitiTag
+            idSuffix="lr"
+            rotate={10}
+            scale={0.62}
+            className="right-[-20px] top-[240px] opacity-90"
+            colors={["#ffa6df", "#79a7ff", "#35c163"]}
+          />
+        </div>
+
         {/* subtle scattered candies in hero */}
         <div className="pointer-events-none absolute inset-0 -z-10">
           <Candy variant="wrapped" color="#ffa6df" className="absolute left-2 top-6 w-7 sm:w-8 opacity-80" delay={0.3} />
