@@ -47,6 +47,25 @@ function VerticalFrostingStrip() {
   );
 }
 
+// Add: Simple Cloud SVG component for background
+const Cloud = ({ className = "", delay = 0 }) => (
+  <motion.svg
+    initial={{ opacity: 0, y: -10 }}
+    animate={{ opacity: 1, y: [0, -6, 0] }}
+    transition={{ duration: 6, repeat: Infinity, delay }}
+    viewBox="0 0 200 80"
+    className={className}
+    aria-hidden="true"
+  >
+    <path
+      d="M30 60c-12 0-22-10-22-22S18 16 30 16c3-10 12-16 22-16 13 0 24 10 25 23 2-1 5-2 8-2 12 0 22 10 22 22s-10 22-22 22H30Z"
+      fill="white"
+      stroke="black"
+      strokeWidth="4"
+    />
+  </motion.svg>
+);
+
 export default function Dashboard() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -110,7 +129,14 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-x-hidden lg:pl-[21rem]" style={{ backgroundColor: "#ffd139" }}>
+    <div className="relative min-h-screen w-full overflow-x-hidden lg:pl-[21rem]" style={{ backgroundColor: "#eaf6ff" }}>
+      {/* Add: soft animated cloud background layer */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <Cloud className="absolute left-4 top-10 w-32" delay={0.2} />
+        <Cloud className="absolute right-10 top-6 w-40" delay={0.6} />
+        <Cloud className="absolute left-1/2 top-24 w-28 -translate-x-1/2" delay={1.0} />
+      </div>
+
       {/* Fixed Left Sidebar (16rem) */}
       <aside
         className="hidden lg:block fixed inset-y-0 left-0 h-screen w-64 border-r-4 border-black z-50 overflow-hidden"
