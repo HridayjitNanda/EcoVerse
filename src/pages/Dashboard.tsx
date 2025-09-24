@@ -145,7 +145,8 @@ export default function Dashboard() {
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden lg:pl-[21rem]" style={{ backgroundColor: "#eaf6ff" }}>
       {/* REPLACED: Use large, non-animated background clouds */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
+      {/* Ensure clouds render above the page background (not behind it) */}
+      <div className="pointer-events-none absolute inset-0 z-0">
         {/* Left large cloud */}
         <StaticCloud className="absolute left-4 top-16 w-[280px]" />
         {/* Right large cloud */}
