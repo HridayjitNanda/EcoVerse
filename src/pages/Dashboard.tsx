@@ -325,6 +325,15 @@ export default function Dashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent>
+              {/* Boss image: Personal Monster */}
+              <div className="mb-3">
+                <img
+                  src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=512&auto=format&fit=crop"
+                  alt="Forest Guardian"
+                  className="mx-auto h-24 w-24 rounded-lg border-4 border-black object-cover"
+                  loading="lazy"
+                />
+              </div>
               <div className="mb-2 flex items-center justify-between text-sm font-semibold">
                 <span>{personalMonsterName}</span>
                 <span>{personalMonsterHP} / 100 HP</span>
@@ -345,6 +354,15 @@ export default function Dashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent>
+              {/* Boss image: World Boss */}
+              <div className="mb-3">
+                <img
+                  src="https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=512&auto=format&fit=crop"
+                  alt="Climate Destroyer"
+                  className="mx-auto h-24 w-24 rounded-lg border-4 border-black object-cover"
+                  loading="lazy"
+                />
+              </div>
               <div className="mb-2 flex items-center justify-between text-sm font-semibold">
                 <span>{worldBossName}</span>
                 <span>{worldBossHP.toLocaleString()} / 100,000 HP</span>
