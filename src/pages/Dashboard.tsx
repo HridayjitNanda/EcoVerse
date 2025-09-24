@@ -171,59 +171,59 @@ export default function Dashboard() {
           </div>
 
           <div className="space-y-3">
-            {/* Unified sidebar button styles: larger size and text */}
+            {/* Unified sidebar button styles: increase size further */}
             <Button
               variant={tab === "overview" ? "default" : "ghost"}
-              className={`w-full h-16 justify-start gap-3 rounded-md border-2 border-black text-lg font-bold
+              className={`w-full h-20 justify-start gap-3 rounded-md border-2 border-black text-xl font-bold
                 ${tab === "overview" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"}`}
               onClick={() => setTab("overview")}
             >
-              <Shield className="h-6 w-6" /> Dashboard
+              <Shield className="h-7 w-7" /> Dashboard
             </Button>
 
             <Button
               variant={tab === "lessons" ? "default" : "ghost"}
-              className={`w-full h-16 justify-start gap-3 rounded-md border-2 border-black text-lg font-bold
+              className={`w-full h-20 justify-start gap-3 rounded-md border-2 border-black text-xl font-bold
                 ${tab === "lessons" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"}`}
               onClick={() => setTab("lessons")}
             >
-              <BookOpen className="h-6 w-6" /> Lessons
+              <BookOpen className="h-7 w-7" /> Lessons
             </Button>
 
             <Button
               variant={tab === "quizzes" ? "default" : "ghost"}
-              className={`w-full h-16 justify-start gap-3 rounded-md border-2 border-black text-lg font-bold
+              className={`w-full h-20 justify-start gap-3 rounded-md border-2 border-black text-xl font-bold
                 ${tab === "quizzes" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"}`}
               onClick={() => setTab("quizzes")}
             >
-              <Trophy className="h-6 w-6" /> Quizzes
+              <Trophy className="h-7 w-7" /> Quizzes
             </Button>
 
             <Button
               variant={tab === "challenges" ? "default" : "ghost"}
-              className={`w-full h-16 justify-start gap-3 rounded-md border-2 border-black text-lg font-bold
+              className={`w-full h-20 justify-start gap-3 rounded-md border-2 border-black text-xl font-bold
                 ${tab === "challenges" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"}`}
               onClick={() => setTab("challenges")}
             >
-              <Leaf className="h-6 w-6" /> Challenges
+              <Leaf className="h-7 w-7" /> Challenges
             </Button>
 
             <Button
               variant={tab === "leaderboard" ? "default" : "ghost"}
-              className={`w-full h-16 justify-start gap-3 rounded-md border-2 border-black text-lg font-bold
+              className={`w-full h-20 justify-start gap-3 rounded-md border-2 border-black text-xl font-bold
                 ${tab === "leaderboard" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"}`}
               onClick={() => setTab("leaderboard")}
             >
-              <Crown className="h-6 w-6" /> Leaderboard
+              <Crown className="h-7 w-7" /> Leaderboard
             </Button>
 
             <Button
               variant={tab === "rewards" ? "default" : "ghost"}
-              className={`w-full h-16 justify-start gap-3 rounded-md border-2 border-black text-lg font-bold
+              className={`w-full h-20 justify-start gap-3 rounded-md border-2 border-black text-xl font-bold
                 ${tab === "rewards" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"}`}
               onClick={() => setTab("rewards")}
             >
-              <Gift className="h-6 w-6" /> Rewards
+              <Gift className="h-7 w-7" /> Rewards
             </Button>
           </div>
 
