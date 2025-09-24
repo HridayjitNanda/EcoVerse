@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { Flame, Globe2, Leaf, Swords, Shield, Trophy, BookOpen, CheckCircle2, LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // Add a small Candy SVG and a sparse global background for the page
 const Candy = ({
@@ -225,164 +226,176 @@ export default function Dashboard() {
           </Card>
         </div>
 
-        {/* Monsters section (actions) */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
-          <Card className="border-4 border-black bg-white">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Shield className="h-5 w-5" /> Personal Monster Actions
-              </CardTitle>
-              <CardDescription>Complete actions to reduce HP</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-center justify-between rounded-md border-2 border-black px-3 py-2">
-                <div className="flex items-center gap-2">
-                  <Leaf className="h-4 w-4" />
-                  Daily Eco Action (-5 HP, +10 pts)
-                </div>
-                <Button
-                  size="sm"
-                  onClick={() => completeChallenge("quick-action", 5, 10)}
-                  disabled={personalMonsterHP === 0}
-                  className="border-2 border-black"
-                >
-                  Do it
-                </Button>
-              </div>
-              <div className="flex items-center justify-between rounded-md border-2 border-black px-3 py-2">
-                <div className="flex items-center gap-2">
-                  <Flame className="h-4 w-4" />
-                  Bonus Action (-10 HP, +20 pts)
-                </div>
-                <Button
-                  size="sm"
-                  onClick={() => completeChallenge("bonus-action", 10, 20)}
-                  disabled={personalMonsterHP === 0}
-                  className="border-2 border-black"
-                >
-                  Do it
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+        {/* REPLACED: Split content into tabs instead of stacking all sections */}
+        <Tabs defaultValue="overview" className="mt-4">
+          <TabsList className="border-2 border-black bg-white">
+            <TabsTrigger value="overview" className="data-[state=active]:bg-black data-[state=active]:text-white">Overview</TabsTrigger>
+            <TabsTrigger value="lessons" className="data-[state=active]:bg-black data-[state=active]:text-white">Lessons</TabsTrigger>
+            <TabsTrigger value="quizzes" className="data-[state=active]:bg-black data-[state=active]:text-white">Quizzes</TabsTrigger>
+            <TabsTrigger value="challenges" className="data-[state=active]:bg-black data-[state=active]:text-white">Challenges</TabsTrigger>
+          </TabsList>
 
-          <Card className="border-4 border-black bg-white">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Globe2 className="h-5 w-5" /> Contribute to World Boss
-              </CardTitle>
-              <CardDescription>Every action helps (-1 HP)</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-center justify-between rounded-md border-2 border-black px-3 py-2">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4" />
-                  Log a community action (-1 HP, +5 pts)
-                </div>
-                <Button
-                  size="sm"
-                  onClick={() => {
-                    setWorldBossHP((p) => Math.max(0, p - 1));
-                    setEcoPoints((p) => p + 5);
-                    toast.success("Thanks for contributing! -1 HP for Carbon Titan, +5 EcoPoints");
-                  }}
-                  disabled={worldBossHP === 0}
-                  className="border-2 border-black"
-                >
-                  Contribute
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Lessons */}
-        <div className="mb-8">
-          <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-2xl font-extrabold tracking-tight">Interactive Lessons</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {lessons.map((l, i) => (
-              <motion.div key={l.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
-                <Card className="border-4 border-black bg-white h-full">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-lg">{l.title}</CardTitle>
-                    <CardDescription className="flex items-center justify-between">
-                      <Badge variant="secondary" className="border-2 border-black">{l.tag}</Badge>
-                      <span>{l.duration}</span>
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex justify-end">
-                    <Button className="border-2 border-black" onClick={() => startLesson(l.title)}>
-                      <BookOpen className="h-4 w-4 mr-2" /> Start
-                    </Button>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* Quizzes */}
-        <div className="mb-8">
-          <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-2xl font-extrabold tracking-tight">Quizzes</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {quizzes.map((q, i) => (
-              <motion.div key={q.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
-                <Card className="border-4 border-black bg-white h-full">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-lg">{q.title}</CardTitle>
-                    <CardDescription className="flex items-center justify-between">
-                      <Badge variant="secondary" className="border-2 border-black">{q.tag}</Badge>
-                      <span>{q.questions} Questions</span>
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex justify-end">
-                    <Button className="border-2 border-black" onClick={() => takeQuiz(q.id, 15)}>
-                      <Trophy className="h-4 w-4 mr-2" /> Take Quiz
-                    </Button>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* Eco-Challenges */}
-        <div className="mb-16">
-          <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-2xl font-extrabold tracking-tight">Eco-Challenges</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {challenges.map((c, i) => (
-              <motion.div key={c.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
-                <Card className="border-4 border-black bg-white h-full">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base">{c.title}</CardTitle>
-                    <CardDescription className="flex items-center justify-between">
-                      <Badge variant="secondary" className="border-2 border-black">{c.tag}</Badge>
-                      <span>-{c.hp} HP • +{c.pts} pts</span>
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex justify-between items-center">
-                    <div className="text-xs font-semibold">
-                      {completedChallenges[c.id] ? "Completed" : "Available"}
+          {/* Overview: Monsters + World contribution */}
+          <TabsContent value="overview" className="mt-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-4">
+              <Card className="border-4 border-black bg-white">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Shield className="h-5 w-5" /> Personal Monster Actions
+                  </CardTitle>
+                  <CardDescription>Complete actions to reduce HP</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex items-center justify-between rounded-md border-2 border-black px-3 py-2">
+                    <div className="flex items-center gap-2">
+                      <Leaf className="h-4 w-4" />
+                      Daily Eco Action (-5 HP, +10 pts)
                     </div>
                     <Button
+                      size="sm"
+                      onClick={() => completeChallenge("quick-action", 5, 10)}
+                      disabled={personalMonsterHP === 0}
                       className="border-2 border-black"
-                      disabled={!!completedChallenges[c.id] || personalMonsterHP === 0}
-                      onClick={() => completeChallenge(c.id, c.hp, c.pts)}
                     >
-                      <Leaf className="h-4 w-4 mr-2" /> Complete
+                      Do it
                     </Button>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+                  </div>
+                  <div className="flex items-center justify-between rounded-md border-2 border-black px-3 py-2">
+                    <div className="flex items-center gap-2">
+                      <Flame className="h-4 w-4" />
+                      Bonus Action (-10 HP, +20 pts)
+                    </div>
+                    <Button
+                      size="sm"
+                      onClick={() => completeChallenge("bonus-action", 10, 20)}
+                      disabled={personalMonsterHP === 0}
+                      className="border-2 border-black"
+                    >
+                      Do it
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-4 border-black bg-white">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Globe2 className="h-5 w-5" /> Contribute to World Boss
+                  </CardTitle>
+                  <CardDescription>Every action helps (-1 HP)</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex items-center justify-between rounded-md border-2 border-black px-3 py-2">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="h-4 w-4" />
+                      Log a community action (-1 HP, +5 pts)
+                    </div>
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        setWorldBossHP((p) => Math.max(0, p - 1));
+                        setEcoPoints((p) => p + 5);
+                        toast.success("Thanks for contributing! -1 HP for Carbon Titan, +5 EcoPoints");
+                      }}
+                      disabled={worldBossHP === 0}
+                      className="border-2 border-black"
+                    >
+                      Contribute
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Lessons */}
+          <TabsContent value="lessons" className="mt-6">
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="text-2xl font-extrabold tracking-tight">Interactive Lessons</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {lessons.map((l, i) => (
+                <motion.div key={l.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
+                  <Card className="border-4 border-black bg-white h-full">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-lg">{l.title}</CardTitle>
+                      <CardDescription className="flex items-center justify-between">
+                        <Badge variant="secondary" className="border-2 border-black">{l.tag}</Badge>
+                        <span>{l.duration}</span>
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex justify-end">
+                      <Button className="border-2 border-black" onClick={() => startLesson(l.title)}>
+                        <BookOpen className="h-4 w-4 mr-2" /> Start
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </TabsContent>
+
+          {/* Quizzes */}
+          <TabsContent value="quizzes" className="mt-6">
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="text-2xl font-extrabold tracking-tight">Quizzes</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {quizzes.map((q, i) => (
+                <motion.div key={q.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
+                  <Card className="border-4 border-black bg-white h-full">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-lg">{q.title}</CardTitle>
+                      <CardDescription className="flex items-center justify-between">
+                        <Badge variant="secondary" className="border-2 border-black">{q.tag}</Badge>
+                        <span>{q.questions} Questions</span>
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex justify-end">
+                      <Button className="border-2 border-black" onClick={() => takeQuiz(q.id, 15)}>
+                        <Trophy className="h-4 w-4 mr-2" /> Take Quiz
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </TabsContent>
+
+          {/* Challenges */}
+          <TabsContent value="challenges" className="mt-6">
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="text-2xl font-extrabold tracking-tight">Eco-Challenges</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {challenges.map((c, i) => (
+                <motion.div key={c.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
+                  <Card className="border-4 border-black bg-white h-full">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-base">{c.title}</CardTitle>
+                      <CardDescription className="flex items-center justify-between">
+                        <Badge variant="secondary" className="border-2 border-black">{c.tag}</Badge>
+                        <span>-{c.hp} HP • +{c.pts} pts</span>
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex justify-between items-center">
+                      <div className="text-xs font-semibold">
+                        {completedChallenges[c.id] ? "Completed" : "Available"}
+                      </div>
+                      <Button
+                        className="border-2 border-black"
+                        disabled={!!completedChallenges[c.id] || personalMonsterHP === 0}
+                        onClick={() => completeChallenge(c.id, c.hp, c.pts)}
+                      >
+                        <Leaf className="h-4 w-4 mr-2" /> Complete
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
