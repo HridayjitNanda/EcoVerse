@@ -170,47 +170,59 @@ export default function Dashboard() {
           </div>
 
           <div className="space-y-2">
+            {/* Unified sidebar button styles: same size, spacing, theme */}
             <Button
               variant={tab === "overview" ? "default" : "ghost"}
-              className={`w-full justify-start ${tab === "overview" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"} border-2 border-black`}
+              className={`w-full h-12 justify-start gap-3 rounded-md border-2 border-black text-sm font-bold
+                ${tab === "overview" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"}`}
               onClick={() => setTab("overview")}
             >
-              <Shield className="h-4 w-4 mr-2" /> Overview
+              <Shield className="h-4 w-4" /> Dashboard
             </Button>
+
             <Button
               variant={tab === "lessons" ? "default" : "ghost"}
-              className={`w-full justify-start ${tab === "lessons" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"} border-2 border-black`}
+              className={`w-full h-12 justify-start gap-3 rounded-md border-2 border-black text-sm font-bold
+                ${tab === "lessons" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"}`}
               onClick={() => setTab("lessons")}
             >
-              <BookOpen className="h-4 w-4 mr-2" /> Lessons
+              <BookOpen className="h-4 w-4" /> Lessons
             </Button>
+
             <Button
               variant={tab === "quizzes" ? "default" : "ghost"}
-              className={`w-full justify-start ${tab === "quizzes" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"} border-2 border-black`}
+              className={`w-full h-12 justify-start gap-3 rounded-md border-2 border-black text-sm font-bold
+                ${tab === "quizzes" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"}`}
               onClick={() => setTab("quizzes")}
             >
-              <Trophy className="h-4 w-4 mr-2" /> Quizzes
+              <Trophy className="h-4 w-4" /> Quizzes
             </Button>
+
             <Button
               variant={tab === "challenges" ? "default" : "ghost"}
-              className={`w-full justify-start ${tab === "challenges" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"} border-2 border-black`}
+              className={`w-full h-12 justify-start gap-3 rounded-md border-2 border-black text-sm font-bold
+                ${tab === "challenges" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"}`}
               onClick={() => setTab("challenges")}
             >
-              <Leaf className="h-4 w-4 mr-2" /> Challenges
+              <Leaf className="h-4 w-4" /> Challenges
             </Button>
+
             <Button
               variant={tab === "leaderboard" ? "default" : "ghost"}
-              className={`w-full justify-start ${tab === "leaderboard" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"} border-2 border-black`}
+              className={`w-full h-12 justify-start gap-3 rounded-md border-2 border-black text-sm font-bold
+                ${tab === "leaderboard" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"}`}
               onClick={() => setTab("leaderboard")}
             >
-              <Crown className="h-4 w-4 mr-2" /> Leaderboard
+              <Crown className="h-4 w-4" /> Leaderboard
             </Button>
+
             <Button
               variant={tab === "rewards" ? "default" : "ghost"}
-              className={`w-full justify-start ${tab === "rewards" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"} border-2 border-black`}
+              className={`w-full h-12 justify-start gap-3 rounded-md border-2 border-black text-sm font-bold
+                ${tab === "rewards" ? "bg-black text-white" : "bg-white text-black hover:bg-white/90"}`}
               onClick={() => setTab("rewards")}
             >
-              <Gift className="h-4 w-4 mr-2" /> Rewards
+              <Gift className="h-4 w-4" /> Rewards
             </Button>
           </div>
 
