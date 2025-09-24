@@ -255,7 +255,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-x-hidden lg:pl-[22rem]" style={{ backgroundColor: "#ffd139" }}>
+    <div className="relative min-h-screen w-full overflow-x-hidden lg:pl-[21rem]" style={{ backgroundColor: "#ffd139" }}>
       <GlobalCandyBackground />
 
       {/* Fixed Left Sidebar (lg and up) */}
@@ -330,7 +330,7 @@ export default function Dashboard() {
       </div>
 
       {/* Main content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl px-4 sm:px-6 lg:px-8 py-8 ml-0">
         {/* Added: Simple welcome heading (replaces removed navbar area) */}
         <div className="mb-6 text-center">
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
