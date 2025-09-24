@@ -902,7 +902,16 @@ export default function Landing() {
             className="mx-auto max-w-4xl text-4xl font-extrabold leading-tight tracking-tight text-black sm:text-6xl"
             style={{ textShadow: "0 3px 0 rgba(0,0,0,0.25)" }}
           >
-            ECOVERSE —{" "}
+            <span className="inline-flex items-center align-middle">
+              <img
+                src="https://harmless-tapir-303.convex.cloud/api/storage/6ad51d4b-1776-4768-a421-94e6dda93a5e"
+                alt="EcoVerse wordmark"
+                className="h-[1.1em] w-auto mx-1 opacity-95 drop-shadow-[0_3px_0_rgba(0,0,0,0.25)]"
+                loading="eager"
+                decoding="async"
+              />
+              <span className="ml-2">—</span>
+            </span>
             <span className="block">LEARN. PLAY. TAKE ACTION.</span>
           </motion.h1>
           <motion.p
