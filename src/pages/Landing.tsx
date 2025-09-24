@@ -906,7 +906,7 @@ export default function Landing() {
               <img
                 src="https://harmless-tapir-303.convex.cloud/api/storage/e87903bc-433c-4f08-b606-6bcc5cc047f0"
                 alt="EcoVerse wordmark"
-                className="h-[2em] w-auto mx-1 opacity-95 drop-shadow-[0_3px_0_rgba(0,0,0,0.25)]"
+                className="h-[2.2em] w-auto mx-1 opacity-95 drop-shadow-[0_3px_0_rgba(0,0,0,0.25)]"
                 loading="eager"
                 decoding="async"
               />
