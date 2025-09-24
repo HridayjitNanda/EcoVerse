@@ -20,6 +20,7 @@ import type * as challenges from "../challenges.js";
 import type * as copies from "../copies.js";
 import type * as http from "../http.js";
 import type * as seedData from "../seedData.js";
+import type * as storage from "../storage.js";
 import type * as users from "../users.js";
 
 /**
@@ -38,6 +39,7 @@ declare const fullApi: ApiFromModules<{
   copies: typeof copies;
   http: typeof http;
   seedData: typeof seedData;
+  storage: typeof storage;
   users: typeof users;
 }>;
 export declare const api: FilterApi<

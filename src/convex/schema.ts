@@ -58,6 +58,32 @@ const schema = defineSchema(
       color: v.optional(v.string()),
       userId: v.id("users"),
     }).index("by_user", ["userId"]),
+
+    // ADD: EcoVerse challenges catalog
+    ev_challenges: defineTable({
+      title: v.string(),
+      hp: v.number(), // personal monster HP reduction
+      pts: v.number(), // points to award client-side upon verification or completion
+      tag: v.string(), // category label like "Waste", "Community"
+      active: v.optional(v.boolean()),
+    }).index("by_active", ["active"]),
+
+    // ADD: User submissions with before/after photos
+    ev_challenge_submissions: defineTable({
+      userId: v.id("users"),
+      challengeId: v.id("ev_challenges"),
+      beforeFileId: v.id("_storage"),
+      afterFileId: v.id("_storage"),
+      status: v.union(
+        v.literal("pending"),
+        v.literal("verified"),
+        v.literal("rejected")
+      ),
+      aiScore: v.optional(v.number()),
+      notes: v.optional(v.string()),
+    })
+      .index("by_user_and_challenge", ["userId", "challengeId"])
+      .index("by_challenge", ["challengeId"]),
   },
   {
     schemaValidation: false,

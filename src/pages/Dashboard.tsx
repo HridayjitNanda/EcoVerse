@@ -14,6 +14,8 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { useAction, useMutation, useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 // Decorative vertical frosting strip (separate fixed layer next to sidebar)
 function VerticalFrostingStrip() {
@@ -209,6 +211,26 @@ export default function Dashboard() {
 
   const currentQuiz = openQuizId ? QUIZ_BANK[openQuizId] : null;
 
+  // Replace Convex hooks to make submissions conditional and use the new list alias
+  const enabledChallenges = useQuery(api.challenges.list) || [];
+  const mySubs = useQuery(api.challenges.listMySubmissions) || [];
+  const submitChallenge = useMutation(api.challenges.submit);
+  const getUploadUrl = useAction(api.storage.generateUploadUrl);
+  const ensureSeeded = useMutation(api.challenges.ensureSeeded);
+
+  // Add helper to know if server-side challenges are available
+  const hasServerChallenges = (enabledChallenges?.length ?? 0) > 0;
+
+  // Modal state for uploading before/after
+  const [openChallengeId, setOpenChallengeId] = useState<string | null>(null);
+  const [beforeFile, setBeforeFile] = useState<File | null>(null);
+  const [afterFile, setAfterFile] = useState<File | null>(null);
+  const [submittingProof, setSubmittingProof] = useState(false);
+
+  // Helper: whether user already submitted for this challenge
+  const hasSubmitted = (cid: string) =>
+    mySubs.some((s: any) => s.challengeId === cid);
+
   // Helper: points per correct answer based on difficulty
   const pointsPerCorrect = (difficulty: "easy" | "medium" | "hard") => {
     if (difficulty === "hard") return 12;
@@ -381,6 +403,12 @@ export default function Dashboard() {
     setCompleted((m: Record<string, boolean>) => ({ ...m, [id]: true }));
     toast.success(`Nice! -${hp} HP personal, -1 HP world, +${pts} pts`);
   };
+
+  // Seed default challenges once for empty DB (best-effort, non-blocking)
+  useEffect(() => {
+    // Ensure challenge catalog exists; ignore errors
+    ensureSeeded({}).catch(() => {});
+  }, []);
 
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden lg:pl-[21rem]" style={{ backgroundColor: "#eaf6ff" }}>
@@ -738,12 +766,22 @@ export default function Dashboard() {
 
           <TabsContent value="challenges" className="mt-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {[
-                { id: "c1", title: "Carry a Reusable Bottle Today", hp: 5, pts: 10, tag: "Water" },
-                { id: "c2", title: "Skip Plastic Cutlery", hp: 5, pts: 12, tag: "Waste" },
-                { id: "c3", title: "Plant a Seed or Sapling", hp: 10, pts: 25, tag: "Nature" },
-              ].map((c, i) => (
-                <motion.div key={c.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
+              {(hasServerChallenges
+                ? enabledChallenges.map((c: any) => ({
+                    id: c._id,
+                    title: c.title as string,
+                    hp: c.hp as number,
+                    pts: c.pts as number,
+                    tag: c.tag as string,
+                  }))
+                : [
+                    // fallback to previous static cards if none seeded in DB
+                    { id: "c1", title: "Remove litter in your area", hp: 5, pts: 15, tag: "Waste" },
+                    { id: "c2", title: "Clean a local spot (before/after)", hp: 8, pts: 20, tag: "Community" },
+                    { id: "c3", title: "Plant a seedling and water it", hp: 10, pts: 25, tag: "Nature" },
+                  ]
+              ).map((c, i) => (
+                <motion.div key={String(c.id)} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
                   <Card className="border-4 border-black bg-white h-full">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-base">{c.title}</CardTitle>
@@ -753,11 +791,24 @@ export default function Dashboard() {
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="flex justify-between items-center">
-                      <div className="text-xs font-semibold">{completed[c.id] ? "Completed" : "Available"}</div>
-                      <Button className="border-2 border-black" disabled={!!completed[c.id] || personalMonsterHP === 0}
-                        onClick={() => completeAction(c.id, c.hp, c.pts)}>
-                        <Leaf className="h-4 w-4 mr-2" /> Complete
-                      </Button>
+                      <div className="text-xs font-semibold">
+                        {hasSubmitted(String(c.id)) ? "Submitted" : "Available"}
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          className="border-2 border-black"
+                          disabled={hasSubmitted(String(c.id)) || personalMonsterHP === 0 || !hasServerChallenges}
+                          onClick={() => {
+                            if (!hasServerChallenges) {
+                              toast("Challenges are initializing. Please try again shortly.");
+                              return;
+                            }
+                            setOpenChallengeId(String(c.id));
+                          }}
+                        >
+                          Submit Proof
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -932,6 +983,111 @@ export default function Dashboard() {
           </DialogContent>
         </Dialog>
         {/* End Quiz Modal */}
+
+        {/* Challenge Proof Modal */}
+        <Dialog open={!!openChallengeId} onOpenChange={(open) => (!open ? setOpenChallengeId(null) : null)}>
+          <DialogContent className="border-4 border-black bg-white max-w-xl">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-extrabold">Submit Before/After Photos</DialogTitle>
+            </DialogHeader>
+
+            <div className="space-y-4">
+              <div className="rounded-md border-2 border-black p-3">
+                <div className="font-bold mb-2">Before Photo</div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setBeforeFile(e.target.files?.[0] || null)}
+                  className="w-full"
+                />
+              </div>
+              <div className="rounded-md border-2 border-black p-3">
+                <div className="font-bold mb-2">After Photo</div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setAfterFile(e.target.files?.[0] || null)}
+                  className="w-full"
+                />
+              </div>
+              <div className="text-xs text-black/70">
+                Note: Our EcoVerse verification checks for AI-generated content and task completion cues. Submissions are marked pending while verification runs.
+              </div>
+            </div>
+
+            <DialogFooter className="flex gap-2">
+              <Button
+                variant="outline"
+                className="border-2 border-black bg-white text-black hover:bg-white/90"
+                disabled={submittingProof}
+                onClick={() => {
+                  setOpenChallengeId(null);
+                  setBeforeFile(null);
+                  setAfterFile(null);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="border-2 border-black bg-black text-white hover:bg-black/90"
+                disabled={!beforeFile || !afterFile || !openChallengeId || submittingProof}
+                onClick={async () => {
+                  if (!beforeFile || !afterFile || !openChallengeId) return;
+                  if (!hasServerChallenges) {
+                    toast("Challenges are not ready yet. Please try again later.");
+                    return;
+                  }
+                  try {
+                    setSubmittingProof(true);
+
+                    // Upload 'before'
+                    const beforeUrl = await getUploadUrl({});
+                    const resBefore = await fetch(beforeUrl, {
+                      method: "POST",
+                      headers: { "Content-Type": beforeFile.type || "application/octet-stream" },
+                      body: beforeFile,
+                    });
+                    const { storageId: beforeStorageId } = await resBefore.json();
+
+                    // Upload 'after'
+                    const afterUrl = await getUploadUrl({});
+                    const resAfter = await fetch(afterUrl, {
+                      method: "POST",
+                      headers: { "Content-Type": afterFile.type || "application/octet-stream" },
+                      body: afterFile,
+                    });
+                    const { storageId: afterStorageId } = await resAfter.json();
+
+                    // Submit to backend (require real DB id)
+                    const dbId = (enabledChallenges.find((c: any) => String(c._id) === openChallengeId)?._id) as any;
+                    if (!dbId) {
+                      toast("Challenge not found. Please refresh and try again.");
+                      return;
+                    }
+                    await submitChallenge({
+                      challengeId: dbId,
+                      beforeFileId: beforeStorageId,
+                      afterFileId: afterStorageId,
+                    });
+
+                    toast.success("Submitted! Verification pending.");
+                    setOpenChallengeId(null);
+                    setBeforeFile(null);
+                    setAfterFile(null);
+                  } catch (e) {
+                    console.error(e);
+                    toast("Unable to submit. Please try again.");
+                  } finally {
+                    setSubmittingProof(false);
+                  }
+                }}
+              >
+                {submittingProof ? "Submitting..." : "Submit"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        {/* End Challenge Proof Modal */}
       </main>
     </div>
   );
