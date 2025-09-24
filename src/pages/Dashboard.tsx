@@ -260,13 +260,9 @@ export default function Dashboard() {
 
       {/* Fixed Left Sidebar (lg and up) */}
       <div
-        className="hidden lg:block fixed inset-y-0 left-0 h-screen w-[21rem] border-r-4 border-black z-50 relative overflow-hidden"
+        className="hidden lg:block fixed inset-y-0 left-0 h-screen w-64 border-r-4 border-black z-50 relative overflow-hidden"
         style={{ background: "linear-gradient(180deg,#ff9dd6 0%,#ff64b5 100%)" }}
       >
-        {/* Add-only: decorative vertical frosting to the right of the original sidebar */}
-        <div className="pointer-events-none absolute top-0 right-0 h-full w-[78px]">
-          <VerticalFrostingStrip />
-        </div>
         <div className="flex h-full flex-col p-4">
           <div className="mb-4">
             <div className="text-black font-extrabold text-lg">EcoVerse</div>
@@ -326,6 +322,11 @@ export default function Dashboard() {
             </Button>
           </div>
         </div>
+      </div>
+
+      {/* Add a separate fixed vertical frosting strip immediately to the right of the sidebar */}
+      <div className="hidden lg:block fixed inset-y-0 left-64 h-screen w-[78px] z-40 pointer-events-none">
+        <VerticalFrostingStrip />
       </div>
 
       {/* Main content */}
