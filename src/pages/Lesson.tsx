@@ -24,30 +24,42 @@ const LESSONS: Record<string, LessonInfo> = {
     id: "l1",
     title: "Climate Change Basics",
     tag: "Beginner",
-    duration: "15 min",
+    duration: "18 min",
     hero: "https://images.unsplash.com/photo-1502301197179-65228ab57f78?q=80&w=1400&auto=format&fit=crop",
     summary:
-      "Learn about the fundamentals of climate change and its impact on our planet. Understand causes, effects, and everyday actions you can take.",
+      "Understand what climate change is, why it's happening, and what it means for people and ecosystems. Learn the core concepts clearly so you can take meaningful action.",
     objectives: [
-      "Explain the greenhouse effect in simple terms",
-      "Recognize key human activities driving warming",
-      "List 3 everyday actions to reduce emissions",
+      "Explain the greenhouse effect with a simple analogy",
+      "Identify major human drivers of climate change",
+      "Differentiate weather from climate",
+      "Recognize common impacts on people and nature",
+      "List 5 practical actions to reduce emissions",
     ],
     sections: [
       {
-        heading: "What is Climate Change?",
+        heading: "Weather vs Climate",
         body:
-          "Climate change refers to long-term shifts in temperatures and weather patterns. While these shifts can be natural, human activities—primarily the burning of fossil fuels—have been the main driver since the 1800s.",
+          "Weather describes short-term atmospheric conditions (like rain today), while climate is the long-term pattern of weather over decades. A single hot day doesn't prove climate change—but a consistent trend of rising average temperatures, changing rainfall, and more frequent extremes does.",
       },
       {
-        heading: "Greenhouse Effect",
+        heading: "The Greenhouse Effect (Simple Analogy)",
         body:
-          "Certain gases trap heat in the atmosphere—like a blanket around Earth. This natural effect keeps our planet warm, but excess greenhouse gases cause too much warming.",
+          "Think of Earth as wrapped in a comfortable blanket. Greenhouse gases—like CO2 and methane—trap some of the Sun's heat, keeping our planet warm enough for life. The problem? We've made the blanket too thick by burning fossil fuels, cutting forests, and industrial processes, trapping too much heat.",
       },
       {
-        heading: "What You Can Do",
+        heading: "Human Drivers",
         body:
-          "Use public transit or cycle for short trips, reduce energy waste at home, and choose climate-friendly foods more often.",
+          "Key sources include electricity and heat from fossil fuels, transport (cars, trucks, ships, planes), industry (cement, steel), agriculture (methane from livestock, nitrous oxide from fertilizers), and deforestation (reducing carbon-absorbing trees). Each sector contributes differently across regions.",
+      },
+      {
+        heading: "Impacts You Can See",
+        body:
+          "Rising sea levels threaten coastal communities; heatwaves strain health systems; shifting rainfall patterns affect crops; warming oceans bleach coral reefs and disrupt fisheries. Extreme events—floods, wildfires, storms—become more frequent or intense, affecting livelihoods globally.",
+      },
+      {
+        heading: "Everyday Actions That Matter",
+        body:
+          "Cut energy waste (LED bulbs, efficient appliances), choose low-carbon transport (walk, cycle, public transit, carpool), reduce food waste, eat more plant-rich meals, and support clean energy. Small habits add up—especially when communities act together.",
       },
     ],
   },
@@ -55,30 +67,42 @@ const LESSONS: Record<string, LessonInfo> = {
     id: "l2",
     title: "Renewable Energy Sources",
     tag: "Intermediate",
-    duration: "20 min",
+    duration: "22 min",
     hero: "https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?q=80&w=1400&auto=format&fit=crop",
     summary:
-      "Explore solar, wind, hydro, and more. See how renewables power communities while cutting carbon emissions.",
+      "Learn how solar, wind, hydro, and other renewable sources generate clean power, and why grids and storage are essential for reliability.",
     objectives: [
-      "Differentiate common renewable sources",
-      "Understand intermittency and storage basics",
-      "Identify where renewables fit in daily life",
+      "Explain how solar, wind, and hydro work at a high level",
+      "Compare strengths and trade-offs of major renewable sources",
+      "Understand intermittency and why storage is needed",
+      "Describe how modern grids balance supply and demand",
+      "Identify ways households can adopt renewables",
     ],
     sections: [
       {
         heading: "Why Renewables?",
         body:
-          "Renewables produce electricity without burning fossil fuels, lowering greenhouse gas emissions and air pollution.",
+          "Renewables generate electricity without burning fossil fuels, reducing greenhouse gas emissions and air pollution. They also improve energy security by diversifying supply and reducing dependence on imported fuels.",
       },
       {
-        heading: "Common Sources",
+        heading: "Solar Energy Basics",
         body:
-          "Solar panels capture sunlight; wind turbines harvest moving air; hydropower taps flowing water. Each has pros, cons, and ideal locations.",
+          "Solar photovoltaic (PV) panels convert sunlight directly into electricity using semiconductor materials. Rooftop solar empowers households and businesses, while utility-scale farms can power entire communities.",
       },
       {
-        heading: "Storage & Grids",
+        heading: "Wind and Hydropower",
         body:
-          "Batteries and smart grids help balance supply and demand, keeping reliable power even when the sun or wind is low.",
+          "Wind turbines capture kinetic energy from moving air; best performance occurs in consistently windy sites onshore or offshore. Hydropower harnesses flowing water—ranging from large dams to run-of-river systems—with predictable output but ecological trade-offs.",
+      },
+      {
+        heading: "Intermittency and Storage",
+        body:
+          "Sunlight and wind vary, so output fluctuates. Batteries, pumped hydro, and thermal storage help smooth supply. Demand-side management (shifting consumption to off-peak times) also keeps grids stable and efficient.",
+      },
+      {
+        heading: "How You Can Participate",
+        body:
+          "Consider rooftop solar or community solar subscriptions, choose green energy plans where available, and reduce peak-time usage. Support local policies and incentives that expand renewable adoption and grid upgrades.",
       },
     ],
   },
@@ -86,30 +110,42 @@ const LESSONS: Record<string, LessonInfo> = {
     id: "l3",
     title: "Ocean Conservation",
     tag: "Beginner",
-    duration: "18 min",
+    duration: "20 min",
     hero: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1400&auto=format&fit=crop",
     summary:
-      "Understand the importance of protecting our oceans and marine life. Learn how pollution and overfishing threaten ecosystems.",
+      "Discover why healthy oceans are essential to life on Earth and how to protect marine ecosystems from pollution and overuse.",
     objectives: [
-      "Describe why healthy oceans matter",
-      "Recognize key threats like plastics and overfishing",
-      "Adopt habits that reduce ocean pollution",
+      "Describe oceans' role in climate and oxygen production",
+      "Identify key threats like plastics, overfishing, and warming",
+      "Understand how acidification harms marine life",
+      "Adopt daily habits that reduce ocean-bound pollution",
+      "Support sustainable seafood and conservation efforts",
     ],
     sections: [
       {
         heading: "Why Oceans Matter",
         body:
-          "Oceans regulate climate, produce oxygen, and support billions of livelihoods. They're home to incredible biodiversity.",
+          "Oceans produce over half of the world's oxygen, absorb significant heat and carbon dioxide, and support complex food webs. Billions depend on marine ecosystems for nutrition, jobs, and cultural identity.",
       },
       {
-        heading: "Main Threats",
+        heading: "Pollution and Plastics",
         body:
-          "Plastic pollution, warming waters, acidification, and overfishing harm marine life and coastal communities.",
+          "Single-use plastics break down into microplastics, entering food chains and harming wildlife. Chemical runoff and oil spills degrade habitats. Prevention—reducing waste at the source—is far more effective than cleanup alone.",
+      },
+      {
+        heading: "Warming and Acidification",
+        body:
+          "Warmer waters disrupt species distribution and coral health. As oceans absorb CO2, they become more acidic, weakening shells and coral skeletons. These shifts ripple through ecosystems and coastal economies.",
+      },
+      {
+        heading: "Overfishing and Bycatch",
+        body:
+          "Unsustainable fishing depletes stocks and damages habitats. Bycatch—non-target species caught unintentionally—adds further stress. Science-based quotas, protected areas, and selective gear reduce impacts.",
       },
       {
         heading: "Protecting Our Seas",
         body:
-          "Cut single-use plastics, support sustainable seafood, and join local clean-ups to keep waterways healthy.",
+          "Choose reusable products, reduce microplastic sources (e.g., synthetic fabrics), support sustainable seafood certifications, and join local clean-ups. Advocate for policies that protect marine reserves and reduce pollution.",
       },
     ],
   },
@@ -117,30 +153,42 @@ const LESSONS: Record<string, LessonInfo> = {
     id: "l4",
     title: "Sustainable Transport",
     tag: "Beginner",
-    duration: "16 min",
+    duration: "18 min",
     hero: "https://images.unsplash.com/photo-1520975922219-b86e0b4b1a7b?q=80&w=1400&auto=format&fit=crop",
     summary:
-      "Discover low-carbon travel choices and how cities and individuals can move smarter and greener.",
+      "Explore low-carbon mobility options, compare emissions across modes, and learn how cities and individuals can move smarter.",
     objectives: [
-      "Recognize sustainable transport modes",
-      "Compare emissions across commute options",
-      "Adopt at least one greener travel habit",
+      "Recognize sustainable transport modes and their benefits",
+      "Compare emissions of car, transit, walking, and cycling",
+      "Explain how e-bikes, EVs, and carpooling reduce footprints",
+      "Plan trips to minimize time and emissions",
+      "Adopt at least one greener commute habit",
     ],
     sections: [
       {
-        heading: "Why Transport Matters",
+        heading: "Transport's Climate Impact",
         body:
-          "Transport is a major source of greenhouse gas emissions. Shifting to cleaner modes can greatly reduce your footprint.",
+          "Transport is a major emissions source globally. Reducing solo car trips and improving vehicle efficiency can significantly cut personal and community footprints.",
       },
       {
-        heading: "Greener Commute Options",
+        heading: "Greener Mode Choices",
         body:
-          "Walking, cycling, public transit, and carpooling reduce emissions. E-bikes and e-scooters are great for short trips.",
+          "Walking and cycling have near-zero operational emissions and boost health. Public transit moves many people efficiently. Carpooling reduces per-person emissions and congestion.",
       },
       {
-        heading: "Plan Your Trip",
+        heading: "Electric Mobility",
         body:
-          "Use route planners to combine modes, avoid traffic, and pick the lowest-emission option that fits your time.",
+          "EVs and e-bikes lower emissions especially when powered by clean grids. They're efficient for daily commutes and short trips, reducing local air pollution and noise.",
+      },
+      {
+        heading: "Smarter Trip Planning",
+        body:
+          "Combine errands, avoid peak traffic when possible, and use route planners to select low-emission routes. Remote work and flexible schedules can also cut travel demand.",
+      },
+      {
+        heading: "City and Policy Solutions",
+        body:
+          "Bike lanes, safe sidewalks, reliable transit, and EV charging networks make sustainable choices easy. Support local initiatives that improve accessibility and safety.",
       },
     ],
   },
@@ -148,30 +196,42 @@ const LESSONS: Record<string, LessonInfo> = {
     id: "l5",
     title: "Water Conservation",
     tag: "Beginner",
-    duration: "14 min",
+    duration: "16 min",
     hero: "https://images.unsplash.com/photo-1508873535684-277a3cbcc4e8?q=80&w=1400&auto=format&fit=crop",
     summary:
-      "Learn practical ways to save water at home and in your community to protect this essential resource.",
+      "Learn where water is used most, how to detect waste, and simple ways to conserve at home and in your community.",
     objectives: [
-      "Understand household water hotspots",
-      "Apply quick-saving habits daily",
-      "Spot and fix leaks efficiently",
+      "Identify household water hotspots (bathroom, kitchen, laundry)",
+      "Reduce daily use with easy habit changes",
+      "Detect and fix leaks quickly and safely",
+      "Choose efficient fixtures and appliances",
+      "Promote community water stewardship",
     ],
     sections: [
       {
-        heading: "The Value of Water",
+        heading: "Why Save Water?",
         body:
-          "Freshwater is limited. Conserving it supports ecosystems, agriculture, and future generations.",
+          "Freshwater is finite and unequally distributed. Conservation protects ecosystems, supports agriculture, and ensures resilience during droughts.",
       },
       {
-        heading: "Easy Savings at Home",
+        heading: "Daily Habits That Help",
         body:
-          "Turn off taps when not in use, run full loads in washers, and take shorter showers to cut daily use.",
+          "Turn off taps while brushing, take shorter showers, run full loads in washers, and thaw food in the fridge instead of under running water.",
       },
       {
-        heading: "Detect Leaks",
+        heading: "Leak Detection 101",
         body:
-          "Small leaks waste huge volumes over time. Check faucets, toilets, and outdoor hoses regularly.",
+          "Check for silent leaks by monitoring your meter, inspecting toilets for running water, and looking for damp spots. Small leaks waste surprising volumes over time.",
+      },
+      {
+        heading: "Efficient Fixtures",
+        body:
+          "Install low-flow showerheads and faucet aerators, choose dual-flush or efficient toilets, and select water-efficient appliances with trusted labels.",
+      },
+      {
+        heading: "Outdoor and Community",
+        body:
+          "Water plants in the early morning, use mulch to reduce evaporation, and choose native species. Support community programs that protect watersheds.",
       },
     ],
   },
@@ -179,30 +239,42 @@ const LESSONS: Record<string, LessonInfo> = {
     id: "l6",
     title: "Biodiversity Basics",
     tag: "Intermediate",
-    duration: "22 min",
+    duration: "24 min",
     hero: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1400&auto=format&fit=crop",
     summary:
-      "Explore why biodiversity matters and how we can protect habitats for a thriving planet.",
+      "Understand what biodiversity is, why it matters for people and ecosystems, and how to protect habitats locally and globally.",
     objectives: [
       "Define biodiversity and ecosystem services",
-      "Identify major threats to species",
-      "Support local biodiversity actions",
+      "Identify key threats to species and habitats",
+      "Explain why genetic diversity boosts resilience",
+      "Support local habitat restoration and pollinators",
+      "Make choices that protect nature every day",
     ],
     sections: [
       {
-        heading: "What is Biodiversity?",
+        heading: "What Is Biodiversity?",
         body:
-          "Biodiversity is the variety of life on Earth. It supports clean air, water, food, and resilience.",
+          "Biodiversity includes the variety of species, ecosystems, and genetic differences within species. It underpins clean air and water, fertile soils, food, and climate resilience.",
       },
       {
-        heading: "Key Threats",
+        heading: "Major Threats",
         body:
-          "Habitat loss, pollution, invasive species, and climate change all reduce biodiversity worldwide.",
+          "Habitat loss, pollution, invasive species, overexploitation, and climate change erode biodiversity. These stressors often interact, magnifying overall impact.",
+      },
+      {
+        heading: "Ecosystem Services",
+        body:
+          "Nature provides services like pollination, water purification, flood control, and disease regulation. When biodiversity declines, these benefits weaken or disappear.",
+      },
+      {
+        heading: "Local Actions",
+        body:
+          "Create pollinator-friendly gardens, reduce pesticide use, preserve native plants, and support community conservation projects. Even balconies and small yards can help.",
       },
       {
         heading: "Protecting Habitats",
         body:
-          "Create pollinator-friendly spaces, reduce chemical use, and support conservation efforts locally.",
+          "Back protected areas, sustainable forestry and fisheries, and responsible land-use planning. Advocate for policies that link conservation with community well-being.",
       },
     ],
   },
