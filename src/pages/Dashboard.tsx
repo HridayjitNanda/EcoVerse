@@ -211,12 +211,14 @@ export default function Dashboard() {
 
   const currentQuiz = openQuizId ? QUIZ_BANK[openQuizId] : null;
 
-  // Replace Convex hooks to make submissions conditional and use the new list alias
-  const enabledChallenges = useQuery(api.challenges.list) || [];
-  const mySubs = useQuery(api.challenges.listMySubmissions) || [];
+  // Use direct Convex references with proper args to avoid runtime errors
+  const enabledChallenges = useQuery(api.challenges.list, {}) || [];
+  const mySubs = useQuery(api.challenges.listMySubmissions, {}) || [];
   const submitChallenge = useMutation(api.challenges.submit);
-  const getUploadUrl = useAction(api.storage.generateUploadUrl);
-  const ensureSeeded = useMutation(api.challenges.ensureSeeded);
+  // Cast to any to work around typegen lag while the action exists at runtime
+  const getUploadUrl = useAction((api as any).storage.generateUploadUrl);
+  // Add: seeding trigger to ensure default challenges exist
+  const ensureDefaultChallenges = useMutation(api.seedData.ensureChallengesPublic);
 
   // Add helper to know if server-side challenges are available
   const hasServerChallenges = (enabledChallenges?.length ?? 0) > 0;
@@ -404,11 +406,13 @@ export default function Dashboard() {
     toast.success(`Nice! -${hp} HP personal, -1 HP world, +${pts} pts`);
   };
 
-  // Seed default challenges once for empty DB (best-effort, non-blocking)
+  // Seed default challenges once for empty DB (best-effort)
   useEffect(() => {
-    // Ensure challenge catalog exists; ignore errors
-    ensureSeeded({}).catch(() => {});
-  }, []);
+    if (!hasServerChallenges) {
+      ensureDefaultChallenges({}).catch(() => {});
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasServerChallenges]);
 
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden lg:pl-[21rem]" style={{ backgroundColor: "#eaf6ff" }}>
