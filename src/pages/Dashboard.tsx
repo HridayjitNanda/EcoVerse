@@ -147,50 +147,18 @@ export default function Dashboard() {
     <div className="relative min-h-screen w-full overflow-x-hidden" style={{ backgroundColor: "#ffd139" }}>
       <GlobalCandyBackground />
 
-      {/* Frosting-style header to match landing */}
-      <nav
-        className="sticky top-0 z-50 border-b-2 border-black"
-        style={{ background: "linear-gradient(180deg,#ff9dd6 0%,#ff64b5 100%)" }}
-      >
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <button
-            className="flex items-center gap-2 rounded-md border-2 border-black bg-white px-3 py-1 text-sm font-extrabold hover:bg-white/90"
-            onClick={() => navigate("/")}
-          >
-            <img src="/logo.svg" alt="EcoVerse" className="h-6 w-6" />
-            EcoVerse
-          </button>
-          <div className="flex items-center gap-3">
-            <span className="hidden sm:block text-sm font-semibold text-black">
-              {user?.name || user?.email || "Student"}
-            </span>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="rounded-md border-2 border-black bg-white text-black hover:bg-white/90"
-              onClick={handleSignOut}
-            >
-              <LogOut className="h-4 w-4 mr-2" />
-              Sign Out
-            </Button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Biscuit base under navbar */}
-      <div className="relative -mt-1 pointer-events-none">
-        <svg viewBox="0 0 1440 44" className="block w-full h-[44px]" preserveAspectRatio="none" aria-hidden="true">
-          <path
-            d="M0 10 C240 28, 480 2, 720 10 C960 26, 1200 2, 1440 10 L1440 44 L0 44 Z"
-            fill="#f5c338"
-            stroke="#b58a1a"
-            strokeWidth="4"
-          />
-        </svg>
-      </div>
-
       {/* Main content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Added: Simple welcome heading (replaces removed navbar area) */}
+        <div className="mb-6 text-center">
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+            Welcome back, {user?.name || user?.email || "Eco Warrior"}!
+          </h1>
+          <p className="mt-1 text-sm sm:text-base font-semibold text-black/70">
+            Track progress, learn with focus, and take real action—at your pace.
+          </p>
+        </div>
+
         {/* Top stats strip */}
         <div className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Card className="border-4 border-black bg-white">
@@ -292,6 +260,15 @@ export default function Dashboard() {
               >
                 <Gift className="h-4 w-4 mr-2" /> Rewards
               </Button>
+              <div className="pt-4">
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start border-2 border-black bg-white text-black hover:bg-white/90"
+                  onClick={handleSignOut}
+                >
+                  <LogOut className="h-4 w-4 mr-2" /> Sign Out
+                </Button>
+              </div>
             </div>
           </aside>
 
