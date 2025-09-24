@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, BookOpen, Clock, Leaf } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import { toast } from "sonner";
 
 type LessonInfo = {
   id: string;
@@ -98,7 +99,7 @@ const LESSONS: Record<string, LessonInfo> = {
       {
         heading: "Why Oceans Matter",
         body:
-          "Oceans regulate climate, produce oxygen, and support billions of livelihoods. They’re home to incredible biodiversity.",
+          "Oceans regulate climate, produce oxygen, and support billions of livelihoods. They're home to incredible biodiversity.",
       },
       {
         heading: "Main Threats",
@@ -112,6 +113,99 @@ const LESSONS: Record<string, LessonInfo> = {
       },
     ],
   },
+  l4: {
+    id: "l4",
+    title: "Sustainable Transport",
+    tag: "Beginner",
+    duration: "16 min",
+    hero: "https://images.unsplash.com/photo-1520975922219-b86e0b4b1a7b?q=80&w=1400&auto=format&fit=crop",
+    summary:
+      "Discover low-carbon travel choices and how cities and individuals can move smarter and greener.",
+    objectives: [
+      "Recognize sustainable transport modes",
+      "Compare emissions across commute options",
+      "Adopt at least one greener travel habit",
+    ],
+    sections: [
+      {
+        heading: "Why Transport Matters",
+        body:
+          "Transport is a major source of greenhouse gas emissions. Shifting to cleaner modes can greatly reduce your footprint.",
+      },
+      {
+        heading: "Greener Commute Options",
+        body:
+          "Walking, cycling, public transit, and carpooling reduce emissions. E-bikes and e-scooters are great for short trips.",
+      },
+      {
+        heading: "Plan Your Trip",
+        body:
+          "Use route planners to combine modes, avoid traffic, and pick the lowest-emission option that fits your time.",
+      },
+    ],
+  },
+  l5: {
+    id: "l5",
+    title: "Water Conservation",
+    tag: "Beginner",
+    duration: "14 min",
+    hero: "https://images.unsplash.com/photo-1508873535684-277a3cbcc4e8?q=80&w=1400&auto=format&fit=crop",
+    summary:
+      "Learn practical ways to save water at home and in your community to protect this essential resource.",
+    objectives: [
+      "Understand household water hotspots",
+      "Apply quick-saving habits daily",
+      "Spot and fix leaks efficiently",
+    ],
+    sections: [
+      {
+        heading: "The Value of Water",
+        body:
+          "Freshwater is limited. Conserving it supports ecosystems, agriculture, and future generations.",
+      },
+      {
+        heading: "Easy Savings at Home",
+        body:
+          "Turn off taps when not in use, run full loads in washers, and take shorter showers to cut daily use.",
+      },
+      {
+        heading: "Detect Leaks",
+        body:
+          "Small leaks waste huge volumes over time. Check faucets, toilets, and outdoor hoses regularly.",
+      },
+    ],
+  },
+  l6: {
+    id: "l6",
+    title: "Biodiversity Basics",
+    tag: "Intermediate",
+    duration: "22 min",
+    hero: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1400&auto=format&fit=crop",
+    summary:
+      "Explore why biodiversity matters and how we can protect habitats for a thriving planet.",
+    objectives: [
+      "Define biodiversity and ecosystem services",
+      "Identify major threats to species",
+      "Support local biodiversity actions",
+    ],
+    sections: [
+      {
+        heading: "What is Biodiversity?",
+        body:
+          "Biodiversity is the variety of life on Earth. It supports clean air, water, food, and resilience.",
+      },
+      {
+        heading: "Key Threats",
+        body:
+          "Habitat loss, pollution, invasive species, and climate change all reduce biodiversity worldwide.",
+      },
+      {
+        heading: "Protecting Habitats",
+        body:
+          "Create pollinator-friendly spaces, reduce chemical use, and support conservation efforts locally.",
+      },
+    ],
+  },
 };
 
 export default function LessonPage() {
@@ -119,7 +213,7 @@ export default function LessonPage() {
   const navigate = useNavigate();
   const lesson = useMemo(() => (id ? LESSONS[id] : undefined), [id]);
 
-  const [progress, setProgress] = useState<number>(20);
+  const [completedSections, setCompletedSections] = useState<Record<number, boolean>>({});
 
   if (!lesson) {
     return (
@@ -136,13 +230,17 @@ export default function LessonPage() {
           <div className="mt-6 rounded-lg border-4 border-black bg-white p-6">
             <h1 className="text-2xl font-extrabold">Lesson not found</h1>
             <p className="mt-2 font-semibold text-black/70">
-              The lesson you’re looking for doesn’t exist.
+              The lesson you're looking for doesn't exist.
             </p>
           </div>
         </div>
       </div>
     );
   }
+
+  // Derived progress from completed sections
+  const completedCount = useMemo(() => Object.keys(completedSections).length, [completedSections]);
+  const progress = Math.round((completedCount / lesson.sections.length) * 100);
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#ffd139" }}>
@@ -217,7 +315,7 @@ export default function LessonPage() {
               <CardTitle className="flex items-center gap-2">
                 <Leaf className="h-5 w-5" /> Objectives
               </CardTitle>
-              <CardDescription>What you’ll learn</CardDescription>
+              <CardDescription>What you'll learn</CardDescription>
             </CardHeader>
             <CardContent>
               <ul className="list-disc pl-5 space-y-2 font-semibold">
@@ -247,9 +345,14 @@ export default function LessonPage() {
                     <div className="mt-4 flex justify-end">
                       <Button
                         className="border-2 border-black"
-                        onClick={() => setProgress((p) => Math.min(100, p + Math.ceil(80 / lesson.sections.length)))}
+                        disabled={!!completedSections[i]}
+                        onClick={() => {
+                          if (completedSections[i]) return;
+                          setCompletedSections((prev) => ({ ...prev, [i]: true }));
+                          toast.success("Marked as completed");
+                        }}
                       >
-                        Mark Complete
+                        {completedSections[i] ? "Completed" : "Mark Complete"}
                       </Button>
                     </div>
                   </CardContent>
@@ -267,7 +370,11 @@ export default function LessonPage() {
           <Button
             className="border-2 border-black bg-[#35c163] text-black hover:bg-[#2cb25a] px-6"
             onClick={() => {
-              setProgress(100);
+              const all: Record<number, boolean> = {};
+              lesson.sections.forEach((_, idx) => {
+                all[idx] = true;
+              });
+              setCompletedSections(all);
               navigate("/dashboard");
             }}
           >

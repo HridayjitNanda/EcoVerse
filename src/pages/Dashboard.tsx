@@ -246,6 +246,9 @@ export default function Dashboard() {
     { id: "l1", title: "Climate Change Basics", duration: "15 min", tag: "Beginner" },
     { id: "l2", title: "Renewable Energy Sources", duration: "20 min", tag: "Intermediate" },
     { id: "l3", title: "Ocean Conservation", duration: "18 min", tag: "Beginner" },
+    { id: "l4", title: "Sustainable Transport", duration: "16 min", tag: "Beginner" },
+    { id: "l5", title: "Water Conservation", duration: "14 min", tag: "Beginner" },
+    { id: "l6", title: "Biodiversity Basics", duration: "22 min", tag: "Intermediate" },
   ] as const;
 
   const quizzes = [
