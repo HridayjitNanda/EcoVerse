@@ -673,6 +673,16 @@ export default function Landing() {
           />
         </div>
 
+        {/* ADD: Provided graffiti image centered in the yellow hero background */}
+        <div className="pointer-events-none absolute inset-0 -z-8 flex items-start justify-center">
+          <img
+            src="https://harmless-tapir-303.convex.cloud/api/storage/4d430adb-6155-419d-9035-51741beedfdf"
+            alt="EcoVerse graffiti wordmark"
+            className="mt-10 w-[780px] max-w-[92%] opacity-80 drop-shadow-[0_6px_0_rgba(0,0,0,0.35)]"
+            loading="lazy"
+          />
+        </div>
+
         {/* subtle scattered candies in hero */}
         <div className="pointer-events-none absolute inset-0 -z-10">
           <Candy variant="wrapped" color="#ffa6df" className="absolute left-2 top-6 w-7 sm:w-8 opacity-80" delay={0.3} />
