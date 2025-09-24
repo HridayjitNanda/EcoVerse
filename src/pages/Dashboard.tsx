@@ -1,17 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
+import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/hooks/use-auth";
-import { api } from "@/convex/_generated/api";
-import { useQuery, useMutation } from "convex/react";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Plus, Copy, Eye, Heart, Edit, Trash2, Search, Filter, LogOut } from "lucide-react";
+import { Flame, Globe2, Leaf, Swords, Shield, Trophy, BookOpen, CheckCircle2, LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 
@@ -66,95 +60,67 @@ const GlobalCandyBackground = () => (
 export default function Dashboard() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const [editingCopy, setEditingCopy] = useState<any>(null);
 
-  const copies = useQuery(api.copies.list, user ? { userId: user._id } : "skip");
-  const categories = useQuery(api.categories.list, {});
-  const createCopy = useMutation(api.copies.create);
-  const updateCopy = useMutation(api.copies.update);
-  const deleteCopy = useMutation(api.copies.remove);
-  const toggleLike = useMutation(api.copies.toggleLike);
+  // New EcoVerse dashboard state (local for now; ready to be wired to backend later)
+  const [ecoPoints, setEcoPoints] = useState<number>(120);
+  const [badges, setBadges] = useState<string[]>(["Starter", "Water Saver"]);
+  const [personalMonsterHP, setPersonalMonsterHP] = useState<number>(100);
+  const [worldBossHP, setWorldBossHP] = useState<number>(100000);
+  const [completedChallenges, setCompletedChallenges] = useState<Record<string, boolean>>({});
 
-  const [newCopy, setNewCopy] = useState({
-    title: "",
-    content: "",
-    category: "general",
-    tags: [] as string[],
-  });
+  // Static demo content
+  const lessons: Array<{ id: string; title: string; duration: string; tag: string }> = [
+    { id: "l1", title: "Plastic Pollution 101", duration: "5 min", tag: "Waste" },
+    { id: "l2", title: "Intro to Carbon Footprint", duration: "6 min", tag: "Climate" },
+    { id: "l3", title: "Water Conservation Basics", duration: "4 min", tag: "Water" },
+  ];
+  const quizzes: Array<{ id: string; title: string; questions: number; tag: string }> = [
+    { id: "q1", title: "Carbon Quiz", questions: 6, tag: "Climate" },
+    { id: "q2", title: "Waste Sorting", questions: 5, tag: "Waste" },
+  ];
+  const challenges: Array<{ id: string; title: string; hp: number; pts: number; tag: string }> = [
+    { id: "c1", title: "Carry a Reusable Bottle Today", hp: 5, pts: 10, tag: "Water" },
+    { id: "c2", title: "Skip Plastic Cutlery", hp: 5, pts: 12, tag: "Waste" },
+    { id: "c3", title: "Plant a Seed or Sapling", hp: 10, pts: 25, tag: "Nature" },
+  ];
 
-  const filteredCopies = copies?.filter(copy => {
-    const matchesSearch = copy.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         copy.content.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === "all" || copy.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  }) || [];
-
-  const handleCreateCopy = async () => {
-    if (!newCopy.title.trim() || !newCopy.content.trim()) {
-      toast.error("Please fill in all required fields");
-      return;
-    }
-
-    try {
-      await createCopy(newCopy);
-      toast.success("Copy created successfully!");
-      setNewCopy({ title: "", content: "", category: "general", tags: [] });
-      setIsCreateDialogOpen(false);
-    } catch (error) {
-      toast.error("Failed to create copy");
-    }
-  };
-
-  const handleUpdateCopy = async () => {
-    if (!editingCopy) return;
-
-    try {
-      await updateCopy({
-        id: editingCopy._id,
-        title: editingCopy.title,
-        content: editingCopy.content,
-        category: editingCopy.category,
-        tags: editingCopy.tags,
-      });
-      toast.success("Copy updated successfully!");
-      setEditingCopy(null);
-    } catch (error) {
-      toast.error("Failed to update copy");
-    }
-  };
-
-  const handleDeleteCopy = async (id: string) => {
-    try {
-      await deleteCopy({ id: id as any });
-      toast.success("Copy deleted successfully!");
-    } catch (error) {
-      toast.error("Failed to delete copy");
-    }
-  };
-
-  const handleCopyToClipboard = async (content: string) => {
-    try {
-      await navigator.clipboard.writeText(content);
-      toast.success("Copied to clipboard!");
-    } catch (error) {
-      toast.error("Failed to copy to clipboard");
-    }
-  };
-
-  const handleLike = async (id: string) => {
-    try {
-      await toggleLike({ id: id as any });
-    } catch (error) {
-      toast.error("Failed to like copy");
-    }
-  };
-
+  // Handlers
   const handleSignOut = async () => {
     await signOut();
     navigate("/");
+  };
+
+  const awardBadgeIfNeeded = (newHP: number) => {
+    if (newHP <= 0 && !badges.includes("Monster Slayer")) {
+      setBadges((b) => [...b, "Monster Slayer"]);
+      toast.success("Badge unlocked: Monster Slayer!");
+    }
+  };
+
+  const completeChallenge = (id: string, hp: number, pts: number) => {
+    if (completedChallenges[id]) {
+      toast("Already completed today!");
+      return;
+    }
+    // Basic logic per spec
+    setPersonalMonsterHP((prev) => {
+      const next = Math.max(0, prev - hp);
+      awardBadgeIfNeeded(next);
+      return next;
+    });
+    setWorldBossHP((prev) => Math.max(0, prev - 1));
+    setEcoPoints((p) => p + pts);
+    setCompletedChallenges((m) => ({ ...m, [id]: true }));
+    toast.success(`Challenge completed! -${hp} HP (Personal), -1 HP (World). +${pts} EcoPoints`);
+  };
+
+  const takeQuiz = (id: string, pts: number) => {
+    setEcoPoints((p) => p + pts);
+    toast.success(`Quiz ${id.toUpperCase()} completed! +${pts} EcoPoints`);
+  };
+
+  const startLesson = (title: string) => {
+    toast(`Started: ${title}`);
   };
 
   return (
@@ -176,7 +142,7 @@ export default function Dashboard() {
           </button>
           <div className="flex items-center gap-3">
             <span className="hidden sm:block text-sm font-semibold text-black">
-              {user?.name || user?.email || "User"}
+              {user?.name || user?.email || "Student"}
             </span>
             <Button
               variant="ghost"
@@ -205,242 +171,218 @@ export default function Dashboard() {
 
       {/* Main content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Controls */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-            <Input
-              placeholder="Search your copies..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-            <SelectTrigger className="w-full sm:w-48">
-              <Filter className="h-4 w-4 mr-2" />
-              <SelectValue placeholder="Filter by category" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
-              <SelectItem value="general">General</SelectItem>
-              <SelectItem value="marketing">Marketing</SelectItem>
-              <SelectItem value="social">Social Media</SelectItem>
-              <SelectItem value="email">Email</SelectItem>
-              <SelectItem value="ads">Advertisements</SelectItem>
-            </SelectContent>
-          </Select>
-          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-            <DialogTrigger asChild>
-              <Button className="whitespace-nowrap">
-                <Plus className="h-4 w-4 mr-2" />
-                New Copy
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-2xl">
-              <DialogHeader>
-                <DialogTitle>Create New Copy</DialogTitle>
-                <DialogDescription>
-                  Add a new piece of copy to your vault
-                </DialogDescription>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="title">Title</Label>
-                  <Input
-                    id="title"
-                    value={newCopy.title}
-                    onChange={(e) => setNewCopy({ ...newCopy, title: e.target.value })}
-                    placeholder="Enter copy title..."
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="content">Content</Label>
-                  <Textarea
-                    id="content"
-                    value={newCopy.content}
-                    onChange={(e) => setNewCopy({ ...newCopy, content: e.target.value })}
-                    placeholder="Enter your copy content..."
-                    rows={6}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="category">Category</Label>
-                  <Select value={newCopy.category} onValueChange={(value) => setNewCopy({ ...newCopy, category: value })}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="general">General</SelectItem>
-                      <SelectItem value="marketing">Marketing</SelectItem>
-                      <SelectItem value="social">Social Media</SelectItem>
-                      <SelectItem value="email">Email</SelectItem>
-                      <SelectItem value="ads">Advertisements</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex justify-end space-x-2">
-                  <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button onClick={handleCreateCopy}>Create Copy</Button>
-                </div>
+        {/* Top stats strip */}
+        <div className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <Card className="border-4 border-black bg-white">
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 text-xl">
+                <Trophy className="h-5 w-5" /> EcoPoints
+              </CardTitle>
+              <CardDescription>Earn points by learning and taking action</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-extrabold">{ecoPoints}</div>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {badges.map((b) => (
+                  <Badge key={b} variant="secondary" className="border-2 border-black">
+                    {b}
+                  </Badge>
+                ))}
               </div>
-            </DialogContent>
-          </Dialog>
+            </CardContent>
+          </Card>
+
+          <Card className="border-4 border-black bg-white">
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 text-xl">
+                <Swords className="h-5 w-5" /> Personal Monster
+              </CardTitle>
+              <CardDescription>Your current foe</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="mb-2 flex items-center justify-between text-sm font-semibold">
+                <span>Trash Troll</span>
+                <span>{personalMonsterHP} / 100 HP</span>
+              </div>
+              <Progress value={(personalMonsterHP / 100) * 100} className="h-3 border-2 border-black" />
+            </CardContent>
+          </Card>
+
+          <Card className="border-4 border-black bg-white">
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 text-xl">
+                <Globe2 className="h-5 w-5" /> World Boss
+              </CardTitle>
+              <CardDescription>Community challenge</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="mb-2 flex items-center justify-between text-sm font-semibold">
+                <span>Carbon Titan</span>
+                <span>{worldBossHP.toLocaleString()} / 100,000 HP</span>
+              </div>
+              <Progress value={(worldBossHP / 100000) * 100} className="h-3 border-2 border-black" />
+            </CardContent>
+          </Card>
         </div>
 
-        {/* Copy Grid: make cards neo-brutalist */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCopies.map((copy, index) => (
-            <motion.div
-              key={copy._id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.06 }}
-            >
-              <Card className="h-full border-4 border-black bg-white hover:translate-y-0.5 transition-transform cursor-pointer group">
-                <CardHeader className="pb-3">
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <CardTitle className="text-lg line-clamp-2">{copy.title}</CardTitle>
-                      <CardDescription className="mt-1">
-                        <Badge variant="secondary" className="text-xs">
-                          {copy.category}
-                        </Badge>
-                      </CardDescription>
-                    </div>
-                    <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setEditingCopy(copy)}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleDeleteCopy(copy._id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-4 mb-4">
-                    {copy.content}
-                  </p>
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center space-x-4 text-xs text-gray-500">
-                      <span className="flex items-center">
-                        <Eye className="h-3 w-3 mr-1" />
-                        {copy.views}
-                      </span>
-                      <span className="flex items-center">
-                        <Heart className="h-3 w-3 mr-1" />
-                        {copy.likes}
-                      </span>
-                    </div>
-                    <div className="flex space-x-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleLike(copy._id)}
-                      >
-                        <Heart className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleCopyToClipboard(copy.content)}
-                      >
-                        <Copy className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+        {/* Monsters section (actions) */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+          <Card className="border-4 border-black bg-white">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Shield className="h-5 w-5" /> Personal Monster Actions
+              </CardTitle>
+              <CardDescription>Complete actions to reduce HP</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex items-center justify-between rounded-md border-2 border-black px-3 py-2">
+                <div className="flex items-center gap-2">
+                  <Leaf className="h-4 w-4" />
+                  Daily Eco Action (-5 HP, +10 pts)
+                </div>
+                <Button
+                  size="sm"
+                  onClick={() => completeChallenge("quick-action", 5, 10)}
+                  disabled={personalMonsterHP === 0}
+                  className="border-2 border-black"
+                >
+                  Do it
+                </Button>
+              </div>
+              <div className="flex items-center justify-between rounded-md border-2 border-black px-3 py-2">
+                <div className="flex items-center gap-2">
+                  <Flame className="h-4 w-4" />
+                  Bonus Action (-10 HP, +20 pts)
+                </div>
+                <Button
+                  size="sm"
+                  onClick={() => completeChallenge("bonus-action", 10, 20)}
+                  disabled={personalMonsterHP === 0}
+                  className="border-2 border-black"
+                >
+                  Do it
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-4 border-black bg-white">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Globe2 className="h-5 w-5" /> Contribute to World Boss
+              </CardTitle>
+              <CardDescription>Every action helps (-1 HP)</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex items-center justify-between rounded-md border-2 border-black px-3 py-2">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4" />
+                  Log a community action (-1 HP, +5 pts)
+                </div>
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    setWorldBossHP((p) => Math.max(0, p - 1));
+                    setEcoPoints((p) => p + 5);
+                    toast.success("Thanks for contributing! -1 HP for Carbon Titan, +5 EcoPoints");
+                  }}
+                  disabled={worldBossHP === 0}
+                  className="border-2 border-black"
+                >
+                  Contribute
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
-        {filteredCopies.length === 0 && (
-          <div className="text-center py-12">
-            <div className="text-gray-400 mb-4">
-              <Copy className="h-16 w-16 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                No copies found
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                {searchTerm || selectedCategory !== "all" 
-                  ? "Try adjusting your search or filter criteria"
-                  : "Get started by creating your first copy"}
-              </p>
-            </div>
-            {!searchTerm && selectedCategory === "all" && (
-              <Button onClick={() => setIsCreateDialogOpen(true)}>
-                <Plus className="h-4 w-4 mr-2" />
-                Create Your First Copy
-              </Button>
-            )}
+        {/* Lessons */}
+        <div className="mb-8">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-2xl font-extrabold tracking-tight">Interactive Lessons</h2>
           </div>
-        )}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {lessons.map((l, i) => (
+              <motion.div key={l.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
+                <Card className="border-4 border-black bg-white h-full">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg">{l.title}</CardTitle>
+                    <CardDescription className="flex items-center justify-between">
+                      <Badge variant="secondary" className="border-2 border-black">{l.tag}</Badge>
+                      <span>{l.duration}</span>
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex justify-end">
+                    <Button className="border-2 border-black" onClick={() => startLesson(l.title)}>
+                      <BookOpen className="h-4 w-4 mr-2" /> Start
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
 
-        {/* Edit Dialog */}
-        <Dialog open={!!editingCopy} onOpenChange={() => setEditingCopy(null)}>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>Edit Copy</DialogTitle>
-              <DialogDescription>
-                Make changes to your copy
-              </DialogDescription>
-            </DialogHeader>
-            {editingCopy && (
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="edit-title">Title</Label>
-                  <Input
-                    id="edit-title"
-                    value={editingCopy.title}
-                    onChange={(e) => setEditingCopy({ ...editingCopy, title: e.target.value })}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="edit-content">Content</Label>
-                  <Textarea
-                    id="edit-content"
-                    value={editingCopy.content}
-                    onChange={(e) => setEditingCopy({ ...editingCopy, content: e.target.value })}
-                    rows={6}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="edit-category">Category</Label>
-                  <Select value={editingCopy.category} onValueChange={(value) => setEditingCopy({ ...editingCopy, category: value })}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="general">General</SelectItem>
-                      <SelectItem value="marketing">Marketing</SelectItem>
-                      <SelectItem value="social">Social Media</SelectItem>
-                      <SelectItem value="email">Email</SelectItem>
-                      <SelectItem value="ads">Advertisements</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex justify-end space-x-2">
-                  <Button variant="outline" onClick={() => setEditingCopy(null)}>
-                    Cancel
-                  </Button>
-                  <Button onClick={handleUpdateCopy}>Save Changes</Button>
-                </div>
-              </div>
-            )}
-          </DialogContent>
-        </Dialog>
+        {/* Quizzes */}
+        <div className="mb-8">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-2xl font-extrabold tracking-tight">Quizzes</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {quizzes.map((q, i) => (
+              <motion.div key={q.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
+                <Card className="border-4 border-black bg-white h-full">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg">{q.title}</CardTitle>
+                    <CardDescription className="flex items-center justify-between">
+                      <Badge variant="secondary" className="border-2 border-black">{q.tag}</Badge>
+                      <span>{q.questions} Questions</span>
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex justify-end">
+                    <Button className="border-2 border-black" onClick={() => takeQuiz(q.id, 15)}>
+                      <Trophy className="h-4 w-4 mr-2" /> Take Quiz
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Eco-Challenges */}
+        <div className="mb-16">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-2xl font-extrabold tracking-tight">Eco-Challenges</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {challenges.map((c, i) => (
+              <motion.div key={c.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
+                <Card className="border-4 border-black bg-white h-full">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base">{c.title}</CardTitle>
+                    <CardDescription className="flex items-center justify-between">
+                      <Badge variant="secondary" className="border-2 border-black">{c.tag}</Badge>
+                      <span>-{c.hp} HP • +{c.pts} pts</span>
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex justify-between items-center">
+                    <div className="text-xs font-semibold">
+                      {completedChallenges[c.id] ? "Completed" : "Available"}
+                    </div>
+                    <Button
+                      className="border-2 border-black"
+                      disabled={!!completedChallenges[c.id] || personalMonsterHP === 0}
+                      onClick={() => completeChallenge(c.id, c.hp, c.pts)}
+                    >
+                      <Leaf className="h-4 w-4 mr-2" /> Complete
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
