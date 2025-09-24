@@ -107,9 +107,9 @@ export default function Dashboard() {
   const worldBossLevel = 1;
 
   const lessons = [
-    { id: "l1", title: "Plastic Pollution 101", duration: "5 min", tag: "Waste" },
-    { id: "l2", title: "Intro to Carbon Footprint", duration: "6 min", tag: "Climate" },
-    { id: "l3", title: "Water Conservation Basics", duration: "4 min", tag: "Water" },
+    { id: "l1", title: "Climate Change Basics", duration: "15 min", tag: "Beginner" },
+    { id: "l2", title: "Renewable Energy Sources", duration: "20 min", tag: "Intermediate" },
+    { id: "l3", title: "Ocean Conservation", duration: "18 min", tag: "Beginner" },
   ] as const;
 
   const quizzes = [
@@ -273,105 +273,105 @@ export default function Dashboard() {
         </div>
 
         {/* NEW: compact stats strip for tokens/challenges/badges */}
-        <div className="mb-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Card className="border-4 border-black bg-white">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-xl">EcoTokens</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-extrabold">{ecoTokens}</div>
-            </CardContent>
-          </Card>
-          <Card className="border-4 border-black bg-white">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-xl">Challenges</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-extrabold">{challengesCount}</div>
-            </CardContent>
-          </Card>
-          <Card className="border-4 border-black bg-white">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-xl">Badges</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-extrabold">{badges.length}</div>
-            </CardContent>
-          </Card>
-        </div>
+        {tab !== "lessons" && (
+          <div className="mb-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <Card className="border-4 border-black bg-white">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">EcoTokens</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-extrabold">{ecoTokens}</div>
+              </CardContent>
+            </Card>
+            <Card className="border-4 border-black bg-white">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">Challenges</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-extrabold">{challengesCount}</div>
+              </CardContent>
+            </Card>
+            <Card className="border-4 border-black bg-white">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">Badges</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-extrabold">{badges.length}</div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
         {/* Top stats (EcoPoints + Monsters) */}
-        <div className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <Card className="border-4 border-black bg-white">
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-xl">
-                <Trophy className="h-5 w-5" /> EcoPoints
-              </CardTitle>
-              <CardDescription>Earn points by learning and taking action</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-extrabold">{ecoPoints}</div>
-            </CardContent>
-          </Card>
+        {tab !== "lessons" && (
+          <div className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <Card className="border-4 border-black bg-white">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-xl">
+                  <Trophy className="h-5 w-5" /> EcoPoints
+                </CardTitle>
+                <CardDescription>Earn points by learning and taking action</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-extrabold">{ecoPoints}</div>
+              </CardContent>
+            </Card>
 
-          {/* Update Personal Monster with name, level, percent */}
-          <Card className="border-4 border-black bg-white">
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-xl">
-                <Swords className="h-5 w-5" /> Your Personal Monster
-              </CardTitle>
-              <CardDescription>
-                Level {personalMonsterLevel} • {personalMonsterName}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {/* Boss image: Personal Monster */}
-              <div className="mb-3">
-                <img
-                  src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=512&auto=format&fit=crop"
-                  alt="Forest Guardian"
-                  className="mx-auto h-24 w-24 rounded-lg border-4 border-black object-cover"
-                  loading="lazy"
-                />
-              </div>
-              <div className="mb-2 flex items-center justify-between text-sm font-semibold">
-                <span>{personalMonsterName}</span>
-                <span>{personalMonsterHP} / 100 HP</span>
-              </div>
-              <Progress value={(personalMonsterHP / 100) * 100} className="h-3 border-2 border-black" />
-              <div className="mt-2 text-xs font-semibold">{((personalMonsterHP / 100) * 100).toFixed(1)}% Health</div>
-            </CardContent>
-          </Card>
+            <Card className="border-4 border-black bg-white">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-xl">
+                  <Swords className="h-5 w-5" /> Your Personal Monster
+                </CardTitle>
+                <CardDescription>
+                  Level {personalMonsterLevel} • {personalMonsterName}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="mb-3">
+                  <img
+                    src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=512&auto=format&fit=crop"
+                    alt="Forest Guardian"
+                    className="mx-auto h-24 w-24 rounded-lg border-4 border-black object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="mb-2 flex items-center justify-between text-sm font-semibold">
+                  <span>{personalMonsterName}</span>
+                  <span>{personalMonsterHP} / 100 HP</span>
+                </div>
+                <Progress value={(personalMonsterHP / 100) * 100} className="h-3 border-2 border-black" />
+                <div className="mt-2 text-xs font-semibold">{((personalMonsterHP / 100) * 100).toFixed(1)}% Health</div>
+              </CardContent>
+            </Card>
 
-          {/* Update World Boss with name, level, percent */}
-          <Card className="border-4 border-black bg-white">
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-xl">
-                <Globe2 className="h-5 w-5" /> World Boss
-              </CardTitle>
-              <CardDescription>
-                Level {worldBossLevel} • {worldBossName}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {/* Boss image: World Boss */}
-              <div className="mb-3">
-                <img
-                  src="https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=512&auto=format&fit=crop"
-                  alt="Climate Destroyer"
-                  className="mx-auto h-24 w-24 rounded-lg border-4 border-black object-cover"
-                  loading="lazy"
-                />
-              </div>
-              <div className="mb-2 flex items-center justify-between text-sm font-semibold">
-                <span>{worldBossName}</span>
-                <span>{worldBossHP.toLocaleString()} / 100,000 HP</span>
-              </div>
-              <Progress value={(worldBossHP / 100000) * 100} className="h-3 border-2 border-black" />
-              <div className="mt-2 text-xs font-semibold">{((worldBossHP / 100000) * 100).toFixed(1)}% Health</div>
-            </CardContent>
-          </Card>
-        </div>
+            <Card className="border-4 border-black bg-white">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-xl">
+                  <Globe2 className="h-5 w-5" /> World Boss
+                </CardTitle>
+                <CardDescription>
+                  Level {worldBossLevel} • {worldBossName}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="mb-3">
+                  <img
+                    src="https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=512&auto=format&fit=crop"
+                    alt="Climate Destroyer"
+                    className="mx-auto h-24 w-24 rounded-lg border-4 border-black object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="mb-2 flex items-center justify-between text-sm font-semibold">
+                  <span>{worldBossName}</span>
+                  <span>{worldBossHP.toLocaleString()} / 100,000 HP</span>
+                </div>
+                <Progress value={(worldBossHP / 100000) * 100} className="h-3 border-2 border-black" />
+                <div className="mt-2 text-xs font-semibold">{((worldBossHP / 100000) * 100).toFixed(1)}% Health</div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
         {/* Tabs for content (also used on mobile) */}
         <Tabs value={tab} onValueChange={setTab}>
