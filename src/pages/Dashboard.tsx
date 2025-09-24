@@ -66,6 +66,20 @@ const Cloud = ({ className = "", delay = 0 }) => (
   </motion.svg>
 );
 
+// ADD: Non-animated large cloud SVG for background art
+const StaticCloud = ({ className = "" }: { className?: string }) => (
+  <svg viewBox="0 0 260 120" className={className} aria-hidden="true">
+    <path
+      d="M40 90c-16 0-30-14-30-30s14-30 30-30c4-14 16-24 30-24 18 0 34 14 36 34 3-2 7-3 12-3 18 0 32 14 32 32s-14 32-32 32H40Z"
+      fill="white"
+      stroke="black"
+      strokeWidth="6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 export default function Dashboard() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -130,11 +144,17 @@ export default function Dashboard() {
 
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden lg:pl-[21rem]" style={{ backgroundColor: "#eaf6ff" }}>
-      {/* Add: soft animated cloud background layer */}
+      {/* REPLACED: Use large, non-animated background clouds */}
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <Cloud className="absolute left-4 top-10 w-32" delay={0.2} />
-        <Cloud className="absolute right-10 top-6 w-40" delay={0.6} />
-        <Cloud className="absolute left-1/2 top-24 w-28 -translate-x-1/2" delay={1.0} />
+        {/* Left large cloud */}
+        <StaticCloud className="absolute left-4 top-16 w-[280px]" />
+        {/* Right large cloud */}
+        <StaticCloud className="absolute right-6 top-10 w-[320px]" />
+        {/* Center-top smaller cloud */}
+        <StaticCloud className="absolute left-1/2 -translate-x-1/2 top-6 w-[220px]" />
+        {/* Bottom corners subtle clouds */}
+        <StaticCloud className="absolute -left-6 bottom-20 w-[260px]" />
+        <StaticCloud className="absolute -right-8 bottom-16 w-[300px]" />
       </div>
 
       {/* Fixed Left Sidebar (16rem) */}
