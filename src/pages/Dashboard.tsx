@@ -119,6 +119,9 @@ export default function Dashboard() {
   // Quiz modal state
   const [openQuizId, setOpenQuizId] = useState<string | null>(null);
   const [quizAnswers, setQuizAnswers] = useState<Record<number, number>>({}); // idx -> optionIndex
+  const [quizSubmitted, setQuizSubmitted] = useState<boolean>(false);
+  const [quizResults, setQuizResults] = useState<boolean[]>([]);
+  const [quizScore, setQuizScore] = useState<number>(0);
 
   // Topic-specific quiz bank
   const QUIZ_BANK: Record<string, { title: string; questions: Array<{ q: string; options: string[]; correct: number }> }> = {
@@ -128,6 +131,9 @@ export default function Dashboard() {
         { q: "Which gas is the primary contributor to human-caused climate change?", options: ["Oxygen (O2)", "Carbon Dioxide (CO2)", "Nitrogen (N2)", "Ozone (O3)"], correct: 1 },
         { q: "Which activity generally has the lowest carbon footprint?", options: ["Driving alone in a car", "Eating beef daily", "Cycling or walking", "Taking short flights frequently"], correct: 2 },
         { q: "What does 'carbon footprint' measure?", options: ["Money spent on energy", "Amount of waste produced", "Total greenhouse gases emitted", "Electricity used per day"], correct: 2 },
+        { q: "Which sector is a major source of CO2 emissions globally?", options: ["Transportation", "Entertainment", "Sports", "Libraries"], correct: 0 },
+        { q: "Which diet change most effectively lowers emissions?", options: ["More beef", "More lamb", "More plant-based meals", "More cheese"], correct: 2 },
+        { q: "Best way to cut home electricity emissions?", options: ["Leave lights on", "Use LED bulbs and efficient appliances", "Open windows in winter", "Run devices 24/7"], correct: 1 },
       ],
     },
     q2: {
@@ -136,6 +142,26 @@ export default function Dashboard() {
         { q: "Which of the following should typically go into recycling (check local rules)?", options: ["Clean paper and cardboard", "Food scraps", "Used tissues", "Ceramic plates"], correct: 0 },
         { q: "What's the best place for fruit and vegetable peels?", options: ["General trash", "Recycling bin", "Compost", "Glass-only bin"], correct: 2 },
         { q: "Why rinse containers before recycling?", options: ["To reduce odor only", "To remove food residue that can contaminate recycling", "To make them shinier", "It's not necessary"], correct: 1 },
+        { q: "Which is typically NOT recyclable curbside?", options: ["Plastic bags/films", "Aluminum cans", "Glass bottles", "Cardboard boxes"], correct: 0 },
+        { q: "Best way to avoid contamination?", options: ["Bag recyclables tightly", "Put liquids in bottles", "Keep materials clean and dry", "Mix trash into recycling"], correct: 2 },
+      ],
+    },
+    // New quizzes
+    q3: {
+      title: "Renewable Energy",
+      questions: [
+        { q: "Solar PV panels convert sunlight into...", options: ["Heat energy", "Mechanical energy", "Electrical energy", "Sound energy"], correct: 2 },
+        { q: "Wind turbines capture energy from...", options: ["Ocean currents", "Moving air", "Geothermal vents", "Tides"], correct: 1 },
+        { q: "Why is storage important for renewables?", options: ["It decorates the grid", "It smooths intermittent supply", "It increases fossil fuels", "It reduces efficiency"], correct: 1 },
+        { q: "Which is a form of energy storage?", options: ["Pumped hydro", "Wooden crates", "Plastic bags", "Paper bins"], correct: 0 },
+      ],
+    },
+    q4: {
+      title: "Water Savers",
+      questions: [
+        { q: "Which habit saves the most water at home?", options: ["Shorter showers", "Running tap while brushing", "Leaky toilet", "Half-load laundry frequently"], correct: 0 },
+        { q: "Best time to water plants?", options: ["Midday", "Early morning", "Evening", "Anytime"], correct: 1 },
+        { q: "Good way to reduce outdoor water use?", options: ["Use native plants and mulch", "Wash driveway with hose", "Water daily at noon", "Over-fertilize lawn"], correct: 0 },
       ],
     },
   } as const;
@@ -148,34 +174,43 @@ export default function Dashboard() {
       return;
     }
     setOpenQuizId(quizId);
-    setQuizAnswers({}); // reset answers
+    setQuizAnswers({});
+    setQuizSubmitted(false);
+    setQuizResults([]);
+    setQuizScore(0);
   };
 
   const closeQuiz = () => {
     setOpenQuizId(null);
     setQuizAnswers({});
+    setQuizSubmitted(false);
+    setQuizResults([]);
+    setQuizScore(0);
   };
 
   const submitQuiz = () => {
     if (!openQuizId || !currentQuiz) return;
     const total = currentQuiz.questions.length;
-    // Ensure all answered
     for (let i = 0; i < total; i++) {
       if (quizAnswers[i] === undefined) {
         toast("Please answer all questions before submitting.");
         return;
       }
     }
-    // Score
+    const res: boolean[] = [];
     let correct = 0;
     currentQuiz.questions.forEach((qq, idx) => {
-      if (quizAnswers[idx] === qq.correct) correct++;
+      const ok = quizAnswers[idx] === qq.correct;
+      res.push(ok);
+      if (ok) correct++;
     });
-    toast.success(`You scored ${correct}/${total}. +15 pts`);
-    // Award points & lock via existing handler
+    setQuizResults(res);
+    setQuizScore(correct);
+    setQuizSubmitted(true);
+
+    // Award points & lock after grading (keep existing points)
     const quizMeta = quizzes.find((q) => q.id === openQuizId);
     handleTakeQuiz(openQuizId, quizMeta?.title || "Quiz");
-    closeQuiz();
   };
 
   // Load existing locks from localStorage on mount / user change
@@ -252,8 +287,10 @@ export default function Dashboard() {
   ] as const;
 
   const quizzes = [
-    { id: "q1", title: "Carbon Quiz", questions: 6, tag: "Climate" },
-    { id: "q2", title: "Waste Sorting", questions: 5, tag: "Waste" },
+    { id: "q1", title: QUIZ_BANK.q1.title, tag: "Climate" },
+    { id: "q2", title: QUIZ_BANK.q2.title, tag: "Waste" },
+    { id: "q3", title: QUIZ_BANK.q3.title, tag: "Energy" },
+    { id: "q4", title: QUIZ_BANK.q4.title, tag: "Water" },
   ] as const;
 
   const leaderboard = [
@@ -628,7 +665,7 @@ export default function Dashboard() {
                       <CardTitle className="text-lg">{q.title}</CardTitle>
                       <CardDescription className="flex items-center justify-between">
                         <Badge variant="secondary" className="border-2 border-black">{q.tag}</Badge>
-                        <span>{q.questions} Questions</span>
+                        <span>{QUIZ_BANK[q.id].questions.length} Questions</span>
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="flex justify-end">
@@ -741,42 +778,98 @@ export default function Dashboard() {
 
             {currentQuiz ? (
               <div className="space-y-5">
-                {currentQuiz.questions.map((item, idx) => (
-                  <div key={idx} className="rounded-md border-2 border-black p-3">
-                    <div className="font-bold mb-2">{idx + 1}. {item.q}</div>
-                    <RadioGroup
-                      value={quizAnswers[idx]?.toString() ?? ""}
-                      onValueChange={(val) =>
-                        setQuizAnswers((prev) => ({ ...prev, [idx]: Number(val) }))
-                      }
-                    >
-                      {item.options.map((opt, i) => (
-                        <div key={i} className="flex items-center space-x-2 py-1">
-                          <RadioGroupItem id={`q-${idx}-opt-${i}`} value={i.toString()} />
-                          <Label htmlFor={`q-${idx}-opt-${i}`} className="font-semibold">{opt}</Label>
+                {currentQuiz.questions.map((item, idx) => {
+                  const selected = quizAnswers[idx];
+                  const isCorrect = quizSubmitted ? quizResults[idx] : null;
+                  return (
+                    <div key={idx} className="rounded-md border-2 border-black p-3">
+                      <div className="font-bold mb-2">
+                        {idx + 1}. {item.q}
+                      </div>
+                      <RadioGroup
+                        value={quizAnswers[idx]?.toString() ?? ""}
+                        onValueChange={(val) =>
+                          !quizSubmitted &&
+                          setQuizAnswers((prev) => ({ ...prev, [idx]: Number(val) }))
+                        }
+                      >
+                        {item.options.map((opt, i) => {
+                          const isUserPick = selected === i;
+                          const showGreen = quizSubmitted && i === item.correct;
+                          const showRed = quizSubmitted && isUserPick && i !== item.correct;
+                          return (
+                            <div
+                              key={i}
+                              className={`flex items-center space-x-2 py-1 rounded ${
+                                showGreen ? "bg-green-100" : showRed ? "bg-red-100" : ""
+                              }`}
+                            >
+                              <RadioGroupItem
+                                id={`q-${idx}-opt-${i}`}
+                                value={i.toString()}
+                                disabled={quizSubmitted}
+                              />
+                              <Label
+                                htmlFor={`q-${idx}-opt-${i}`}
+                                className={`font-semibold ${
+                                  showGreen ? "text-green-700" : showRed ? "text-red-700" : ""
+                                }`}
+                              >
+                                {opt}
+                                {quizSubmitted && i === item.correct ? " (Correct)" : ""}
+                                {quizSubmitted && isUserPick && i !== item.correct ? " (Your answer)" : ""}
+                              </Label>
+                            </div>
+                          );
+                        })}
+                      </RadioGroup>
+
+                      {quizSubmitted ? (
+                        <div className={`mt-2 text-sm font-bold ${
+                          isCorrect ? "text-green-700" : "text-red-700"
+                        }`}>
+                          {isCorrect ? "You got this right!" : `Correct answer: ${item.options[item.correct]}`}
                         </div>
-                      ))}
-                    </RadioGroup>
-                  </div>
-                ))}
-                <Separator className="border-2 border-black" />
+                      ) : null}
+                    </div>
+                  );
+                })}
+                {quizSubmitted ? (
+                  <>
+                    <Separator className="border-2 border-black" />
+                    <div className="text-lg font-extrabold">
+                      Score: {quizScore}/{currentQuiz.questions.length}
+                    </div>
+                  </>
+                ) : null}
               </div>
             ) : null}
 
             <DialogFooter className="flex gap-2">
-              <Button
-                variant="outline"
-                className="border-2 border-black bg-white text-black hover:bg-white/90"
-                onClick={closeQuiz}
-              >
-                Cancel
-              </Button>
-              <Button
-                className="border-2 border-black bg-[#35c163] text-black hover:bg-[#2cb25a]"
-                onClick={submitQuiz}
-              >
-                Submit
-              </Button>
+              {!quizSubmitted ? (
+                <>
+                  <Button
+                    variant="outline"
+                    className="border-2 border-black bg-white text-black hover:bg-white/90"
+                    onClick={closeQuiz}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    className="border-2 border-black bg-[#35c163] text-black hover:bg-[#2cb25a]"
+                    onClick={submitQuiz}
+                  >
+                    Submit
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  className="border-2 border-black bg-black text-white hover:bg-black/90"
+                  onClick={closeQuiz}
+                >
+                  Close
+                </Button>
+              )}
             </DialogFooter>
           </DialogContent>
         </Dialog>
