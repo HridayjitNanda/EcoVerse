@@ -148,11 +148,11 @@ export default function Dashboard() {
       <GlobalCandyBackground />
 
       {/* Fixed Left Sidebar (lg and up) */}
-      <div className="hidden lg:block fixed left-0 top-0 h-full w-64 bg-neutral-950 border-r border-white/10 z-40">
+      <div className="hidden lg:block fixed left-0 top-0 h-full w-64 bg-transparent border-r-4 border-black z-40">
         <div className="flex h-full flex-col p-4">
           <div className="mb-4">
-            <div className="text-white font-extrabold text-lg">EcoVerse</div>
-            <div className="text-white/70 text-xs">Save the Planet</div>
+            <div className="text-black font-extrabold text-lg">EcoVerse</div>
+            <div className="text-black/70 text-xs">Save the Planet</div>
           </div>
           <div className="space-y-2">
             <Button
