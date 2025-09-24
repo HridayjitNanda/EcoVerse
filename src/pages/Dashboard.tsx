@@ -6,9 +6,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/use-auth";
 import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Shield, BookOpen, Trophy, Leaf, Crown, Gift, Globe2, LogOut, Users, CheckCircle2, Swords } from "lucide-react";
 import { toast } from "sonner";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 // Decorative vertical frosting strip (separate fixed layer next to sidebar)
 function VerticalFrostingStrip() {
@@ -105,6 +109,138 @@ export default function Dashboard() {
   const personalMonsterLevel = 1;
   const worldBossName = "Climate Destroyer";
   const worldBossLevel = 1;
+
+  // Add: Quiz cooldown state (24h locks) scoped per user
+  const QUIZ_LOCK_HOURS = 24;
+  const [now, setNow] = useState<number>(Date.now());
+  const [quizLocks, setQuizLocks] = useState<Record<string, number>>({});
+  const storageKey = `quizLocks:${user?.email || "anon"}`;
+
+  // Quiz modal state
+  const [openQuizId, setOpenQuizId] = useState<string | null>(null);
+  const [quizAnswers, setQuizAnswers] = useState<Record<number, number>>({}); // idx -> optionIndex
+
+  // Topic-specific quiz bank
+  const QUIZ_BANK: Record<string, { title: string; questions: Array<{ q: string; options: string[]; correct: number }> }> = {
+    q1: {
+      title: "Carbon Quiz",
+      questions: [
+        { q: "Which gas is the primary contributor to human-caused climate change?", options: ["Oxygen (O2)", "Carbon Dioxide (CO2)", "Nitrogen (N2)", "Ozone (O3)"], correct: 1 },
+        { q: "Which activity generally has the lowest carbon footprint?", options: ["Driving alone in a car", "Eating beef daily", "Cycling or walking", "Taking short flights frequently"], correct: 2 },
+        { q: "What does 'carbon footprint' measure?", options: ["Money spent on energy", "Amount of waste produced", "Total greenhouse gases emitted", "Electricity used per day"], correct: 2 },
+      ],
+    },
+    q2: {
+      title: "Waste Sorting",
+      questions: [
+        { q: "Which of the following should typically go into recycling (check local rules)?", options: ["Clean paper and cardboard", "Food scraps", "Used tissues", "Ceramic plates"], correct: 0 },
+        { q: "What's the best place for fruit and vegetable peels?", options: ["General trash", "Recycling bin", "Compost", "Glass-only bin"], correct: 2 },
+        { q: "Why rinse containers before recycling?", options: ["To reduce odor only", "To remove food residue that can contaminate recycling", "To make them shinier", "It's not necessary"], correct: 1 },
+      ],
+    },
+  } as const;
+
+  const currentQuiz = openQuizId ? QUIZ_BANK[openQuizId] : null;
+
+  const openQuiz = (quizId: string) => {
+    if (isQuizLocked(quizId)) {
+      toast("This quiz is locked. Please try again later.");
+      return;
+    }
+    setOpenQuizId(quizId);
+    setQuizAnswers({}); // reset answers
+  };
+
+  const closeQuiz = () => {
+    setOpenQuizId(null);
+    setQuizAnswers({});
+  };
+
+  const submitQuiz = () => {
+    if (!openQuizId || !currentQuiz) return;
+    const total = currentQuiz.questions.length;
+    // Ensure all answered
+    for (let i = 0; i < total; i++) {
+      if (quizAnswers[i] === undefined) {
+        toast("Please answer all questions before submitting.");
+        return;
+      }
+    }
+    // Score
+    let correct = 0;
+    currentQuiz.questions.forEach((qq, idx) => {
+      if (quizAnswers[idx] === qq.correct) correct++;
+    });
+    toast.success(`You scored ${correct}/${total}. +15 pts`);
+    // Award points & lock via existing handler
+    const quizMeta = quizzes.find((q) => q.id === openQuizId);
+    handleTakeQuiz(openQuizId, quizMeta?.title || "Quiz");
+    closeQuiz();
+  };
+
+  // Load existing locks from localStorage on mount / user change
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(storageKey);
+      if (raw) {
+        const parsed = JSON.parse(raw) as Record<string, number>;
+        setQuizLocks(parsed || {});
+      } else {
+        setQuizLocks({});
+      }
+    } catch {
+      setQuizLocks({});
+    }
+    // tick immediately on user change
+    setNow(Date.now());
+  }, [storageKey]);
+
+  // Persist locks whenever they change
+  useEffect(() => {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(quizLocks));
+    } catch {}
+  }, [quizLocks, storageKey]);
+
+  // Update clock every minute to refresh countdowns
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 60_000);
+    return () => clearInterval(t);
+  }, []);
+
+  // Helpers for cooldown and formatting
+  const isQuizLocked = (id: string) => {
+    const exp = quizLocks[id];
+    return typeof exp === "number" && exp > now;
+  };
+
+  const msRemaining = (id: string) => {
+    const exp = quizLocks[id] || 0;
+    return Math.max(0, exp - now);
+  };
+
+  const formatMsToHhMm = (ms: number) => {
+    const totalMins = Math.ceil(ms / 60000);
+    const h = Math.floor(totalMins / 60);
+    const m = totalMins % 60;
+    const hh = h.toString().padStart(2, "0");
+    const mm = m.toString().padStart(2, "0");
+    return `${hh}:${mm}`;
+  };
+
+  const handleTakeQuiz = (quizId: string, quizTitle: string) => {
+    if (isQuizLocked(quizId)) {
+      toast("This quiz is locked. Please try again later.");
+      return;
+    }
+    // Award points
+    setEcoPoints((p) => p + 15);
+    toast.success(`Quiz complete! +15 pts`);
+
+    // Lock for next 24 hours
+    const expiresAt = Date.now() + QUIZ_LOCK_HOURS * 60 * 60 * 1000;
+    setQuizLocks((prev) => ({ ...prev, [quizId]: expiresAt }));
+  };
 
   const lessons = [
     { id: "l1", title: "Climate Change Basics", duration: "15 min", tag: "Beginner" },
@@ -493,8 +629,15 @@ export default function Dashboard() {
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="flex justify-end">
-                      <Button className="border-2 border-black" onClick={() => { setEcoPoints((p) => p + 15); toast.success(`Quiz complete! +15 pts`); }}>
-                        <Trophy className="h-4 w-4 mr-2" /> Take Quiz
+                      <Button
+                        className="border-2 border-black"
+                        disabled={isQuizLocked(q.id)}
+                        onClick={() => openQuiz(q.id)}
+                      >
+                        <Trophy className="h-4 w-4 mr-2" />
+                        {isQuizLocked(q.id)
+                          ? `Locked (${formatMsToHhMm(msRemaining(q.id))})`
+                          : "Take Quiz"}
                       </Button>
                     </CardContent>
                   </Card>
@@ -583,6 +726,58 @@ export default function Dashboard() {
             </div>
           </TabsContent>
         </Tabs>
+
+        {/* Quiz Modal */}
+        <Dialog open={!!openQuizId} onOpenChange={(open) => (!open ? closeQuiz() : null)}>
+          <DialogContent className="border-4 border-black bg-white max-w-2xl">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-extrabold">
+                {currentQuiz ? currentQuiz.title : "Quiz"}
+              </DialogTitle>
+            </DialogHeader>
+
+            {currentQuiz ? (
+              <div className="space-y-5">
+                {currentQuiz.questions.map((item, idx) => (
+                  <div key={idx} className="rounded-md border-2 border-black p-3">
+                    <div className="font-bold mb-2">{idx + 1}. {item.q}</div>
+                    <RadioGroup
+                      value={quizAnswers[idx]?.toString() ?? ""}
+                      onValueChange={(val) =>
+                        setQuizAnswers((prev) => ({ ...prev, [idx]: Number(val) }))
+                      }
+                    >
+                      {item.options.map((opt, i) => (
+                        <div key={i} className="flex items-center space-x-2 py-1">
+                          <RadioGroupItem id={`q-${idx}-opt-${i}`} value={i.toString()} />
+                          <Label htmlFor={`q-${idx}-opt-${i}`} className="font-semibold">{opt}</Label>
+                        </div>
+                      ))}
+                    </RadioGroup>
+                  </div>
+                ))}
+                <Separator className="border-2 border-black" />
+              </div>
+            ) : null}
+
+            <DialogFooter className="flex gap-2">
+              <Button
+                variant="outline"
+                className="border-2 border-black bg-white text-black hover:bg-white/90"
+                onClick={closeQuiz}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="border-2 border-black bg-[#35c163] text-black hover:bg-[#2cb25a]"
+                onClick={submitQuiz}
+              >
+                Submit
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        {/* End Quiz Modal */}
       </main>
     </div>
   );
