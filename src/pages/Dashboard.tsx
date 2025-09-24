@@ -255,7 +255,6 @@ export default function Dashboard() {
   };
 
   return (
-    {/* Increase left padding on large screens to account for sidebar (16rem) + frosting strip (~78px ≈ 5rem) */}
     <div className="relative min-h-screen w-full overflow-x-hidden lg:pl-[21rem]" style={{ backgroundColor: "#ffd139" }}>
       <GlobalCandyBackground />
 
