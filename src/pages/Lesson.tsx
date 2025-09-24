@@ -347,7 +347,7 @@ export default function LessonPage() {
             <img
               src={lesson.hero}
               alt={lesson.title}
-              className="h-64 w-full object-cover"
+              className="h-64 sm:h-72 lg:h-80 w-full object-cover"
               loading="lazy"
             />
             <div className="absolute inset-x-0 bottom-0 bg-yellow-300/80 border-t-4 border-black">
@@ -380,17 +380,17 @@ export default function LessonPage() {
         </div>
 
         {/* Content grid */}
-        <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Objectives */}
           <Card className="border-4 border-black bg-white lg:col-span-1">
             <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-2xl">
                 <Leaf className="h-5 w-5" /> Objectives
               </CardTitle>
               <CardDescription>What you'll learn</CardDescription>
             </CardHeader>
             <CardContent>
-              <ul className="list-disc pl-5 space-y-2 font-semibold">
+              <ul className="list-disc pl-5 space-y-2 font-semibold text-base sm:text-lg">
                 {lesson.objectives.map((o, i) => (
                   <li key={i}>{o}</li>
                 ))}
@@ -399,7 +399,7 @@ export default function LessonPage() {
           </Card>
 
           {/* Sections */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="lg:col-span-1 space-y-4">
             {lesson.sections.map((s, i) => (
               <motion.div
                 key={i}
@@ -410,13 +410,13 @@ export default function LessonPage() {
               >
                 <Card className="border-4 border-black bg-white">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-xl">{s.heading}</CardTitle>
+                    <CardTitle className="text-2xl">{s.heading}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="font-semibold text-black/80">{s.body}</p>
+                    <p className="font-semibold text-black/80 text-base sm:text-lg">{s.body}</p>
                     <div className="mt-4 flex justify-end">
                       <Button
-                        className="border-2 border-black"
+                        className="border-2 border-black h-12 text-lg px-6"
                         disabled={!!completedSections[i]}
                         onClick={() => {
                           if (completedSections[i]) return;
