@@ -546,7 +546,7 @@ export default function Dashboard() {
         {/* NEW: compact stats strip for tokens/challenges/badges */}
         {tab === "dashboard" && (
           <div className="mb-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Card className="border-4 border-black bg-white">
+            <Card className="border-4 border-black bg-white h-28">
               <CardHeader className="pb-2">
                 <CardTitle className="text-xl">EcoTokens</CardTitle>
               </CardHeader>
@@ -554,7 +554,7 @@ export default function Dashboard() {
                 <div className="text-3xl font-extrabold">{ecoTokens}</div>
               </CardContent>
             </Card>
-            <Card className="border-4 border-black bg-white">
+            <Card className="border-4 border-black bg-white h-28">
               <CardHeader className="pb-2">
                 <CardTitle className="text-xl">Challenges</CardTitle>
               </CardHeader>
@@ -562,7 +562,7 @@ export default function Dashboard() {
                 <div className="text-3xl font-extrabold">{challengesCount}</div>
               </CardContent>
             </Card>
-            <Card className="border-4 border-black bg-white">
+            <Card className="border-4 border-black bg-white h-28">
               <CardHeader className="pb-2">
                 <CardTitle className="text-xl">Badges</CardTitle>
               </CardHeader>
@@ -576,7 +576,7 @@ export default function Dashboard() {
         {/* Top stats (EcoPoints + Monsters) */}
         {tab === "dashboard" && (
           <div className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Card className="border-4 border-black bg-white">
+            <Card className="border-4 border-black bg-white min-h-[320px]">
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-center gap-2 text-xl">
                   <Trophy className="h-5 w-5" /> EcoPoints
@@ -588,7 +588,7 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
-            <Card className="border-4 border-black bg-white">
+            <Card className="border-4 border-black bg-white min-h-[320px]">
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-center gap-2 text-xl">
                   <Swords className="h-5 w-5" /> Your Personal Monster
@@ -615,7 +615,7 @@ export default function Dashboard() {
               </CardContent>
             </Card>
 
-            <Card className="border-4 border-black bg-white">
+            <Card className="border-4 border-black bg-white min-h-[320px]">
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-center gap-2 text-xl">
                   <Globe2 className="h-5 w-5" /> World Boss
