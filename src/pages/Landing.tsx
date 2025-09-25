@@ -339,7 +339,7 @@ export default function Landing() {
   );
 
   // Nav items
-  const navItems: string[] = ["Home", "About", "Features"];
+  const navItems: string[] = ["Home", "Features"];
 
   // Add: global candy background layer (fixed, subtle, sparse)
   const GlobalCandyBackground = () => (
